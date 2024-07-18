@@ -23,18 +23,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Get projects by technology
-router.get("/filter/:tech", async (req, res) => {
-  try {
-    const project = await Project.find({
-      technologies: req.params.tech,
-    });
-    res.json(project);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
 // Create new project
 router.post("/", async (req, res) => {
   const project = new Project({

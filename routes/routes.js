@@ -22,3 +22,20 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+// Create new project
+router.post("/", async (req, res) => {
+  const project = new Project({
+    name: req.body.name,
+    linK: req.body.link,
+    image: req.body.image,
+    technologies: req.body.technologies,
+    description: req.body.description,
+  });
+  try {
+    const newProject = await project.save();
+    res.status(201).json(newProject);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});

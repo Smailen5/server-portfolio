@@ -62,7 +62,7 @@ router.put("/:id", async (req, res) => {
 // Delete project
 router.delete("/:id", async (req, res) => {
   try {
-    const project = await Project.findById(req.params.id);
+    const project = await Project.findByIdAndDelete(req.params.id);
     if (!project) return res.status(404).json({ message: "Project not found" });
     await project.remove();
     res.json({ message: "Project deleted" });

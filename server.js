@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(bodyParser.json());
+app.use(express.json());
 
 // MongoDB connection
 mongoose

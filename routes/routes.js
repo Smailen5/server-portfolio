@@ -27,7 +27,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   const project = new Project({
     name: req.body.name,
-    linK: req.body.link,
+    link: req.body.link,
     image: req.body.image,
     technologies: req.body.technologies,
     description: req.body.description,

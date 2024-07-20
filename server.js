@@ -1,9 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const dotenv = require("dotenv");
+const dotenv = require("dotenv").config();;
 
-dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -12,9 +11,8 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 // MongoDB connection
-const uri = `mongodb+srv://${process.env.MONGODB_USER_PASS}@cluster0.u0afaln.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 mongoose
-.connect(uri)
+.connect(process.env.MONGODB_ATLAS_URI)
 .then(() => console.log("Connected to MongoDB yeah :)"))
 .catch((err) => console.error("Connection failed :(", err));
 

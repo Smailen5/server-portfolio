@@ -31,6 +31,7 @@ export const syncRepos = async (req: Request, res: Response) => {
       return res.status(500).json({
         message:
           'Token GitHub non configurato. Aggiungi GITHUB_TOKEN nel file .env',
+        errors: [],
       });
     }
 
@@ -42,7 +43,10 @@ export const syncRepos = async (req: Request, res: Response) => {
     });
 
     if (!Array.isArray(packages)) {
-      throw new Error('La cartella packages non è stata trovata');
+      return res.status(404).json({
+        message: 'La cartella packages non è stata trovata',
+        errors: [],
+      });
     }
 
     // Filtriamo solo le cartelle (escludiamo file come .gitkeep)
@@ -80,9 +84,9 @@ export const syncRepos = async (req: Request, res: Response) => {
             projectData.image = screenshot.download_url;
           }
         } catch (error: any) {
-          // console.log(
-          //   `Nessuna immagine di anteprima trovata per ${folder.name}`
-          // );
+          errors.push(
+            `Nessuna immagine di anteprima trovata per ${folder.name}: ${error.message}`
+          );
         }
 
         // Recuperiamo il README.md
@@ -98,9 +102,9 @@ export const syncRepos = async (req: Request, res: Response) => {
             projectData.readme = content;
           }
         } catch (error: any) {
-          // console.log(
-          //   `Nessun README.md trovato per ${folder.name}`
-          // );
+          errors.push(
+            `Nessun README.md trovato per ${folder.name}: ${error.message}`
+          );
         }
 
         try {
@@ -125,9 +129,9 @@ export const syncRepos = async (req: Request, res: Response) => {
             };
           }
         } catch (error: any) {
-          // console.log(
-          //   `Nessun package.json trovato per ${folder.name}, uso i dati di base`
-          // );
+          errors.push(
+            `Nessun package.json trovato per ${folder.name}: ${error.message}`
+          );
         }
 
         // Controlliamo se il progetto esiste già
@@ -144,9 +148,16 @@ export const syncRepos = async (req: Request, res: Response) => {
         syncedCount++;
       } catch (error: any) {
         const errorMessage = `Errore nel recupero dei dati per ${folder.name}: ${error.message}`;
-        console.error(errorMessage);
         errors.push(errorMessage);
       }
+    }
+
+    // Se non è stato sincronizzato nessun progetto, restituiamo un errore
+    if (syncedCount === 0) {
+      return res.status(500).json({
+        message: 'Nessun progetto è stato sincronizzato con successo',
+        errors: errors,
+      });
     }
 
     return res.json({
@@ -157,6 +168,9 @@ export const syncRepos = async (req: Request, res: Response) => {
       projects: packageFolders.map((folder) => folder.name),
     });
   } catch (err: any) {
-    return res.status(500).json({ message: err.message });
+    return res.status(500).json({
+      message: err.message,
+      errors: [],
+    });
   }
 };

@@ -23,10 +23,21 @@ const startServer = async () => {
     app.listen(port, () => {
       // console.log(`Server in esecuzione sulla porta ${port}`);
     });
-  } catch (error) {
+  } catch (error: any) {
     // console.error("Errore durante l'avvio del server:", error);
     process.exit(1);
   }
 };
+
+// Gestione degli errori non catturati
+process.on('uncaughtException', (error: Error) => {
+  // console.error('Errore non gestito:', error);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason: any) => {
+  // console.error('Promise rejection non gestita:', reason);
+  process.exit(1);
+});
 
 startServer();

@@ -11,12 +11,13 @@ export interface ProjectAttributes {
   description: string;
   createdAt?: Date;
   updatedAt?: Date;
+  readme: string;
 }
 
 // Tipo per la creazione di un nuovo project (senza id)
 export type ProjectCreationAttributes = Optional<
   ProjectAttributes,
-  'id' | 'createdAt' | 'updatedAt'
+  'id' | 'createdAt' | 'updatedAt' | 'readme'
 >;
 
 // Creazione del modello
@@ -47,6 +48,10 @@ const Project = sequelize.define<
   description: {
     type: DataTypes.TEXT,
     allowNull: false,
+  },
+  readme: {
+    type: DataTypes.TEXT,
+    allowNull: true,
   },
 });
 

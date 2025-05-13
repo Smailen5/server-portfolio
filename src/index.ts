@@ -21,10 +21,10 @@ const startServer = async () => {
   try {
     await initDatabase();
     app.listen(port, () => {
-      console.log(`Server in esecuzione sulla porta ${port}`);
+      // console.log(`Server in esecuzione sulla porta ${port}`);
     });
   } catch (error) {
-    console.error("Errore durante l'avvio del server:", error);
+    // console.error("Errore durante l'avvio del server:", error);
     process.exit(1);
   }
 };

@@ -25,7 +25,7 @@ interface PackageJson {
   technologies: string[];
 }
 
-export const syncRepos = async (_req: Request, res: Response) => {
+export const syncRepos = async (req: Request, res: Response) => {
   try {
     if (!process.env.GITHUB_TOKEN) {
       return res.status(500).json({
@@ -50,10 +50,10 @@ export const syncRepos = async (_req: Request, res: Response) => {
       (item: GitHubContent) => item.type === 'dir'
     );
 
-    console.log(
-      'Progetti trovati:',
-      packageFolders.map((folder) => folder.name)
-    );
+    // console.log(
+    //   'Progetti trovati:',
+    //   packageFolders.map((folder) => folder.name)
+    // );
 
     let syncedCount = 0;
     let errors: string[] = [];
@@ -80,9 +80,9 @@ export const syncRepos = async (_req: Request, res: Response) => {
             projectData.image = screenshot.download_url;
           }
         } catch (error: any) {
-          console.log(
-            `Nessuna immagine di anteprima trovata per ${folder.name}`
-          );
+          // console.log(
+          //   `Nessuna immagine di anteprima trovata per ${folder.name}`
+          // );
         }
 
         // Recuperiamo il README.md
@@ -98,7 +98,9 @@ export const syncRepos = async (_req: Request, res: Response) => {
             projectData.readme = content;
           }
         } catch (error: any) {
-          console.log(`Nessun README.md trovato per ${folder.name}`);
+          // console.log(
+          //   `Nessun README.md trovato per ${folder.name}`
+          // );
         }
 
         try {
@@ -123,9 +125,9 @@ export const syncRepos = async (_req: Request, res: Response) => {
             };
           }
         } catch (error: any) {
-          console.log(
-            `Nessun package.json trovato per ${folder.name}, uso i dati di base`
-          );
+          // console.log(
+          //   `Nessun package.json trovato per ${folder.name}, uso i dati di base`
+          // );
         }
 
         // Controlliamo se il progetto esiste già

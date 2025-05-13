@@ -15,6 +15,7 @@ interface GitHubContent {
   type: string;
   html_url: string;
   updated_at: string;
+  download_url?: string;
 }
 
 interface PackageJson {
@@ -62,9 +63,26 @@ export const syncRepos = async (_req: Request, res: Response) => {
           name: folder.name,
           description: '',
           link: folder.html_url,
-          image: '', // Puoi aggiungere un'immagine di default o lasciare vuoto
+          image: '', // Verrà aggiornato con l'immagine di anteprima
           technologies: [] as string[],
         };
+
+        // Recuperiamo l'immagine di anteprima
+        try {
+          const { data: screenshot } = await octokit.rest.repos.getContent({
+            owner: 'Smailen5',
+            repo: 'Frontend-mentor-challenge',
+            path: `screen-capture/${folder.name}.webp`,
+          });
+
+          if ('download_url' in screenshot) {
+            projectData.image = screenshot.download_url;
+          }
+        } catch (error: any) {
+          console.log(
+            `Nessuna immagine di anteprima trovata per ${folder.name}`
+          );
+        }
 
         try {
           const { data: packageJson } = await octokit.rest.repos.getContent({

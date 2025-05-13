@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import { Request, RequestHandler, Response, Router } from 'express';
 import Project from '../models/Project';
 
 const router = Router();
@@ -18,28 +18,28 @@ interface ProjectRequest extends Request {
 }
 
 // Get all projects
-router.get('/', async (_req: Request, res: Response) => {
+router.get('/', (async (_req: Request, res: Response) => {
   try {
     const projects = await Project.find();
-    res.json(projects);
+    return res.json(projects);
   } catch (err: any) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
-});
+}) as unknown as RequestHandler);
 
 // Get single project
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/:id', (async (req: Request, res: Response) => {
   try {
     const project = await Project.findById(req.params.id);
     if (!project) return res.status(404).json({ message: 'Project non found' });
-    res.json(project);
+    return res.json(project);
   } catch (err: any) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
-});
+}) as unknown as RequestHandler);
 
 // Create new project
-router.post('/', async (req: ProjectRequest, res: Response) => {
+router.post('/', (async (req: ProjectRequest, res: Response) => {
   const project = new Project({
     name: req.body.name,
     link: req.body.link,
@@ -49,14 +49,14 @@ router.post('/', async (req: ProjectRequest, res: Response) => {
   });
   try {
     const newProject = await project.save();
-    res.status(201).json(newProject);
+    return res.status(201).json(newProject);
   } catch (err: any) {
-    res.status(400).json({ message: err.message });
+    return res.status(400).json({ message: err.message });
   }
-});
+}) as unknown as RequestHandler);
 
 // Update project
-router.put('/:id', async (req: ProjectRequest, res: Response) => {
+router.put('/:id', (async (req: ProjectRequest, res: Response) => {
   try {
     const project = await Project.findById(req.params.id);
     if (!project) return res.status(404).json({ message: 'Project not found' });
@@ -68,21 +68,21 @@ router.put('/:id', async (req: ProjectRequest, res: Response) => {
     project.description = req.body.description || project.description;
 
     const updateProject = await project.save();
-    res.json(updateProject);
+    return res.json(updateProject);
   } catch (err: any) {
-    res.status(400).json({ message: err.message });
+    return res.status(400).json({ message: err.message });
   }
-});
+}) as unknown as RequestHandler);
 
 // Delete project
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', (async (req: Request, res: Response) => {
   try {
     const project = await Project.findByIdAndDelete(req.params.id);
     if (!project) return res.status(404).json({ message: 'Project not found' });
-    res.json({ message: 'Project deleted' });
+    return res.json({ message: 'Project deleted' });
   } catch (err: any) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
-});
+}) as unknown as RequestHandler);
 
 export default router;

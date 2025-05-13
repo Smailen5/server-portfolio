@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import { initDatabase } from './config/initDb';
+import githubRoutes from './routes/github';
 import projectRoutes from './routes/projects';
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.use('/api/projects', projectRoutes);
+app.use('/api/github', githubRoutes);
 
 // Inizializza il database e avvia il server
 const startServer = async () => {

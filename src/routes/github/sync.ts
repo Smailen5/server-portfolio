@@ -26,84 +26,94 @@ export const syncRepos = async (_req: Request, res: Response) => {
       });
     }
 
-    let allPackages: GitHubContent[] = [];
-    let page = 1;
-    const perPage = 100;
+    // Recuperiamo i contenuti della cartella packages
+    const { data: packages } = await octokit.rest.repos.getContent({
+      owner: 'Smailen5',
+      repo: 'Frontend-mentor-challenge',
+      path: 'packages',
+    });
 
-    // Recuperiamo tutti i contenuti della cartella packages con paginazione
-    while (true) {
-      const { data: packages } = await octokit.rest.repos.getContent({
-        owner: 'Smailen5',
-        repo: 'Frontend-mentor-challenge',
-        path: 'packages',
-        per_page: perPage,
-        page: page,
-      });
-
-      if (!Array.isArray(packages)) {
-        throw new Error('La cartella packages non è stata trovata');
-      }
-
-      if (packages.length === 0) break;
-
-      allPackages = [...allPackages, ...packages];
-      page++;
-
-      // Se riceviamo meno risultati del per_page, abbiamo finito
-      if (packages.length < perPage) break;
+    if (!Array.isArray(packages)) {
+      throw new Error('La cartella packages non è stata trovata');
     }
 
-    const packageFolders = allPackages.filter(
+    // Filtriamo solo le cartelle (escludiamo file come .gitkeep)
+    const packageFolders = packages.filter(
       (item: GitHubContent) => item.type === 'dir'
     );
 
+    console.log(
+      'Progetti trovati:',
+      packageFolders.map((folder) => folder.name)
+    );
+
     let syncedCount = 0;
+    let errors: string[] = [];
 
     for (const folder of packageFolders) {
       try {
-        const { data: packageJson } = await octokit.rest.repos.getContent({
-          owner: 'Smailen5',
-          repo: 'Frontend-mentor-challenge',
-          path: `${folder.path}/package.json`,
-        });
+        let projectData = {
+          name: folder.name,
+          description: '',
+          link: folder.html_url,
+          image: '', // Puoi aggiungere un'immagine di default o lasciare vuoto
+          technologies: [] as string[],
+        };
 
-        if ('content' in packageJson) {
-          const content = Buffer.from(packageJson.content, 'base64').toString();
-          const packageData = JSON.parse(content);
-
-          const projectData = {
-            name: packageData.name || folder.name,
-            description: packageData.description || '',
-            link: folder.html_url,
-            image: '', // Puoi aggiungere un'immagine di default o lasciare vuoto
-            technologies: packageData.dependencies
-              ? Object.keys(packageData.dependencies)
-              : [],
-          };
-
-          // Controlliamo se il progetto esiste già
-          const [project, created] = await Project.findOrCreate({
-            where: { name: projectData.name },
-            defaults: projectData,
+        try {
+          const { data: packageJson } = await octokit.rest.repos.getContent({
+            owner: 'Smailen5',
+            repo: 'Frontend-mentor-challenge',
+            path: `${folder.path}/package.json`,
           });
 
-          if (!created) {
-            // Aggiorniamo il progetto esistente
-            await project.update(projectData);
-          }
+          if ('content' in packageJson) {
+            const content = Buffer.from(
+              packageJson.content,
+              'base64'
+            ).toString();
+            const packageData = JSON.parse(content);
 
-          syncedCount++;
+            projectData = {
+              ...projectData,
+              name: packageData.name || folder.name,
+              description: packageData.description || '',
+              technologies: packageData.dependencies
+                ? Object.keys(packageData.dependencies)
+                : [],
+            };
+          }
+        } catch (error: any) {
+          console.log(
+            `Nessun package.json trovato per ${folder.name}, uso i dati di base`
+          );
         }
-      } catch (error) {
-        console.error(
-          `Errore nel recupero del package.json per ${folder.name}:`,
-          error
-        );
+
+        // Controlliamo se il progetto esiste già
+        const [project, created] = await Project.findOrCreate({
+          where: { name: projectData.name },
+          defaults: projectData,
+        });
+
+        if (!created) {
+          // Aggiorniamo il progetto esistente
+          await project.update(projectData);
+        }
+
+        syncedCount++;
+      } catch (error: any) {
+        const errorMessage = `Errore nel recupero dei dati per ${folder.name}: ${error.message}`;
+        console.error(errorMessage);
+        errors.push(errorMessage);
       }
     }
 
     return res.json({
       message: `Sincronizzati ${syncedCount} progetti con successo`,
+      totalProjects: packageFolders.length,
+      syncedProjects: syncedCount,
+      errors: errors,
+      projects: packageFolders.map((folder) => folder.name),
     });
   } catch (err: any) {
     return res.status(500).json({ message: err.message });

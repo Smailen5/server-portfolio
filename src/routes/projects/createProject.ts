@@ -8,20 +8,22 @@ interface ProjectRequest extends Request {
     image: string;
     technologies: string[];
     description: string;
+    readme: string;
   };
 }
 
 export const createProject = (async (req: ProjectRequest, res: Response) => {
   try {
-    const newProject = await Project.create({
+    const project = await Project.create({
       name: req.body.name,
-      link: req.body.link,
+      description: req.body.description,
       image: req.body.image,
       technologies: req.body.technologies,
-      description: req.body.description,
+      readme: req.body.readme,
     });
-    return res.status(201).json(newProject);
-  } catch (err: any) {
-    return res.status(400).json({ message: err.message });
+
+    return res.status(201).json(project);
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
   }
 }) as unknown as RequestHandler;

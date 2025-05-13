@@ -63,7 +63,6 @@ export const syncRepos = async (_req: Request, res: Response) => {
         let projectData = {
           name: folder.name,
           description: '',
-          link: folder.html_url,
           image: '', // Verrà aggiornato con l'immagine di anteprima
           technologies: [] as string[],
           readme: '',

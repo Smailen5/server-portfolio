@@ -5,13 +5,12 @@ import sequelize from '../config/database';
 export interface ProjectAttributes {
   id: number;
   name: string;
-  link: string;
   image: string;
   technologies: string[];
   description: string;
+  readme: string;
   createdAt?: Date;
   updatedAt?: Date;
-  readme: string;
 }
 
 // Tipo per la creazione di un nuovo project (senza id)
@@ -30,10 +29,6 @@ const Project = sequelize.define<
     primaryKey: true,
   },
   name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  link: {
     type: DataTypes.STRING,
     allowNull: false,
   },

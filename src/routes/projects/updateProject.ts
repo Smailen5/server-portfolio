@@ -4,7 +4,6 @@ import Project, { ProjectAttributes } from '../../models/Project';
 interface ProjectRequest extends Request {
   body: {
     name: string;
-    link: string;
     image: string;
     technologies: string[];
     description: string;
@@ -24,7 +23,6 @@ export const updateProject = (async (req: ProjectRequest, res: Response) => {
 
     await project.update({
       name: req.body.name || projectData.name,
-      link: req.body.link || projectData.link,
       image: req.body.image || projectData.image,
       technologies: req.body.technologies || projectData.technologies,
       description: req.body.description || projectData.description,

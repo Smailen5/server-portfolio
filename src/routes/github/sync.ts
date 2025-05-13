@@ -17,6 +17,12 @@ interface GitHubContent {
   updated_at: string;
 }
 
+interface PackageJson {
+  name: string;
+  description: string;
+  technologies: string[];
+}
+
 export const syncRepos = async (_req: Request, res: Response) => {
   try {
     if (!process.env.GITHUB_TOKEN) {
@@ -72,15 +78,13 @@ export const syncRepos = async (_req: Request, res: Response) => {
               packageJson.content,
               'base64'
             ).toString();
-            const packageData = JSON.parse(content);
+            const packageData = JSON.parse(content) as PackageJson;
 
             projectData = {
               ...projectData,
               name: packageData.name || folder.name,
               description: packageData.description || '',
-              technologies: packageData.dependencies
-                ? Object.keys(packageData.dependencies)
-                : [],
+              technologies: packageData.technologies || [],
             };
           }
         } catch (error: any) {

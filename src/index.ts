@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import { initDatabase } from './config/initDb';
-import projectRoutes from './routes/routes';
+import projectRoutes from './routes/projects';
 
 const app = express();
 const port = process.env.PORT || 3000;

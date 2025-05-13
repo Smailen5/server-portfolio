@@ -27,8 +27,8 @@ dist-ssr
 
 # Private
 .env
+database.sqlite
 
 # File
 # NON RIMUOVERE, CONTROLLA PRIMA README
 readme.md
-

@@ -16,6 +16,7 @@ interface GitHubContent {
   html_url: string;
   updated_at: string;
   download_url?: string;
+  content?: string;
 }
 
 interface PackageJson {
@@ -65,6 +66,7 @@ export const syncRepos = async (_req: Request, res: Response) => {
           link: folder.html_url,
           image: '', // Verrà aggiornato con l'immagine di anteprima
           technologies: [] as string[],
+          readme: '',
         };
 
         // Recuperiamo l'immagine di anteprima
@@ -82,6 +84,22 @@ export const syncRepos = async (_req: Request, res: Response) => {
           console.log(
             `Nessuna immagine di anteprima trovata per ${folder.name}`
           );
+        }
+
+        // Recuperiamo il README.md
+        try {
+          const { data: readme } = await octokit.rest.repos.getContent({
+            owner: 'Smailen5',
+            repo: 'Frontend-mentor-challenge',
+            path: `${folder.path}/README.md`,
+          });
+
+          if ('content' in readme) {
+            const content = Buffer.from(readme.content, 'base64').toString();
+            projectData.readme = content;
+          }
+        } catch (error: any) {
+          console.log(`Nessun README.md trovato per ${folder.name}`);
         }
 
         try {

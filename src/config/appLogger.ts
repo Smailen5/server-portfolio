@@ -57,7 +57,7 @@ const transports = [
     format: fileFormat,
   }),
   // File per tutti i log
-  new winston.transports.File({ filename: 'logs/all.log' }),
+  new winston.transports.File({ filename: 'logs/all.log', format: fileFormat }),
 ];
 
 // Crea il logger

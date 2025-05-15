@@ -1,7 +1,7 @@
 import morgan from 'morgan';
 
 // Formato per i log
-const logFormat = ':method :url :status :response-time ms - :res[content-length]';
+const logFormat = 'Method: :method Url: :url Status: :status Response Time: :response-time ms - Size: :res[content-length]';
 
 // Middleware per il logging delle richieste HTTP
 export const httpLogger = morgan(logFormat, {

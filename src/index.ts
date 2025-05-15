@@ -2,7 +2,6 @@ import bodyParser from 'body-parser';
 import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import { initDatabase } from './config/initDb';
-// Gestione errori
 import { corsMiddleware } from './middleware/cors';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { limiter } from './middleware/rateLimiter';

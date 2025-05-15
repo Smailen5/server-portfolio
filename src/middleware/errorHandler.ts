@@ -1,0 +1,49 @@
+import { NextFunction, Request, Response } from 'express';
+
+// Classe personalizzata per gestire gli errori
+export class AppError extends Error {
+  statusCode: number;
+  status: string;
+  isOperational: boolean;
+
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.statusCode = statusCode;
+    this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
+    this.isOperational = true;
+
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+// Middleware per gestire gli errori
+export const errorHandler = (
+  err: Error | AppError,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // se è un errore personalizzato
+  if (err instanceof AppError) {
+    return res.status(err.statusCode).json({
+      status: err.status,
+      message: err.message,
+    });
+  }
+
+  // per errori non operativi (errori di programmazione)
+  console.error('ERROR 💥', err);
+
+  return res.status(500).json({
+    status: 'error',
+    message: 'Qualcosa è andato storto!',
+  });
+};
+
+// Middleware per gestire le rotte non trovate
+export const notFoundHandler = (req: Request, res: Response) => {
+  res.status(404).json({
+    status: 'fail',
+    message: `Non è possibile trovare ${req.originalUrl} su questo server`,
+  });
+};

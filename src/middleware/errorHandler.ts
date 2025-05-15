@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { logger } from '../config/logger';
 
 // Classe personalizzata per gestire gli errori
 export class AppError extends Error {
@@ -25,6 +26,7 @@ export const errorHandler = (
 ) => {
   // se è un errore personalizzato
   if (err instanceof AppError) {
+    logger.error(`${err.statusCode} - ${err.message}`);
     return res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
@@ -34,6 +36,7 @@ export const errorHandler = (
   // per errori non operativi (errori di programmazione)
   console.error('ERROR 💥', err);
 
+  logger.error(`500 - ${err.message}`);
   return res.status(500).json({
     status: 'error',
     message: 'Qualcosa è andato storto!',
@@ -42,6 +45,7 @@ export const errorHandler = (
 
 // Middleware per gestire le rotte non trovate
 export const notFoundHandler = (req: Request, res: Response) => {
+  logger.warn(`404 - Rotta non trovata: ${req.originalUrl}`);
   res.status(404).json({
     status: 'fail',
     message: `Non è possibile trovare ${req.originalUrl} su questo server`,

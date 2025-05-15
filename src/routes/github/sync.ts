@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import { Request, Response } from 'express';
 import { Octokit } from 'octokit';
+import { syncValidator } from '../../middleware/validators';
+import { validateRequest } from '../../middleware/validatorsRequest';
 import Project from '../../models/Project';
 
 dotenv.config();
@@ -25,7 +27,10 @@ interface PackageJson {
   technologies: string[];
 }
 
-export const syncRepos = async (req: Request, res: Response) => {
+export const syncRepos = [
+  syncValidator,
+  validateRequest,
+  async(req: Request, res: Response) => {
   try {
     if (!process.env.GITHUB_TOKEN) {
       return res.status(500).json({
@@ -173,4 +178,4 @@ export const syncRepos = async (req: Request, res: Response) => {
       errors: [],
     });
   }
-};
+}];

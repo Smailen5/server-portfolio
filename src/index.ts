@@ -38,7 +38,7 @@ const startServer = async () => {
   try {
     await initDatabase();
     app.listen(serverConfig.port, () => {
-      // console.log(`Server in esecuzione sulla porta ${port}`);
+      // console.log(`Server in esecuzione sulla porta ${serverConfig.port}`);
     });
   } catch (error: any) {
     // console.error("Errore durante l'avvio del server:", error);

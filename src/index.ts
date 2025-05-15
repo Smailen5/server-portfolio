@@ -5,7 +5,7 @@ import { initDatabase } from './config/initDb';
 import { serverConfig } from './config/server';
 import { corsMiddleware } from './middleware/cors';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
-import { httpLogger } from './middleware/logger';
+import { httpLogger } from './middleware/httpLogger';
 import { limiter } from './middleware/rateLimiter';
 import githubRoutes from './routes/github';
 import projectRoutes from './routes/projects';

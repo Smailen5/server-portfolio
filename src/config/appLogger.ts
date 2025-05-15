@@ -50,7 +50,7 @@ const transports = [
 ];
 
 // Crea il logger
-export const logger = winston.createLogger({
+export const appLogger = winston.createLogger({
   level: level(),
   levels,
   format,

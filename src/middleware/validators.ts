@@ -56,3 +56,12 @@ export const updateProjectValidator = [
 
 // Validazione per l'ID (usato in GET e DELETE)
 export const idValidator = [param('id').isInt().withMessage('ID non valido')];
+
+// Validazione per la sincronizzazione dei progetti
+export const syncValidator = [
+  body('githubToken')
+    .notEmpty()
+    .withMessage('Il token GitHub e necessario')
+    .isString()
+    .withMessage('Il token deve essere una stringa'),
+];

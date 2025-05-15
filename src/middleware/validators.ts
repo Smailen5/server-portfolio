@@ -53,3 +53,6 @@ export const updateProjectValidator = [
     .isString()
     .withMessage('La descrizione deve essere una stringa'),
 ];
+
+// Validazione per l'ID (usato in GET e DELETE)
+export const idValidator = [param('id').isInt().withMessage('ID non valido')];

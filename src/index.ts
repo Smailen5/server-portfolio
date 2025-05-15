@@ -4,6 +4,7 @@ import express from 'express';
 import { initDatabase } from './config/initDb';
 import githubRoutes from './routes/github';
 import projectRoutes from './routes/projects';
+import rateLimit from 'express-rate-limit';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,6 +22,14 @@ app.use(bodyParser.json());
 // Routes
 app.use('/api/projects', projectRoutes);
 app.use('/api/github', githubRoutes);
+
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minuti
+  max: 100 // Limite di 100 richieste per finestra
+})
+
+app.use(limiter);
 
 // Inizializza il database e avvia il server
 const startServer = async () => {

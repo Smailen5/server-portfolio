@@ -1,9 +1,9 @@
 import bodyParser from 'body-parser';
-import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import { initDatabase } from './config/initDb';
 // Gestione errori
+import { corsMiddleware } from './middleware/cors';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { limiter } from './middleware/rateLimiter';
 import githubRoutes from './routes/github';
@@ -13,13 +13,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(
-  cors({
-    origin: ['https://smailenvargas.com', 'http://localhost:3000'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
-);
+app.use(corsMiddleware);
 app.use(bodyParser.json());
 
 // Routes

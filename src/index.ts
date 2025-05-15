@@ -1,11 +1,11 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
-import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { initDatabase } from './config/initDb';
 // Gestione errori
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
+import { limiter } from './middleware/rateLimiter';
 import githubRoutes from './routes/github';
 import projectRoutes from './routes/projects';
 
@@ -27,11 +27,6 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/github', githubRoutes);
 
 // Rate Limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minuti
-  max: 100, // Limite di 100 richieste per finestra
-});
-
 app.use(limiter);
 
 // Protezione dai problemi di sicurezza

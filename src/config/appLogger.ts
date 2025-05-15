@@ -56,12 +56,14 @@ const transports = [
     level: 'error',
     format: fileFormat,
     options: { flags: 'a' },
+    maxFiles: 50, // mantiene gli ultimi 50 log
   }),
   // File per tutti i log
   new winston.transports.File({
     filename: 'logs/all.log',
     format: fileFormat,
     options: { flags: 'a' },
+    maxFiles: 50, // mantiene gli ultimi 50 log
   }),
 ];
 

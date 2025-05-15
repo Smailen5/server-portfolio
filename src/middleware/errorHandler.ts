@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { appLogger } from '../config/appLogger';
+import { env } from '../config/env';
 
 // Classe personalizzata per gestire gli errori
 export class AppError extends Error {
@@ -30,6 +31,7 @@ export const errorHandler = (
     return res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
+      ...(env.isDevelopment && { stack: err.stack }),
     });
   }
 
@@ -39,7 +41,8 @@ export const errorHandler = (
   appLogger.error(`500 - ${err.message}`);
   return res.status(500).json({
     status: 'error',
-    message: 'Qualcosa è andato storto!',
+    message: env.isDevelopment ? err.message : 'Qualcosa è andato storto!',
+    ...(env.isDevelopment && { stack: err.stack }),
   });
 };
 

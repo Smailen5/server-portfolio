@@ -15,4 +15,6 @@ export const env = {
   errorLogFilePath: process.env.ERROR_LOG_FILE_PATH,
   corsOrigins: process.env.CORS_ORIGINS,
   devOrigin: process.env.DEV_ORIGIN,
+  rateLimitWindow: process.env.RATE_LIMIT_WINDOW_MS,
+  rateLimitMax: process.env.RATE_LIMIT_MAX,
 };

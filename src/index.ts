@@ -32,7 +32,7 @@ app.use(limiter);
 // Protezione dai problemi di sicurezza
 app.use(helmet());
 
-// Gestisce le rotte non traovate
+// Gestisce le rotte non trovate
 app.all('*', notFoundHandler);
 
 // Gestisce tutti gli errori

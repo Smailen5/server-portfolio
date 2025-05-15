@@ -13,7 +13,7 @@ export const env = {
   logLevel: process.env.LOG_LEVEL || 'info',
   logFilePath: process.env.LOG_FILE_PATH,
   errorLogFilePath: process.env.ERROR_LOG_FILE_PATH,
-  corsOrigins: process.env.CORS_ORIGINS,
+  corsOrigins: process.env.CORS_ORIGIN,
   devOrigin: process.env.DEV_ORIGIN,
   rateLimitWindow: process.env.RATE_LIMIT_WINDOW_MS,
   rateLimitMax: process.env.RATE_LIMIT_MAX,

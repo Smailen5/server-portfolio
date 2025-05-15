@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import { initDatabase } from './config/initDb';
+import { serverConfig } from './config/server';
 import { corsMiddleware } from './middleware/cors';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { limiter } from './middleware/rateLimiter';
@@ -9,7 +10,6 @@ import githubRoutes from './routes/github';
 import projectRoutes from './routes/projects';
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(corsMiddleware);
@@ -37,7 +37,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 const startServer = async () => {
   try {
     await initDatabase();
-    app.listen(port, () => {
+    app.listen(serverConfig.port, () => {
       // console.log(`Server in esecuzione sulla porta ${port}`);
     });
   } catch (error: any) {

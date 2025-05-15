@@ -3,8 +3,13 @@ import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import { initDatabase } from './config/initDb';
 import { serverConfig } from './config/server';
+import { validateEnv } from './config/validateEnv';
 import { corsMiddleware } from './middleware/cors';
-import { errorHandler, notFoundHandler } from './middleware/errorHandler';
+import {
+  AppError,
+  errorHandler,
+  notFoundHandler,
+} from './middleware/errorHandler';
 import { httpLogger } from './middleware/httpLogger';
 import { limiter } from './middleware/rateLimiter';
 import githubRoutes from './routes/github';
@@ -38,12 +43,18 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 // Inizializza il database e avvia il server
 const startServer = async () => {
   try {
+    validateEnv();
     await initDatabase();
     app.listen(serverConfig.port, () => {
       // console.log(`Server in esecuzione sulla porta ${serverConfig.port}`);
     });
   } catch (error: any) {
     // console.error("Errore durante l'avvio del server:", error);
+    if (error instanceof AppError) {
+      console.error(`Errore di configurazione: ${error.message}`);
+    } else {
+      console.error("Errore durante l'avvio del server:", error);
+    }
     process.exit(1);
   }
 };

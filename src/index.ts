@@ -1,9 +1,11 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { initDatabase } from './config/initDb';
+// Gestione errori
+import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import githubRoutes from './routes/github';
 import projectRoutes from './routes/projects';
 
@@ -34,6 +36,14 @@ app.use(limiter);
 
 // Protezione dai problemi di sicurezza
 app.use(helmet());
+
+// Gestisce le rotte non traovate
+app.all('*', notFoundHandler);
+
+// Gestisce tutti gli errori
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  errorHandler(err, req, res, next);
+});
 
 // Inizializza il database e avvia il server
 const startServer = async () => {

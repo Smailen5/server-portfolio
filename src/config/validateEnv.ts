@@ -1,0 +1,20 @@
+import { AppError } from '../middleware/errorHandler';
+import { env } from './env';
+
+export const validateEnv = () => {
+  const requireVars = [
+    'githubToken',
+    'logFilePath',
+    'errorLogFilePath',
+    'corsOrigins',
+    'devOrigin',
+    'rateLimitWindow',
+    'rateLimitMax',
+  ] as const;
+
+  for (const key of requireVars) {
+    if (env[key] === undefined) {
+      throw new AppError(`La variabile ${key} non è stata impostata`, 500);
+    }
+  }
+};

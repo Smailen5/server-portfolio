@@ -1,4 +1,5 @@
 import winston from 'winston';
+import { env } from '../config/env';
 
 // Definisce i livelli di log
 const levels = {
@@ -11,8 +12,7 @@ const levels = {
 
 // Scegliamo il livello di log in base all'ambiente
 const level = () => {
-  const env = process.env.NODE_ENV || 'development';
-  return env === 'development' ? 'debug' : 'info';
+  return env.isDevelopment ? 'debug' : 'info';
 };
 
 // Definisce i colori per i livelli di log
@@ -52,7 +52,7 @@ const transports = [
   }),
   // File per gli errori (senza colori)
   new winston.transports.File({
-    filename: 'logs/error.log',
+    filename: env.errorLogFilePath,
     level: 'error',
     format: fileFormat,
     options: { flags: 'a' },
@@ -60,7 +60,7 @@ const transports = [
   }),
   // File per tutti i log
   new winston.transports.File({
-    filename: 'logs/all.log',
+    filename: env.logFilePath,
     format: fileFormat,
     options: { flags: 'a' },
     maxFiles: 50, // mantiene gli ultimi 50 log

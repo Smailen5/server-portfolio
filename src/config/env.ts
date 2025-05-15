@@ -13,4 +13,6 @@ export const env = {
   logLevel: process.env.LOG_LEVEL || 'info',
   logFilePath: process.env.LOG_FILE_PATH,
   errorLogFilePath: process.env.ERROR_LOG_FILE_PATH,
+  corsOrigins: process.env.CORS_ORIGINS,
+  devOrigin: process.env.DEV_ORIGIN,
 };

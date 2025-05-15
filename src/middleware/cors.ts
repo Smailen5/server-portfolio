@@ -1,7 +1,9 @@
 import cors from 'cors';
+import { env } from '../config/env';
 
 export const corsOptions = {
-  origin: ['https://smailenvargas.com', 'http://localhost:3000'],
+  origin:
+    env.corsOrigins && env.devOrigin ? [env.corsOrigins, env.devOrigin] : false,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };

@@ -1,4 +1,6 @@
 import { Request, RequestHandler, Response } from 'express';
+import { createProjectValidator } from '../../middleware/validators';
+import { validateRequest } from '../../middleware/validatorsRequest';
 import Project from '../../models/Project';
 
 interface ProjectRequest extends Request {
@@ -12,18 +14,22 @@ interface ProjectRequest extends Request {
   };
 }
 
-export const createProject = (async (req: ProjectRequest, res: Response) => {
-  try {
-    const project = await Project.create({
-      name: req.body.name,
-      description: req.body.description,
-      image: req.body.image,
-      technologies: req.body.technologies,
-      readme: req.body.readme,
-    });
+export const createProject = [
+  createProjectValidator,
+  validateRequest,
+  async (req: ProjectRequest, res: Response) => {
+    try {
+      const project = await Project.create({
+        name: req.body.name,
+        description: req.body.description,
+        image: req.body.image,
+        technologies: req.body.technologies,
+        readme: req.body.readme,
+      });
 
-    return res.status(201).json(project);
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message });
-  }
-}) as unknown as RequestHandler;
+      return res.status(201).json(project);
+    } catch (error: any) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
+] as unknown as RequestHandler[];

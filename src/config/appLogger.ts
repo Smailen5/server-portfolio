@@ -55,9 +55,14 @@ const transports = [
     filename: 'logs/error.log',
     level: 'error',
     format: fileFormat,
+    options: { flags: 'a' },
   }),
   // File per tutti i log
-  new winston.transports.File({ filename: 'logs/all.log', format: fileFormat }),
+  new winston.transports.File({
+    filename: 'logs/all.log',
+    format: fileFormat,
+    options: { flags: 'a' },
+  }),
 ];
 
 // Crea il logger

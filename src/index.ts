@@ -15,7 +15,7 @@ app.use(
   cors({
     origin: ['https://smailenvargas.com', 'http://localhost:3000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 app.use(bodyParser.json());

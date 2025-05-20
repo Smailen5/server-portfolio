@@ -10,6 +10,7 @@ export const env = {
   isProduction: process.env.NODE_ENV === 'production',
   port: process.env.PORT || 3000,
   githubToken: process.env.GITHUB_TOKEN,
+  apiKey: process.env.API_KEY,
   logLevel: process.env.LOG_LEVEL || 'info',
   logFilePath: process.env.LOG_FILE_PATH,
   errorLogFilePath: process.env.ERROR_LOG_FILE_PATH,

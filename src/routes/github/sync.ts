@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { Octokit } from 'octokit';
 import { env } from '../../config/env';
+import { authMiddleware } from '../../middleware/auth';
 import { syncValidator } from '../../middleware/validators';
 import { validateRequest } from '../../middleware/validatorsRequest';
 import Project from '../../models/Project';
-import { authMiddleware } from '../../middleware/auth';
 
 const octokit = new Octokit({
   auth: env.githubToken,
@@ -24,7 +24,7 @@ interface PackageJson {
   name: string;
   description: string;
   technologies: string[];
-  createdAt: Date;
+  createdAt: string;
 }
 
 export const syncRepos = [
@@ -134,7 +134,9 @@ export const syncRepos = [
                 name: packageData.name || folder.name,
                 description: packageData.description || '',
                 technologies: packageData.technologies || [],
-                createdAt: packageData.createdAt || new Date(),
+                createdAt: packageData.createdAt
+                  ? new Date(packageData.createdAt)
+                  : new Date(),
               };
             }
           } catch (error: any) {

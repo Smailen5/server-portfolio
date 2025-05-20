@@ -1,4 +1,4 @@
-import { body, param } from 'express-validator';
+import { body, header, param } from 'express-validator';
 
 // Validazione per la creazione di un progetto
 export const createProjectValidator = [
@@ -59,9 +59,9 @@ export const idValidator = [param('id').isInt().withMessage('ID non valido')];
 
 // Validazione per la sincronizzazione dei progetti
 export const syncValidator = [
-  body('githubToken')
+  header('x-api-key')
     .notEmpty()
-    .withMessage('Il token GitHub e necessario')
+    .withMessage('La chiave API e necessaria')
     .isString()
-    .withMessage('Il token deve essere una stringa'),
+    .withMessage('La chiave API deve essere una stringa'),
 ];

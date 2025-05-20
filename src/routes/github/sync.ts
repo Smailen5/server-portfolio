@@ -4,6 +4,7 @@ import { env } from '../../config/env';
 import { syncValidator } from '../../middleware/validators';
 import { validateRequest } from '../../middleware/validatorsRequest';
 import Project from '../../models/Project';
+import { authMiddleware } from '../../middleware/auth';
 
 const octokit = new Octokit({
   auth: env.githubToken,
@@ -28,6 +29,7 @@ interface PackageJson {
 export const syncRepos = [
   syncValidator,
   validateRequest,
+  authMiddleware,
   async (req: Request, res: Response) => {
     try {
       if (!env.githubToken) {

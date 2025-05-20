@@ -48,6 +48,80 @@ Recupera un singolo progetto per ID dal database.
 }
 ```
 
+#### POST /api/projects
+
+Crea un nuovo progetto.
+
+**Headers richiesti**
+
+```
+x-api-key: token-autenticazione-api
+```
+
+**Risposta**
+
+```json
+{
+  "message": "Progetto creato con successo",
+  "project": {
+    "id": 1,
+    "name": "nome-progetto",
+    "description": "descrizione del progetto",
+    "image": "url-immagine",
+    "technologies": ["tech1", "tech2"],
+    "readme": "contenuto markdown del readme",
+    "createdAt": "2024-03-20T...",
+    "updatedAt": "2024-03-20T..."
+  }
+}
+```
+
+#### PUT /api/projects/:id
+
+Aggiorna un progetto esistente.
+
+**Headers richiesti**
+
+```
+x-api-key: token-autenticazione-api
+```
+
+**Risposta**
+
+```json
+{
+  "message": "Progetto aggiornato con successo",
+  "project": {
+    "id": 1,
+    "name": "nome-progetto",
+    "description": "descrizione del progetto",
+    "image": "url-immagine",
+    "technologies": ["tech1", "tech2"],
+    "readme": "contenuto markdown del readme",
+    "createdAt": "2024-03-20T...",
+    "updatedAt": "2024-03-20T..."
+  }
+}
+```
+
+#### DELETE /api/projects/:id
+
+Elimina un progetto esistente.
+
+**Headers richiesti**
+
+```
+x-api-key: token-autenticazione-api
+```
+
+**Risposta**
+
+```json
+{
+  "message": "Progetto eliminato con successo"
+}
+```
+
 ### Sincronizzazione GitHub
 
 #### PUT /api/github/sync
@@ -57,7 +131,7 @@ Sincronizza i progetti dal repository GitHub con il database.
 **Headers richiesti**
 
 ```
-x-auth-token: your_secret_auth_token
+x-api-key: token-autenticazione-api
 ```
 
 **Risposta**
@@ -70,7 +144,7 @@ x-auth-token: your_secret_auth_token
   "errors": [],
   "projects": ["nome-progetto-1", "nome-progetto-2"]
 }
-```
+````
 
 ## Gestione degli Errori
 
@@ -96,7 +170,7 @@ In caso di errore, la risposta avrà questo formato:
 Per avviare il server in modalità sviluppo:
 
 ```bash
-pnpm run dev
+pnpm dev
 ```
 
 Per la produzione:

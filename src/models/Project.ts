@@ -48,6 +48,10 @@ const Project = sequelize.define<
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  }
 });
 
 export default Project as ModelStatic<

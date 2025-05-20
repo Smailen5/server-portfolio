@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
 import { Request, RequestHandler, Response } from 'express';
 import { Octokit } from 'octokit';
-
-dotenv.config();
+import { env } from '../../config/env';
 
 const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN,
+  auth: env.githubToken,
 });
 
 interface GitHubContent {
@@ -18,7 +16,7 @@ interface GitHubContent {
 
 export const getRepos = (async (_req: Request, res: Response) => {
   try {
-    if (!process.env.GITHUB_TOKEN) {
+    if (!env.githubToken) {
       return res.status(500).json({
         message:
           'Token GitHub non configurato. Aggiungi GITHUB_TOKEN nel file .env',

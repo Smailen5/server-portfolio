@@ -1,8 +1,10 @@
 import { Request, RequestHandler, Response } from 'express';
-import { idValidator } from '../../middleware/validators';
-import { validateRequest } from '../../middleware/validatorsRequest';
+import {
+  authMiddleware,
+  idValidator,
+  validateRequest,
+} from '../../middleware/';
 import Project from '../../models/Project';
-import { authMiddleware } from '../../middleware/auth';
 
 export const deleteProject = [
   idValidator,

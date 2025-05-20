@@ -1,5 +1,5 @@
 import { DataTypes, Model, ModelStatic, Optional } from 'sequelize';
-import sequelize from '../config/database';
+import { sequelize } from '../config/';
 
 // Definizione del tipo per il modello Project
 export interface ProjectAttributes {
@@ -51,7 +51,7 @@ const Project = sequelize.define<
   createdAt: {
     type: DataTypes.DATE,
     allowNull: true,
-  }
+  },
 });
 
 export default Project as ModelStatic<

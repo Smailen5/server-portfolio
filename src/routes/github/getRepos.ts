@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express';
 import { Octokit } from 'octokit';
-import { env } from '../../config/env';
+import { env } from '../../config/';
 
 const octokit = new Octokit({
   auth: env.githubToken,

@@ -1,8 +1,10 @@
 import { Request, RequestHandler, Response } from 'express';
-import { updateProjectValidator } from '../../middleware/validators';
-import { validateRequest } from '../../middleware/validatorsRequest';
+import {
+  authMiddleware,
+  updateProjectValidator,
+  validateRequest,
+} from '../../middleware/';
 import Project, { ProjectAttributes } from '../../models/Project';
-import { authMiddleware } from '../../middleware/auth';
 
 interface ProjectRequest extends Request {
   body: {

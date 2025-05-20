@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 import { Octokit } from 'octokit';
-import { env } from '../../config/env';
-import { authMiddleware } from '../../middleware/auth';
-import { syncValidator } from '../../middleware/validators';
-import { validateRequest } from '../../middleware/validatorsRequest';
+import { env } from '../../config/';
+import {
+  authMiddleware,
+  syncValidator,
+  validateRequest,
+} from '../../middleware/';
 import Project from '../../models/Project';
 
 const octokit = new Octokit({

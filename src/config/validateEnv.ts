@@ -1,4 +1,4 @@
-import { AppError } from '../middleware/errorHandler';
+import { AppError } from '../middleware/';
 import { env } from './env';
 
 export const validateEnv = () => {

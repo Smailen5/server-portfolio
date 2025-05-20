@@ -24,6 +24,7 @@ interface PackageJson {
   name: string;
   description: string;
   technologies: string[];
+  createdAt: Date;
 }
 
 export const syncRepos = [
@@ -74,6 +75,7 @@ export const syncRepos = [
             description: '',
             image: '', // Verrà aggiornato con l'immagine di anteprima
             technologies: [] as string[],
+            createdAt: new Date(),
             readme: '',
           };
 
@@ -112,6 +114,7 @@ export const syncRepos = [
             );
           }
 
+          // Recuperiamo il package.json
           try {
             const { data: packageJson } = await octokit.rest.repos.getContent({
               owner: 'Smailen5',
@@ -131,6 +134,7 @@ export const syncRepos = [
                 name: packageData.name || folder.name,
                 description: packageData.description || '',
                 technologies: packageData.technologies || [],
+                createdAt: packageData.createdAt || new Date(),
               };
             }
           } catch (error: any) {

@@ -2,10 +2,12 @@ import { Request, RequestHandler, Response } from 'express';
 import { idValidator } from '../../middleware/validators';
 import { validateRequest } from '../../middleware/validatorsRequest';
 import Project from '../../models/Project';
+import { authMiddleware } from '../../middleware/auth';
 
 export const deleteProject = [
   idValidator,
   validateRequest,
+  authMiddleware,
   async (req: Request, res: Response) => {
     try {
       const project = await Project.findByPk(req.params.id);

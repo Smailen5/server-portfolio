@@ -7,8 +7,11 @@ import { updateProject } from './put/updateProject';
 
 const router = Router();
 
+// Rotte pubbliche
 router.get('/', getAllProjects);
 router.get('/:id', getProjectById);
+
+// Rotte protette (richiedono autenticazione)
 router.post('/', createProject);
 router.put('/:id', updateProject);
 router.delete('/:id', deleteProject);

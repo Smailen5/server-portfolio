@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express';
-import { idValidator } from '../../middleware/validators';
-import { validateRequest } from '../../middleware/validatorsRequest';
-import Project from '../../models/Project';
+import { idValidator } from '../../../middleware/validators';
+import { validateRequest } from '../../../middleware/validatorsRequest';
+import Project from '../../../models/Project';
 
 export const getProjectById = [
   idValidator,

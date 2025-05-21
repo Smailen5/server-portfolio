@@ -1,23 +1,17 @@
 import { Request, RequestHandler, Response } from 'express';
-import {
-  authMiddleware,
-  idValidator,
-  validateRequest,
-} from '../../middleware/';
-import Project from '../../models/Project';
+import { idValidator } from '../../../middleware/validators';
+import { validateRequest } from '../../../middleware/validatorsRequest';
+import Project from '../../../models/Project';
 
-export const deleteProject = [
+export const getProjectById = [
   idValidator,
   validateRequest,
-  authMiddleware,
   async (req: Request, res: Response) => {
     try {
       const project = await Project.findByPk(req.params.id);
       if (!project)
-        return res.status(404).json({ message: 'Project non trovato' });
-
-      await project.destroy();
-      return res.json({ message: 'Project eliminato' });
+        return res.status(404).json({ message: 'Progetto non trovato' });
+      return res.json(project);
     } catch (err: any) {
       return res.status(500).json({ message: err.message });
     }

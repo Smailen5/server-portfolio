@@ -18,4 +18,6 @@ export const env = {
   devOrigin: process.env.DEV_ORIGIN,
   rateLimitWindow: process.env.RATE_LIMIT_WINDOW_MS,
   rateLimitMax: process.env.RATE_LIMIT_MAX,
+  adminEmail: process.env.ADMIN_EMAIL,
+  adminPassword: process.env.ADMIN_PASSWORD,
 };

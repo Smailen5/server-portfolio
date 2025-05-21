@@ -7,6 +7,7 @@ import {
   validateRequest,
 } from '../../middleware/';
 import Project from '../../models/Project';
+import { jwtAuth } from '../../middleware/auth/jwtAuth';
 
 const octokit = new Octokit({
   auth: env.githubToken,
@@ -33,6 +34,7 @@ export const syncRepos = [
   syncValidator,
   validateRequest,
   authMiddleware,
+  jwtAuth,
   async (req: Request, res: Response) => {
     try {
       if (!env.githubToken) {

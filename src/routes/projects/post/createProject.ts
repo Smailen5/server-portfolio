@@ -1,10 +1,9 @@
 import { Request, RequestHandler, Response } from 'express';
-import {
-  authMiddleware,
-  createProjectValidator,
-  validateRequest,
-} from '../../middleware/';
-import Project from '../../models/Project';
+import { authMiddleware } from '../../../middleware/auth';
+import { jwtAuth } from '../../../middleware/auth/jwtAuth';
+import { createProjectValidator } from '../../../middleware/validators';
+import { validateRequest } from '../../../middleware/validatorsRequest';
+import Project from '../../../models/Project';
 
 interface ProjectRequest extends Request {
   body: {
@@ -21,6 +20,7 @@ export const createProject = [
   createProjectValidator,
   validateRequest,
   authMiddleware,
+  jwtAuth,
   async (req: ProjectRequest, res: Response) => {
     try {
       const project = await Project.create({

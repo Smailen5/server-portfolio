@@ -6,7 +6,7 @@ import { getAllProjects } from './projects/get/getAllProjects';
 import { getProjectById } from './projects/get/getProjectById';
 import { createProject } from './projects/post/createProject';
 import { updateProject } from './projects/put/updateProject';
-import usersRoutes from './users/routes';
+import usersRoutes from './users';
 
 const router = Router();
 

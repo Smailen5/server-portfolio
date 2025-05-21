@@ -14,7 +14,7 @@ import { httpLogger } from './middleware/httpLogger';
 import { limiter } from './middleware/rateLimiter';
 import githubRoutes from './routes/github';
 import projectRoutes from './routes/projects';
-import usersRoutes from './routes/users/routes';
+import usersRoutes from './routes/users';
 
 const app = express();
 

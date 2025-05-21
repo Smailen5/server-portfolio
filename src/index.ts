@@ -14,6 +14,7 @@ import { httpLogger } from './middleware/httpLogger';
 import { limiter } from './middleware/rateLimiter';
 import githubRoutes from './routes/github';
 import projectRoutes from './routes/projects';
+import usersRoutes from './routes/users/routes';
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(httpLogger);
 // Routes
 app.use('/api/projects', projectRoutes);
 app.use('/api/github', githubRoutes);
+app.use('/api/users', usersRoutes);
 
 // Rate Limiting
 app.use(limiter);

@@ -3,6 +3,7 @@ import { updateProjectValidator } from '../../middleware/validators';
 import { validateRequest } from '../../middleware/validatorsRequest';
 import Project, { ProjectAttributes } from '../../models/Project';
 import { authMiddleware } from '../../middleware/auth';
+import { jwtAuth } from '../../middleware/auth/jwtAuth';
 
 interface ProjectRequest extends Request {
   body: {
@@ -20,6 +21,7 @@ export const updateProject = [
   updateProjectValidator,
   validateRequest,
   authMiddleware,
+  jwtAuth,
   async (req: ProjectRequest, res: Response) => {
     try {
       const project = await Project.findByPk(req.params.id);

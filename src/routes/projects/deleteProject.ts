@@ -3,11 +3,13 @@ import { idValidator } from '../../middleware/validators';
 import { validateRequest } from '../../middleware/validatorsRequest';
 import Project from '../../models/Project';
 import { authMiddleware } from '../../middleware/auth';
+import { jwtAuth } from '../../middleware/auth/jwtAuth';
 
 export const deleteProject = [
   idValidator,
   validateRequest,
   authMiddleware,
+  jwtAuth,
   async (req: Request, res: Response) => {
     try {
       const project = await Project.findByPk(req.params.id);

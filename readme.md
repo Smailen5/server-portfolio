@@ -4,6 +4,20 @@ Server backend per la gestione dei progetti del portfolio.
 
 ## API Endpoints
 
+### Autenticazione
+
+#### POST /api/users/login
+
+Autenticazione per l'accesso all'API.
+
+**Risposta**
+
+```json
+{
+  "token": "token-jwt"
+}
+```
+
 ### Progetti
 
 #### GET /api/projects
@@ -56,6 +70,7 @@ Crea un nuovo progetto.
 
 ```
 x-api-key: token-autenticazione-api
+Authorization: Bearer token-jwt
 ```
 
 **Risposta**
@@ -84,6 +99,7 @@ Aggiorna un progetto esistente.
 
 ```
 x-api-key: token-autenticazione-api
+Authorization: Bearer token-jwt
 ```
 
 **Risposta**
@@ -112,6 +128,7 @@ Elimina un progetto esistente.
 
 ```
 x-api-key: token-autenticazione-api
+Authorization: Bearer token-jwt
 ```
 
 **Risposta**
@@ -132,6 +149,7 @@ Sincronizza i progetti dal repository GitHub con il database.
 
 ```
 x-api-key: token-autenticazione-api
+Authorization: Bearer token-jwt
 ```
 
 **Risposta**

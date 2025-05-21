@@ -65,3 +65,17 @@ export const syncValidator = [
     .isString()
     .withMessage('La chiave API deve essere una stringa'),
 ];
+
+// Validazione utente
+export const validateLoginInput = [
+  body('email')
+    .notEmpty()
+    .withMessage("L'email e obbligatoria")
+    .isEmail()
+    .withMessage("Inserisci un'email valida"),
+  body('password')
+    .notEmpty()
+    .withMessage('La password e obbligatoria')
+    .isLength({ min: 6 })
+    .withMessage('La password deve essere almeno 6 caratteri'),
+];

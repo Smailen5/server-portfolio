@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { Octokit } from 'octokit';
-import { env } from '../../config/';
+import { env } from '../../config';
 import {
   authMiddleware,
   syncValidator,
   validateRequest,
-} from '../../middleware/';
+} from '../../middleware';
 import { jwtAuth } from '../../middleware/auth/jwtAuth';
 import Project from '../../models/Project';
 

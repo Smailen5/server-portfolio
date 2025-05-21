@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getRepos } from '../../controllers/github/getRepos';
-import { syncRepos } from '../../controllers/github/sync';
+import { syncRepos } from '../../controllers/github/syncRepos';
 
 const router = Router();
 

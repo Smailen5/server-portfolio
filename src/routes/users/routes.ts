@@ -1,34 +1,10 @@
-import bcrypt from 'bcrypt';
-import dotenv from 'dotenv';
-import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import User from '../../models/User';
+import { Router } from 'express';
+import { logUser } from '../../controllers/users/authController';
+import { validateLoginInput } from '../../middleware/validators';
+import { handleLoginValidation } from '../../middleware/validatorsLogin';
 
-dotenv.config();
+const router = Router();
 
-export const logUser = async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ where: { email } });
+router.post('/login', validateLoginInput, handleLoginValidation, logUser);
 
-    if (!user) return res.status(401).json({ message: 'Utente non trovato' });
-
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      user.getDataValue('password')
-    );
-    if (!isPasswordValid)
-      return res.status(401).json({ message: 'Password non valida' });
-
-    const token = jwt.sign(
-      { id: user.getDataValue('id') },
-      process.env.JWT_SECRET as string,
-      {
-        expiresIn: '24h',
-      }
-    );
-    res.json({ token });
-  } catch (error) {
-    res.status(401).json({ message: 'Credenziali non valide' });
-  }
-};
+export default router;

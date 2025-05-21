@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { getRepos } from '../controllers/github/getRepos';
 import { syncRepos } from '../controllers/github/syncRepos';
+import { createProject } from '../controllers/projects/createProject';
 import { deleteProject } from '../controllers/projects/deleteProject';
 import { getAllProjects } from '../controllers/projects/getAllProjects';
 import { getProjectById } from '../controllers/projects/getProjectById';
-import { createProject } from '../controllers/projects/createProject';
 import { updateProject } from '../controllers/projects/updateProject';
 import usersRoutes from './users';
 

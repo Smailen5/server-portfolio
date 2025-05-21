@@ -10,6 +10,7 @@ export const validateEnv = () => {
     'devOrigin',
     'rateLimitWindow',
     'rateLimitMax',
+    'apiKey',
   ] as const;
 
   for (const key of requireVars) {

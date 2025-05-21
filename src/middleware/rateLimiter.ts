@@ -9,7 +9,9 @@ export const limiter = rateLimit({
 });
 
 export const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
+  windowMs: env.rateLimitWindow
+    ? parseInt(env.rateLimitWindow)
+    : 15 * 60 * 1000,
   max: 5, // Limite di 5 richieste per finestra
   message: {
     success: false,

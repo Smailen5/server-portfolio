@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { getRepos } from './github/getRepos';
-import { syncRepos } from './github/sync';
-import { deleteProject } from './projects/delete/deleteProject';
-import { getAllProjects } from './projects/get/getAllProjects';
-import { getProjectById } from './projects/get/getProjectById';
-import { createProject } from './projects/post/createProject';
-import { updateProject } from './projects/put/updateProject';
+import { getRepos } from '../controllers/github/getRepos';
+import { syncRepos } from '../controllers/github/syncRepos';
+import { deleteProject } from '../controllers/projects/deleteProject';
+import { getAllProjects } from '../controllers/projects/getAllProjects';
+import { getProjectById } from '../controllers/projects/getProjectById';
+import { createProject } from '../controllers/projects/createProject';
+import { updateProject } from '../controllers/projects/updateProject';
 import usersRoutes from './users';
 
 const router = Router();

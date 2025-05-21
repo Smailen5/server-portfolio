@@ -6,8 +6,8 @@ import {
   syncValidator,
   validateRequest,
 } from '../../middleware/';
-import Project from '../../models/Project';
 import { jwtAuth } from '../../middleware/auth/jwtAuth';
+import Project from '../../models/Project';
 
 const octokit = new Octokit({
   auth: env.githubToken,

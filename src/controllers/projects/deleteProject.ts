@@ -1,9 +1,9 @@
 import { Request, RequestHandler, Response } from 'express';
-import { authMiddleware } from '../../../middleware/auth';
-import { jwtAuth } from '../../../middleware/auth/jwtAuth';
-import { idValidator } from '../../../middleware/validators';
-import { validateRequest } from '../../../middleware/validatorsRequest';
-import Project from '../../../models/Project';
+import { authMiddleware } from '../../middleware';
+import { jwtAuth } from '../../middleware/auth/jwtAuth';
+import { idValidator } from '../../middleware/validators';
+import { validateRequest } from '../../middleware/validatorsRequest';
+import Project from '../../models/Project';
 
 export const deleteProject = [
   idValidator,

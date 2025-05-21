@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from 'express';
-import { authMiddleware } from '../../middleware/auth';
+import { authMiddleware } from '../../middleware/auth/auth';
 import { jwtAuth } from '../../middleware/auth/jwtAuth';
 import { updateProjectValidator } from '../../middleware/validators/validators';
 import { validateRequest } from '../../middleware/validators/validatorsRequest';

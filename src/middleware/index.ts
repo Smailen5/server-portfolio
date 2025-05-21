@@ -1,4 +1,4 @@
-export * from './auth';
+export * from './auth/auth';
 export * from './cors';
 export * from './errorHandler';
 export * from './httpLogger';

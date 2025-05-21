@@ -1,8 +1,8 @@
 import { Request, RequestHandler, Response } from 'express';
 import { authMiddleware } from '../../middleware/auth';
 import { jwtAuth } from '../../middleware/auth/jwtAuth';
-import { updateProjectValidator } from '../../middleware/validators';
-import { validateRequest } from '../../middleware/validatorsRequest';
+import { updateProjectValidator } from '../../middleware/validators/validators';
+import { validateRequest } from '../../middleware/validators/validatorsRequest';
 import Project, { ProjectAttributes } from '../../models/Project';
 
 interface ProjectRequest extends Request {

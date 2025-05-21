@@ -10,6 +10,21 @@ Server backend per la gestione dei progetti del portfolio.
 
 Autenticazione per l'accesso all'API.
 
+**Headers richiesti**
+
+```
+x-api-key: token-autenticazione-api
+```
+
+**Body**
+
+```json
+{
+  "email": "email-utente",
+  "password": "password-utente"
+}
+```
+
 **Risposta**
 
 ```json
@@ -73,6 +88,17 @@ x-api-key: token-autenticazione-api
 Authorization: Bearer token-jwt
 ```
 
+**Body**
+
+```json
+{
+  "name": "nome-progetto",
+  "description": "descrizione del progetto",
+  "image": "url-immagine",
+  "technologies": ["tech1", "tech2"]
+}
+```
+
 **Risposta**
 
 ```json
@@ -100,6 +126,19 @@ Aggiorna un progetto esistente.
 ```
 x-api-key: token-autenticazione-api
 Authorization: Bearer token-jwt
+```
+
+**Body**
+
+Solo i campi che vengono modificati devono essere presenti nel body.
+
+```json
+{
+  "name": "nome-progetto",
+  "description": "descrizione del progetto",
+  "image": "url-immagine",
+  "technologies": ["tech1", "tech2"]
+}
 ```
 
 **Risposta**

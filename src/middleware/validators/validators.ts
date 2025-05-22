@@ -4,19 +4,19 @@ import { body, header, param } from 'express-validator';
 export const createProjectValidator = [
   body('name')
     .notEmpty()
-    .withMessage('Il nome e obbligatorio')
+    .withMessage('Il nome è obbligatorio')
     .isString()
     .withMessage('Il nome deve essere una stringa'),
   body('link')
     .notEmpty()
-    .withMessage('Il link e obbligatorio')
+    .withMessage('Il link è obbligatorio')
     .isURL()
     .withMessage('il link deve essere un URL valido'),
   body('image')
     .notEmpty()
-    .withMessage("L'immagine e obbligatoria")
-    .isString()
-    .withMessage("L'immagine deve essere una stringa"),
+    .withMessage("L'immagine è obbligatoria")
+    .isURL()
+    .withMessage("L'immagine deve essere un URL valido"),
   body('technologies')
     .isArray()
     .withMessage('Le tecnologie devono essere un array')
@@ -24,7 +24,7 @@ export const createProjectValidator = [
     .withMessage('Almeno una tecnologia e obbligatoria'),
   body('description')
     .notEmpty()
-    .withMessage('La descrizione e obbligatoria')
+    .withMessage('La descrizione è obbligatoria')
     .isString()
     .withMessage('La descrizione deve essere una stringa'),
 ];
@@ -61,7 +61,7 @@ export const idValidator = [param('id').isInt().withMessage('ID non valido')];
 export const syncValidator = [
   header('x-api-key')
     .notEmpty()
-    .withMessage('La chiave API e necessaria')
+    .withMessage('La chiave API è necessaria')
     .isString()
     .withMessage('La chiave API deve essere una stringa'),
 ];

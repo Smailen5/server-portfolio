@@ -84,12 +84,6 @@ export const validateLoginInput = [
   body('password')
     .notEmpty()
     .withMessage('La password è obbligatoria')
-    .isLength({ min: 8 })
-    .withMessage('La password deve essere di almeno 8 caratteri')
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-    )
-    .withMessage(
-      'La password deve contenere almeno una lettera maiuscola, una minuscola, un numero e un carattere speciale'
-    ),
+    .isLength({ min: 6 })
+    .withMessage('La password deve essere di almeno 6 caratteri'),
 ];

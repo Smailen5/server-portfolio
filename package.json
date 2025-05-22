@@ -7,9 +7,22 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "smailen vargas",
   "license": "ISC",
-  "description": "",
+  "description": "server personale per il mio sito portfolio",
+  "technologies": [
+    "nodejs",
+    "express",
+    "typescript",
+    "sequelize",
+    "sqlite3",
+    "jsonwebtoken",
+    "bcrypt",
+    "helmet",
+    "morgan",
+    "winston",
+    "octokit"
+  ],
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.9",

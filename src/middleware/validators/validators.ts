@@ -70,12 +70,20 @@ export const syncValidator = [
 export const validateLoginInput = [
   body('email')
     .notEmpty()
-    .withMessage("L'email e obbligatoria")
+    .withMessage("L'email è obbligatoria")
     .isEmail()
-    .withMessage("Inserisci un'email valida"),
+    .withMessage("Inserisci un'email valida")
+    .normalizeEmail()
+    .toLowerCase(),
   body('password')
     .notEmpty()
-    .withMessage('La password e obbligatoria')
-    .isLength({ min: 6 })
-    .withMessage('La password deve essere almeno 6 caratteri'),
+    .withMessage('La password è obbligatoria')
+    .isLength({ min: 8 })
+    .withMessage('La password deve essere di almeno 8 caratteri')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    )
+    .withMessage(
+      'La password deve contenere almeno una lettera maiuscola, una minuscola, un numero e un carattere speciale'
+    ),
 ];

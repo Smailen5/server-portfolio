@@ -8,27 +8,17 @@ import {
 } from '../../middleware';
 import { jwtAuth } from '../../middleware/auth/jwtAuth';
 import Project from '../../models/Project';
+import { ProjectData } from '../../types';
+import {
+  getPackageJson,
+  getProjectsFromGithub,
+  getReadme,
+  getScreenshot,
+} from '../../utils/githubUtils';
 
 const octokit = new Octokit({
   auth: env.githubToken,
 });
-
-interface GitHubContent {
-  name: string;
-  path: string;
-  type: string;
-  html_url: string;
-  updated_at: string;
-  download_url?: string;
-  content?: string;
-}
-
-interface PackageJson {
-  name: string;
-  description: string;
-  technologies: string[];
-  createdAt: string;
-}
 
 export const syncRepos = [
   syncValidator,
@@ -45,36 +35,13 @@ export const syncRepos = [
         });
       }
 
-      // Recuperiamo i contenuti della cartella packages
-      const { data: packages } = await octokit.rest.repos.getContent({
-        owner: 'Smailen5',
-        repo: 'Frontend-mentor-challenge',
-        path: 'packages',
-      });
-
-      if (!Array.isArray(packages)) {
-        return res.status(404).json({
-          message: 'La cartella packages non è stata trovata',
-          errors: [],
-        });
-      }
-
-      // Filtriamo solo le cartelle (escludiamo file come .gitkeep)
-      const packageFolders = packages.filter(
-        (item: GitHubContent) => item.type === 'dir'
-      );
-
-      // console.log(
-      //   'Progetti trovati:',
-      //   packageFolders.map((folder) => folder.name)
-      // );
-
+      const packageFolders = await getProjectsFromGithub(octokit);
       let syncedCount = 0;
       let errors: string[] = [];
 
       for (const folder of packageFolders) {
         try {
-          let projectData = {
+          let projectData: ProjectData = {
             name: folder.name,
             description: '',
             image: '', // Verrà aggiornato con l'immagine di anteprima
@@ -84,69 +51,37 @@ export const syncRepos = [
           };
 
           // Recuperiamo l'immagine di anteprima
-          try {
-            const { data: screenshot } = await octokit.rest.repos.getContent({
-              owner: 'Smailen5',
-              repo: 'Frontend-mentor-challenge',
-              path: `screen-capture/${folder.name}.webp`,
-            });
-
-            if ('download_url' in screenshot) {
-              projectData.image = screenshot.download_url;
-            }
-          } catch (error: any) {
+          const screenshot = await getScreenshot(octokit, folder.name);
+          if (screenshot) {
+            projectData.image = screenshot;
+          } else {
             errors.push(
-              `Nessuna immagine di anteprima trovata per ${folder.name}: ${error.message}`
+              `Nessuna immagine di anteprima trovata per ${folder.name}`
             );
           }
 
           // Recuperiamo il README.md
-          try {
-            const { data: readme } = await octokit.rest.repos.getContent({
-              owner: 'Smailen5',
-              repo: 'Frontend-mentor-challenge',
-              path: `${folder.path}/README.md`,
-            });
-
-            if ('content' in readme) {
-              const content = Buffer.from(readme.content, 'base64').toString();
-              projectData.readme = content;
-            }
-          } catch (error: any) {
-            errors.push(
-              `Nessun README.md trovato per ${folder.name}: ${error.message}`
-            );
+          const readme = await getReadme(octokit, folder);
+          if (readme) {
+            projectData.readme = readme;
+          } else {
+            errors.push(`Nessun README.md trovato per ${folder.name}`);
           }
 
           // Recuperiamo il package.json
-          try {
-            const { data: packageJson } = await octokit.rest.repos.getContent({
-              owner: 'Smailen5',
-              repo: 'Frontend-mentor-challenge',
-              path: `${folder.path}/package.json`,
-            });
-
-            if ('content' in packageJson) {
-              const content = Buffer.from(
-                packageJson.content,
-                'base64'
-              ).toString();
-              const packageData = JSON.parse(content) as PackageJson;
-
-              projectData = {
-                ...projectData,
-                name: packageData.name || folder.name,
-                description: packageData.description || '',
-                technologies: packageData.technologies || [],
-                createdAt: packageData.createdAt
-                  ? new Date(packageData.createdAt)
-                  : new Date(),
-              };
-            }
-          } catch (error: any) {
-            errors.push(
-              `Nessun package.json trovato per ${folder.name}: ${error.message}`
-            );
+          const packageData = await getPackageJson(octokit, folder);
+          if (packageData) {
+            projectData = {
+              ...projectData,
+              name: packageData.name || folder.name,
+              description: packageData.description || '',
+              technologies: packageData.technologies || [],
+              createdAt: packageData.createdAt
+                ? new Date(packageData.createdAt)
+                : new Date(),
+            };
+          } else {
+            errors.push(`Nessun package.json trovato per ${folder.name}`);
           }
 
           // Controlliamo se il progetto esiste già

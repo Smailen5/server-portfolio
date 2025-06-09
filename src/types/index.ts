@@ -2,9 +2,8 @@ export interface GitHubContent {
   name: string;
   path: string;
   type: string;
-  html_url: string;
-  updated_at: string;
-  download_url?: string;
+  html_url: string | null;
+  download_url?: string | null;
   content?: string;
 }
 

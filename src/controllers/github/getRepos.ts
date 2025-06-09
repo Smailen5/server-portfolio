@@ -28,7 +28,7 @@ export const getRepos = (async (_req: Request, res: Response) => {
           description: packageData?.description || '',
           url: folder.html_url,
           technologies: packageData?.technologies || [],
-          updated_at: packageData?.createdAt || folder.updated_at,
+          updated_at: packageData?.createdAt || new Date().toISOString(),
         };
       })
     );

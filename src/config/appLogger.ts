@@ -50,21 +50,26 @@ const transports = [
   new winston.transports.Console({
     format: consoleFormat,
   }),
-  // File per gli errori (senza colori)
-  new winston.transports.File({
-    filename: env.errorLogFilePath,
-    level: 'error',
-    format: fileFormat,
-    options: { flags: 'a' },
-    maxFiles: 50, // mantiene gli ultimi 50 log
-  }),
-  // File per tutti i log
-  new winston.transports.File({
-    filename: env.logFilePath,
-    format: fileFormat,
-    options: { flags: 'a' },
-    maxFiles: 50, // mantiene gli ultimi 50 log
-  }),
+
+  ...(env.isDevelopment
+    ? [
+        // File per gli errori (senza colori)
+        new winston.transports.File({
+          filename: env.errorLogFilePath,
+          level: 'error',
+          format: fileFormat,
+          options: { flags: 'a' },
+          maxFiles: 50, // mantiene gli ultimi 50 log
+        }),
+        // File per tutti i log
+        new winston.transports.File({
+          filename: env.logFilePath,
+          format: fileFormat,
+          options: { flags: 'a' },
+          maxFiles: 50, // mantiene gli ultimi 50 log
+        }),
+      ]
+    : []),
 ];
 
 // Crea il logger

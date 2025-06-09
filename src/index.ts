@@ -47,7 +47,7 @@ const startServer = async () => {
   try {
     validateEnv();
     await initDatabase();
-    app.listen(serverConfig.port, () => {
+    app.listen(Number(serverConfig.port), '0.0.0.0', () => {
       // console.log(`Server in esecuzione sulla porta ${serverConfig.port}`);
     });
   } catch (error: any) {

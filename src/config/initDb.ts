@@ -1,4 +1,4 @@
-import { getRepos } from '../controllers/github/getRepos';
+// import { getRepos } from '../controllers/github/getRepos';
 import { createAdminUser } from '../seeders/createAdminUser';
 import { appLogger } from './appLogger';
 import sequelize from './database';

@@ -201,7 +201,7 @@ Authorization: Bearer token-jwt
   "errors": [],
   "projects": ["nome-progetto-1", "nome-progetto-2"]
 }
-````
+```
 
 ## Gestione degli Errori
 
@@ -235,3 +235,7 @@ Per la produzione:
 ```bash
 pnpm start
 ```
+
+## Licenza
+
+Questo progetto è distribuito con licenza ISC. Vedi il file [LICENSE](LICENSE) per maggiori dettagli.

@@ -15,6 +15,7 @@ export const createAdminUser = async () => {
       const hashedPassword = await bcrypt.hash(env.adminPassword, 10);
 
       await User.create({
+        name: 'Admin',
         email: env.adminEmail,
         password: hashedPassword,
         role: 'admin',

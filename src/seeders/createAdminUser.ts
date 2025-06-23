@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { appLogger } from '../config/appLogger';
 import { env } from '../config/env';
-import {User} from '../models/User';
+import { User } from '../models/User';
 
 export const createAdminUser = async () => {
   try {
@@ -9,9 +9,7 @@ export const createAdminUser = async () => {
       throw new Error('Credenziali admin non configurate nel file .env');
     }
 
-    const adminExists = await User.findOne({
-      where: { email: env.adminEmail },
-    });
+    const adminExists = await User.findOne({ email: env.adminEmail });
 
     if (!adminExists) {
       const hashedPassword = await bcrypt.hash(env.adminPassword, 10);

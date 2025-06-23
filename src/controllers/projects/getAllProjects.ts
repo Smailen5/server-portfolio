@@ -1,11 +1,9 @@
 import { Request, RequestHandler, Response } from 'express';
-import Project from '../../models/Project';
+import {Project} from '../../models/Projects';
 
 export const getAllProjects = (async (_req: Request, res: Response) => {
   try {
-    const projects = await Project.findAll({
-      order: [['createdAt', 'DESC']],
-    });
+    const projects = await Project.find().sort({ createdAt: -1 })
     return res.json(projects);
   } catch (err: any) {
     return res.status(500).json({ message: err.message });

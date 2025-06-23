@@ -3,7 +3,7 @@ import { authMiddleware } from '../../middleware/auth/auth';
 import { jwtAuth } from '../../middleware/auth/jwtAuth';
 import { updateProjectValidator } from '../../middleware/validators/validators';
 import { validateRequest } from '../../middleware/validators/validatorsRequest';
-import Project, { ProjectAttributes } from '../../models/Project';
+import { Project } from '../../models/Projects';
 
 interface ProjectRequest extends Request {
   body: {
@@ -24,13 +24,13 @@ export const updateProject = [
   jwtAuth,
   async (req: ProjectRequest, res: Response) => {
     try {
-      const project = await Project.findByPk(req.params.id);
+      const project = await Project.findOne({ _id: req.params.id });
       if (!project)
         return res.status(404).json({ message: 'Project non trovato' });
 
-      const projectData = project.get({ plain: true }) as ProjectAttributes;
+      const projectData = project.toObject();
 
-      await project.update({
+      await project.updateOne({
         name: req.body.name || projectData.name,
         image: req.body.image || projectData.image,
         technologies: req.body.technologies || projectData.technologies,

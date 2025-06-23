@@ -7,7 +7,7 @@ import {
   validateRequest,
 } from '../../middleware';
 import { jwtAuth } from '../../middleware/auth/jwtAuth';
-import Project from '../../models/Project';
+import { Project } from '../../models/Projects';
 import { ProjectData } from '../../types';
 import {
   getPackageJson,
@@ -85,14 +85,21 @@ export const syncRepos = [
           }
 
           // Controlliamo se il progetto esiste già
-          const [project, created] = await Project.findOrCreate({
-            where: { name: projectData.name },
-            defaults: projectData,
-          });
+          let project = await Project.findOne({ name: projectData.name });
+          // const [project, created] = await Project.findOrCreate({
+          //   where: { name: projectData.name },
+          //   defaults: projectData,
+          // });
 
-          if (!created) {
-            // Aggiorniamo il progetto esistente
-            await project.update(projectData);
+          if (project) {
+            // Aggiorniamo il progetto esistente con la data odierna
+            await Project.updateOne(
+              { name: projectData.name },
+              { ...projectData, updatedAt: new Date() }
+            );
+          } else {
+            // Creiamo un nuovo progetto
+            project = await Project.create(projectData)
           }
 
           syncedCount++;

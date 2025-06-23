@@ -3,7 +3,7 @@ import { authMiddleware } from '../../middleware/auth/auth';
 import { jwtAuth } from '../../middleware/auth/jwtAuth';
 import { createProjectValidator } from '../../middleware/validators/validators';
 import { validateRequest } from '../../middleware/validators/validatorsRequest';
-import Project from '../../models/Project';
+import {Project} from '../../models/Projects';
 
 interface ProjectRequest extends Request {
   body: {

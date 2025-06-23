@@ -1,9 +1,9 @@
 import { Request, RequestHandler, Response } from 'express';
-import Project from '../../models/Project';
+import {Project} from '../../models/Projects';
 
 export const getAllProjects = (async (_req: Request, res: Response) => {
   try {
-    const projects = await Project.findAll({
+    const projects = await Project.find({
       order: [['createdAt', 'DESC']],
     });
     return res.json(projects);

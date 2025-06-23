@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import { appLogger } from './config/appLogger';
-import DbConnection from './config/mongodb';
+// import DbConnection from './config/mongodb';
 import { serverConfig } from './config/server';
 import { validateEnv } from './config/validateEnv';
 import { corsMiddleware } from './middleware/cors';
@@ -16,9 +16,10 @@ import { limiter } from './middleware/rateLimiter';
 import githubRoutes from './routes/github';
 import projectRoutes from './routes/projects';
 import usersRoutes from './routes/users';
+import initMongo from './config/initMongo';
 
 const app = express();
-const conn = new DbConnection();
+// const conn = new DbConnection();
 
 // Middleware
 app.use(corsMiddleware);
@@ -49,7 +50,8 @@ const startServer = async () => {
   try {
     validateEnv();
     // await initDatabase();
-    await conn.getConnection();
+    await initMongo()
+    // await conn.getConnection();
     app.listen(Number(serverConfig.port), '0.0.0.0', () => {
       appLogger.info(`Server in esecuzione sulla porta ${serverConfig.port}`);
     });

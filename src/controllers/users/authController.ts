@@ -2,13 +2,13 @@ import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { appLogger } from '../../config/appLogger';
-import User from '../../models/User';
+import {User} from '../../models/User';
 
 export const logUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ email });
 
     if (!user) {
       appLogger.warn(
@@ -24,7 +24,7 @@ export const logUser = async (req: Request, res: Response): Promise<void> => {
     // Verifica la password con bcrypt
     const isPasswordValid = await bcrypt.compare(
       password,
-      user.getDataValue('password')
+      user.password
     );
 
     if (!isPasswordValid) {
@@ -39,10 +39,10 @@ export const logUser = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Aggiorna lastLogin
-    await user.update({ lastLogin: new Date() });
+    await user.updateOne({ _id: user._id }, { lastLogin: new Date() });
 
     const token = jwt.sign(
-      { id: user.getDataValue('id') },
+      { id: user._id },
       process.env.JWT_SECRET as string,
       { expiresIn: '24h' }
     );

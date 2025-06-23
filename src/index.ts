@@ -1,7 +1,8 @@
 import bodyParser from 'body-parser';
 import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
-import { initDatabase } from './config/initDb';
+import { appLogger } from './config/appLogger';
+// import DbConnection from './config/mongodb';
 import { serverConfig } from './config/server';
 import { validateEnv } from './config/validateEnv';
 import { corsMiddleware } from './middleware/cors';
@@ -15,8 +16,10 @@ import { limiter } from './middleware/rateLimiter';
 import githubRoutes from './routes/github';
 import projectRoutes from './routes/projects';
 import usersRoutes from './routes/users';
+import initMongo from './config/initMongo';
 
 const app = express();
+// const conn = new DbConnection();
 
 // Middleware
 app.use(corsMiddleware);
@@ -46,9 +49,11 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 const startServer = async () => {
   try {
     validateEnv();
-    await initDatabase();
+    // await initDatabase();
+    await initMongo()
+    // await conn.getConnection();
     app.listen(Number(serverConfig.port), '0.0.0.0', () => {
-      // console.log(`Server in esecuzione sulla porta ${serverConfig.port}`);
+      appLogger.info(`Server in esecuzione sulla porta ${serverConfig.port}`);
     });
   } catch (error: any) {
     // console.error("Errore durante l'avvio del server:", error);

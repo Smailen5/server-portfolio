@@ -1,65 +1,25 @@
-import { DataTypes, Model, ModelStatic, Optional } from 'sequelize';
-import sequelize from '../config/database';
+import mongoose, { Schema, Document } from 'mongoose';
 
-// Definizione del tipo per il modello User
-export interface UserAttributes {
-  id: number;
+export interface IUser extends Document {
+  name: string;
   email: string;
-  name?: string;
   password: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  lastLogin?: Date;
-  isActive?: boolean;
-  role: 'admin' | 'user';
+  role: string;
+  isActive: boolean;
+  lastLogin: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-// Tipo per la creazione di un nuovo utente (senza id)
-export type UserCreationAttributes = Optional<
-  UserAttributes,
-  'id' | 'createdAt' | 'updatedAt' | 'lastLogin' | 'isActive' | 'role'
->;
+const UserSchema = new Schema({
+  name: { type: String, required: true},
+  email: { type: String, required: true, unique: true},
+  password: { type: String, required: true},
+  role: { type: String, required: true, enum: ['admin', 'user']},
+  isActive: { type: Boolean, default: true},
+  lastLogin: { type: Date, default: Date.now()},
+  createdAt: { type: Date, default: Date.now()},
+  updatedAt: { type: Date, default: Date.now()},
+})
 
-// Creazione del modello
-const User = sequelize.define<Model<UserAttributes, UserCreationAttributes>>(
-  'User',
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
-      },
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.ENUM('admin', 'user'),
-      defaultValue: 'user',
-    },
-    isActive: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
-    },
-    lastLogin: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-  }
-);
-
-export default User as ModelStatic<
-  Model<UserAttributes, UserCreationAttributes>
->;
+export const User = mongoose.model<IUser>('User', UserSchema)

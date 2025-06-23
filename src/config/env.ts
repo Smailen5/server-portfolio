@@ -20,4 +20,5 @@ export const env = {
   rateLimitMax: process.env.RATE_LIMIT_MAX,
   adminEmail: process.env.ADMIN_EMAIL,
   adminPassword: process.env.ADMIN_PASSWORD,
+  dbConnection: process.env.DB_CONNECTION,
 };

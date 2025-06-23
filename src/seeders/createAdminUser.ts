@@ -24,6 +24,8 @@ export const createAdminUser = async () => {
       });
 
       appLogger.info('Utente amministratore creato con successo');
+    } else {
+      appLogger.info('Utente amministratore già esistente');
     }
   } catch (error) {
     appLogger.error(`Errore nella creazione dell'utente admin: ${error}`);

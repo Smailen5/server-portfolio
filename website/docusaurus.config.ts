@@ -49,18 +49,16 @@ const config: Config = {
     [
       'classic',
       {
+        blog: false,
+    [
+      'classic',
+      {
         docs: {
           sidebarPath: './sidebars.ts',
           // Riferimento al repository per permettere agli utenti di editare le pagine
           editUrl:
             'https://github.com/Smailen5/server-portfolio/tree/main/website/',
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
           editUrl:
             'https://github.com/Smailen5/server-portfolio/tree/main/website/',
           onInlineTags: 'warn',

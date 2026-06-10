@@ -17,6 +17,7 @@ import githubRoutes from './routes/github';
 import projectRoutes from './routes/projects';
 import usersRoutes from './routes/users';
 import initMongo from './config/initMongo';
+import { error } from 'console';
 
 const app = express();
 // const conn = new DbConnection();
@@ -75,6 +76,15 @@ process.on('uncaughtException', (error: Error) => {
 process.on('unhandledRejection', (reason: any) => {
   // console.error('Promise rejection non gestita:', reason);
   process.exit(1);
+});
+
+app.get('api/projects', async (req, res) => {
+  try {
+    const projects = await Project.find();
+    res.status(200).json(projects);
+  } catch (err) {
+    res.status(500).json({ message: "Errore nel recupero dati", error: err})
+  }
 });
 
 startServer();

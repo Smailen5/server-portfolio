@@ -31,3 +31,6 @@ database.sqlite
 
 # File
 
+
+# Local Netlify folder
+.netlify

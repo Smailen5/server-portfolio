@@ -1,5 +1,8 @@
 # Portfolio Server API
 
+![Release](https://img.shields.io/github/v/release/Smailen5/server-portfolio)
+![Last commit](https://img.shields.io/github/last-commit/Smailen5/server-portfolio)
+
 Server backend per la gestione dei progetti del portfolio.
 
 ## API Endpoints

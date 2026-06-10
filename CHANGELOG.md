@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.2](https://github.com/Smailen5/server-portfolio/compare/v2.0.1...v2.0.2) (2026-06-10)
+
+
+### Bug Fixes
+
+* aggiorna tsconfig a module node16 ([#22](https://github.com/Smailen5/server-portfolio/issues/22)) ([65441ef](https://github.com/Smailen5/server-portfolio/commit/65441eff598a6181f112685880f5520b1e6d135c))
+* aggiorna workflow a v5 e regex PR ([#28](https://github.com/Smailen5/server-portfolio/issues/28)) ([8f0601c](https://github.com/Smailen5/server-portfolio/commit/8f0601c2fc5aa373c190885c3ea7889351b32b5a))
+* rimuove codice che bloccava la build ([#15](https://github.com/Smailen5/server-portfolio/issues/15)) ([03022d1](https://github.com/Smailen5/server-portfolio/commit/03022d16a8ff33774e99a0c8a12886669a2228ae))
+* torna a release-please-action v4 ([#29](https://github.com/Smailen5/server-portfolio/issues/29)) ([377d5e3](https://github.com/Smailen5/server-portfolio/commit/377d5e337ee2dab4f0e2554782c6964c19659b50))
+
+
+### Documentation
+
+* aggiunge .env.example di base ([#19](https://github.com/Smailen5/server-portfolio/issues/19)) ([ee81f15](https://github.com/Smailen5/server-portfolio/commit/ee81f1559249a1ed5711b0f167bd73fa45cea10a))
+* aggiunge AGENTS.md con regole repo ([#26](https://github.com/Smailen5/server-portfolio/issues/26)) ([8cad493](https://github.com/Smailen5/server-portfolio/commit/8cad4938580e4b755e18f2f05bdca494c489c17c))
+* aggiunge badge al readme ([#23](https://github.com/Smailen5/server-portfolio/issues/23)) ([3a2db99](https://github.com/Smailen5/server-portfolio/commit/3a2db995ccda49952ee5aa2ac39e26a1590fd595))
+* aggiunge template issue e PR per il progetto ([#11](https://github.com/Smailen5/server-portfolio/issues/11)) ([70d9715](https://github.com/Smailen5/server-portfolio/commit/70d9715f4b6ac9939b3cca79d04520e9be757681))
+* passa da licenza ISC a MIT ([#18](https://github.com/Smailen5/server-portfolio/issues/18)) ([acab30e](https://github.com/Smailen5/server-portfolio/commit/acab30efb74f5814855dfd779c1774ae00c07107))
+
+
+### Chores
+
+* aggiorna dipendenze minori e patch ([#24](https://github.com/Smailen5/server-portfolio/issues/24)) ([3f93f3a](https://github.com/Smailen5/server-portfolio/commit/3f93f3a8403431ef6da374130390a4749331da0d))
+* aggiorna husky e commitlint ([#16](https://github.com/Smailen5/server-portfolio/issues/16)) ([b6887c8](https://github.com/Smailen5/server-portfolio/commit/b6887c887e2211b22485b17b5cd26528a3475c90))
+* aggiorna pnpm-lock dopo rimozione standard-version ([#14](https://github.com/Smailen5/server-portfolio/issues/14)) ([8e5229f](https://github.com/Smailen5/server-portfolio/commit/8e5229f3f46eace68738ef9359949389e84b3270))
+* allinea gitignore al template ([#17](https://github.com/Smailen5/server-portfolio/issues/17)) ([00366f7](https://github.com/Smailen5/server-portfolio/commit/00366f72dfbf76728ab27786103dba80abdae26b))
+* rimuove tecnologie legacy da json ([#27](https://github.com/Smailen5/server-portfolio/issues/27)) ([9960832](https://github.com/Smailen5/server-portfolio/commit/9960832fcaee279c2ff1b2787a91613a8f5f1136))
+
+
+### CI/CD
+
+* aggiunge build, lint e titolo PR ([#13](https://github.com/Smailen5/server-portfolio/issues/13)) ([841965c](https://github.com/Smailen5/server-portfolio/commit/841965cc4c927d23324a7a22913a6dd409dbeb9f))
+
 ## [2.0.1](https://github.com/Smailen5/server-portfolio/compare/v2.0.0...v2.0.1) (2026-06-10)
 
 

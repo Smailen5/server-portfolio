@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "author": "smailen vargas",
-  "license": "ISC",
+  "license": "MIT",
   "description": "server personale per il mio sito portfolio",
   "technologies": [
     "nodejs",

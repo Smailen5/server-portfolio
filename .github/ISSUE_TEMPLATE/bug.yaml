@@ -1,0 +1,54 @@
+name: Bug Report
+description: Segnala e risolvi un malfunzionamento nel codice
+title: 'bug: [descrizione breve]'
+labels: ['bug']
+assignees: 'Smailen5'
+body:
+ - type: markdown
+   attributes:
+     value: |
+       Descrivi quanto piu' possibile il bug, in modo chiaro e dettagliato.
+
+ - type: textarea
+   id: description
+   attributes:
+     label: Descrizione e Riproduzione
+     description: "Cosa si e' rotto e quali sono i passaggi per riprodurre l'errore?"
+     placeholder: |
+       Il server va in crash durante la sincronizzazione GitHub.
+       1. Avvia il server
+       2. Chiama PUT /api/github/sync
+       3. Il server restituisce 500 Internal Server Error
+   validations:
+     required: true
+
+ - type: textarea
+   id: acceptance_criteria
+   attributes:
+     label: Comportamento Atteso (Criteri di Accettazione)
+     description: "Come dovrebbe funzionare correttamente?"
+     placeholder: |
+       - La sincronizzazione deve completarsi con successo
+       - Tutti i progetti devono essere aggiornati nel database
+       - Nessun errore nei log del server
+   validations:
+     required: true
+
+ - type: textarea
+   id: task
+   attributes:
+     label: Task (Risoluzione)
+     description: "Ipotesi o passaggi tecnici per risolvere il bug."
+     placeholder: |
+       - [ ] Verificare il payload della risposta GitHub API
+       - [ ] Controllare la gestione degli errori in syncRepos
+       - [ ] Scrivere test per evitare regressioni
+   validations:
+     required: true
+
+ - type: textarea
+   id: logs
+   attributes:
+     label: Log / Stack Trace (Fortemente consigliato)
+     placeholder: "Incolla qui l'errore del terminale o della console."
+     render: shell

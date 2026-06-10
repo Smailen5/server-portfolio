@@ -1,0 +1,46 @@
+name: Feature Request
+description: Aggiungi una nuova funzione
+title: 'feat: [descrizione breve]'
+labels: ['feature', 'enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Descrivi la feature che vorresti aggiungere in modo chiaro e dettagliato.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrizione
+      description: "Spiega cosa vorresti aggiungere e perche'."
+      placeholder: "Aggiungere un endpoint per l\'health check e' necessario per monitorare lo stato del server"
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Criteri di Accettazione
+      description: "Elenca i criteri per considerare completa la issue (Il Cosa)."
+      placeholder: |
+        - Endpoint GET /api/health che restituisce stato del server
+        - Risposta include uptime, versione, stato database
+        - Test per verificare il corretto funzionamento
+    validations:
+      required: true
+
+  - type: textarea
+    id: task
+    attributes:
+      label: Task
+      description: 'Elenca i passaggi tecnici necessari per completare la feature (Il Come).'
+      placeholder: |
+        - [ ] Creare il controller per l'health check
+        - [ ] Aggiungere la route in src/routes
+        - [ ] Aggiornare i test
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Note aggiuntive (opzionale)
+      placeholder: 'Link a documentazione, dipendenze da installare, screenshots'

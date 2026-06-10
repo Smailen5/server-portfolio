@@ -1,0 +1,46 @@
+name: Refactor
+description: Migliora la struttura o le performance del codice esistente
+title: 'refactor: [descrizione breve]'
+labels: ['refactor']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Il refactoring migliora il codice interno senza alterare il comportamento esterno per l'utente.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrizione e Motivazione
+      description: "Quale parte del codice va riscritta e perche'? (es. leggibilita', performance, modularita')"
+      placeholder: "Il controller syncRepos e' un monolite di 130 righe, difficile da mantenere. Va diviso in servizi separati."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Criteri di Accettazione
+      description: "Come dimostriamo che il refactoring ha avuto successo senza rompere nulla?"
+      placeholder: |
+        - La logica di sincronizzazione e' divisa in almeno 3 servizi separati
+        - Le performance sono rimaste stabili o migliorate
+        - Tutti i test esistenti passano senza modifiche alla logica del test
+    validations:
+      required: true
+
+  - type: textarea
+    id: task
+    attributes:
+      label: Task
+      description: 'File da toccare o passaggi tecnici'
+      placeholder: |
+        - [ ] Estrarre logica GitHub in un servizio dedicato
+        - [ ] Creare interfacce per i servizi
+        - [ ] Pulire le importazioni inutilizzate
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Note aggiuntive (opzionale)
+      placeholder: 'Librerie esterne da valutare, link a pattern design, ecc.'

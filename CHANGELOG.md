@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.1](https://github.com/Smailen5/server-portfolio/compare/v2.0.0...v2.0.1) (2026-06-10)
+
+
+### Bug Fixes
+
+* allinea tag format ai tag esistenti del repo ([#9](https://github.com/Smailen5/server-portfolio/issues/9)) ([91fc53d](https://github.com/Smailen5/server-portfolio/commit/91fc53de3ccb53c0149ab78d10ed4a5888a8b85a))
+
+
+### Chores
+
+* 🔧 aggiunge la proprietà 'private' a package.json ([2fa5772](https://github.com/Smailen5/server-portfolio/commit/2fa57725da0d0dae3ee0c3ded95ef96f8fbb702c))
+* 🗑️ rimuove la migrazione ([77f16f7](https://github.com/Smailen5/server-portfolio/commit/77f16f7c87a09f8aed77b1e8b3e3a1454cece750))
+* sostituisce standard-version con release-please ([#7](https://github.com/Smailen5/server-portfolio/issues/7)) ([b3e3497](https://github.com/Smailen5/server-portfolio/commit/b3e3497630da818727aea54cd3aed39412f143c1))
+* ultima PR da DEV prima del nuovo workflow su main ([#6](https://github.com/Smailen5/server-portfolio/issues/6)) ([fbeb57d](https://github.com/Smailen5/server-portfolio/commit/fbeb57d630d6586b0807008bc42aa31c07a4a603))
+
 ## [2.0.0](https://github.com/Smailen5/server-portfolio/compare/v1.1.0...v2.0.0) (2025-06-23)
 
 

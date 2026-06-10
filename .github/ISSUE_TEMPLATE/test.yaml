@@ -1,0 +1,42 @@
+name: Test
+description: Crea o migliora la suite di test (unitari, e2e, integrazione)
+title: 'test: [descrizione breve]'
+labels: ['test']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Definisci chiaramente quali casi d'uso devono essere coperti dai nuovi test.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrizione
+      description: "Quali funzioni o componenti necessitano di test?"
+      placeholder: "Il controller dei progetti non ha copertura di test e potrebbe generare bug in produzione."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Criteri di Accettazione (Casi d'uso)
+      description: "Quali specifici scenari devono essere verificati dal test?"
+      placeholder: |
+        - Il test deve verificare il recupero di tutti i progetti
+        - Il test deve gestire correttamente ID non validi
+        - Il test deve fallire se l'utente non e' autenticato
+    validations:
+      required: true
+
+  - type: textarea
+    id: task
+    attributes:
+      label: Task
+      description: "Passaggi tecnici per la stesura."
+      placeholder: |
+        - [ ] Configurare il file di test separato (.test.ts)
+        - [ ] Scrivere i mock per i dati di input
+        - [ ] Eseguire copertura e raggiungere il 90% sulla funzione
+    validations:
+      required: true

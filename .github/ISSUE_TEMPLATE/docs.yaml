@@ -1,0 +1,41 @@
+name: Documentation
+description: Aggiungi o aggiorna la documentazione (README, commenti, wiki)
+title: 'docs: [descrizione breve]'
+labels: ['documentation']
+body: 
+  - type: markdown
+    attributes:
+      value: |
+        La documentazione e' vitale. Specifica chiaramente cosa manca o cosa e' obsoleto.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrizione
+      description: "Quale parte della documentazione necessita di interventi?"
+      placeholder: "Mancano le istruzioni per configurare le variabili d'ambiente locali nel README."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Criteri di Accettazione
+      description: "Cosa deve includere il documento finito?"
+      placeholder: |
+        - Presenza del file .env.example
+        - Sezione chiara nel README sui comandi di avvio locale
+    validations:
+      required: true
+
+  - type: textarea
+    id: task
+    attributes:
+      label: Task
+      description: "Cosa bisogna scrivere concretamente."
+      placeholder: |
+        - [ ] Creare .env.example
+        - [ ] Scrivere sezione 'Getting Started'
+        - [ ] Aggiungere commenti JSDoc/TSDoc alle funzioni utility principali
+    validations:
+      required: true

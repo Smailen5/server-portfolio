@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Installa dipendenze
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+  validate-pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Valida titolo PR
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          MAX_LENGTH=42
+          PATTERN='^(feat|fix|docs|chore|refactor|test|perf|ci|build): '
+
+          if ! echo "$TITLE" | grep -qE "$PATTERN"; then
+            echo "❌ Il titolo deve iniziare con un prefisso conventional commit (feat:, fix:, docs:, ...)"
+            exit 1
+          fi
+
+          LENGTH=${#TITLE}
+          if [ "$LENGTH" -gt "$MAX_LENGTH" ]; then
+            echo "❌ Il titolo ($LENGTH caratteri) supera il limite di $MAX_LENGTH"
+            exit 1
+          fi
+
+          echo "✅ Titolo valido: $TITLE ($LENGTH caratteri)"

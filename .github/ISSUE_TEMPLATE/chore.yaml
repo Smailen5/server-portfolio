@@ -1,0 +1,38 @@
+name: Chore
+description: Attivita' di manutenzione ordinaria (dipendenze, configurazioni, pulizia)
+title: 'chore: [descrizione breve]'
+labels: ['chore']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Task di manutenzione ordinaria che non modifica il codice sorgente ne' introduce nuove funzionalita'.
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrizione
+      description: "Cosa va aggiornato, rimosso o modificato?"
+      placeholder: "Rimuovere il file morto src/routes/index.ts che non viene importato da nessuna parte."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Criteri di Accettazione
+      description: "Come verifichiamo che il task sia completato correttamente?"
+      placeholder: |
+        - File rimosso senza errori
+        - Build e lint passano
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: Task
+      description: "Passaggi tecnici per completare l'attivita'."
+      placeholder: |
+        - [ ] Eliminare il file
+        - [ ] Verificare assenza di import
+        - [ ] pnpm build
+    validations:
+      required: true

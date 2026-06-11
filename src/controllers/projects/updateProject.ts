@@ -24,18 +24,19 @@ export const updateProject = [
   jwtAuth,
   async (req: ProjectRequest, res: Response) => {
     try {
-      const project = await Project.findOne({ _id: req.params.id });
+      const project = await Project.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          name: req.body.name,
+          image: req.body.image,
+          technologies: req.body.technologies,
+          description: req.body.description,
+        },
+        { new: true }
+      );
+
       if (!project)
         return res.status(404).json({ message: 'Project non trovato' });
-
-      const projectData = project.toObject();
-
-      await project.updateOne({
-        name: req.body.name || projectData.name,
-        image: req.body.image || projectData.image,
-        technologies: req.body.technologies || projectData.technologies,
-        description: req.body.description || projectData.description,
-      });
 
       return res.json(project);
     } catch (err: any) {

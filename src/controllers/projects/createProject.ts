@@ -25,6 +25,7 @@ export const createProject = [
     try {
       const project = await Project.create({
         name: req.body.name,
+        link: req.body.link,
         description: req.body.description,
         image: req.body.image,
         technologies: req.body.technologies,

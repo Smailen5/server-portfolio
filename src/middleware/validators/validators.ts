@@ -31,7 +31,7 @@ export const createProjectValidator = [
 
 // Validazione per l'aggiornamento di un progetto
 export const updateProjectValidator = [
-  param('id').isInt().withMessage('ID non valido'),
+  param('id').isMongoId().withMessage('ID non valido'),
   body('name')
     .optional()
     .isString()
@@ -55,7 +55,7 @@ export const updateProjectValidator = [
 ];
 
 // Validazione per l'ID (usato in GET e DELETE)
-export const idValidator = [param('id').isInt().withMessage('ID non valido')];
+export const idValidator = [param('id').isMongoId().withMessage('ID non valido')];
 
 // Validazione per la sincronizzazione dei progetti
 export const syncValidator = [

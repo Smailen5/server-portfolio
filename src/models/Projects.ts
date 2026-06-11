@@ -18,8 +18,8 @@ const ProjectSchema = new Schema({
   description: { type: String, default: '' },
   technologies: { type: [{ type: String }] },
   readme: { type: String, default: '' },
-  createdAt: { type: Date, default: Date.now() },
-  updatedAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
 });
 
 export const Project = mongoose.model<IProject>('Project', ProjectSchema);

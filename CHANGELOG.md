@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.3](https://github.com/Smailen5/server-portfolio/compare/v2.0.2...v2.0.3) (2026-06-11)
+
+
+### Bug Fixes
+
+* aggiunge campo link a schema Projects ([#60](https://github.com/Smailen5/server-portfolio/issues/60)) ([8d624ea](https://github.com/Smailen5/server-portfolio/commit/8d624eac6b33df8496de17d4173e0ddb02f24fe7))
+* corregge Date.now parentesi schemi ([#61](https://github.com/Smailen5/server-portfolio/issues/61)) ([c8b879e](https://github.com/Smailen5/server-portfolio/commit/c8b879ed00c43cc20968e5e1bec7a2271aa93cc7))
+* isInt -&gt; isMongoId nei validatori ([#59](https://github.com/Smailen5/server-portfolio/issues/59)) ([b26b247](https://github.com/Smailen5/server-portfolio/commit/b26b247de3b6fba8b824cef5cfb798212b80641f))
+* usa findOneAndUpdate in updateProject ([#62](https://github.com/Smailen5/server-portfolio/issues/62)) ([8872d01](https://github.com/Smailen5/server-portfolio/commit/8872d01e0db65ac0949e262f0a9b42f6e098918a))
+
+
+### Chores
+
+* aggiunge template chore, build, ci ([#58](https://github.com/Smailen5/server-portfolio/issues/58)) ([8a0735c](https://github.com/Smailen5/server-portfolio/commit/8a0735c26835dc1a47cc7fdae029fc12cee50afb))
+* ignora NOTE-prossimi-passi.md ([#33](https://github.com/Smailen5/server-portfolio/issues/33)) ([c75c2f6](https://github.com/Smailen5/server-portfolio/commit/c75c2f675e51715a0593b87796c6650415009eda))
+* rimuove @types/sequelize ([#32](https://github.com/Smailen5/server-portfolio/issues/32)) ([bec5e35](https://github.com/Smailen5/server-portfolio/commit/bec5e35b828f2d5bb83e492faabae3edcba22a8f))
+* sposta types bcrypt jwt devDeps ([#63](https://github.com/Smailen5/server-portfolio/issues/63)) ([19b2a6e](https://github.com/Smailen5/server-portfolio/commit/19b2a6eb1c246773ccb6ad4a82dc6f2f2ff668f0))
+
+
+### Tests
+
+* configura vitest e test di esempio ([#64](https://github.com/Smailen5/server-portfolio/issues/64)) ([aa80ff5](https://github.com/Smailen5/server-portfolio/commit/aa80ff5947a5ba2aa07d26ff866aa4c873f4cc42))
+
+
+### CI/CD
+
+* forza Node 24 per release-please ([#30](https://github.com/Smailen5/server-portfolio/issues/30)) ([c169e45](https://github.com/Smailen5/server-portfolio/commit/c169e45e827022e1874449edc20aa5a955cebb18))
+
 ## [2.0.2](https://github.com/Smailen5/server-portfolio/compare/v2.0.1...v2.0.2) (2026-06-10)
 
 

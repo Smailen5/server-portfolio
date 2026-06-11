@@ -1,0 +1,39 @@
+name: Build
+description: Modifiche al sistema di build, configurazioni e script
+title: 'build: [descrizione breve]'
+labels: ['build']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Modifiche al sistema di build, al compilatore TypeScript o agli script di progetto.
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrizione
+      description: "Cosa va modificato nel sistema di build?"
+      placeholder: "Aggiornare tsconfig.json per supportare il nuovo modulo ES."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Criteri di Accettazione
+      description: "Come verifichiamo che la build funzioni?"
+      placeholder: |
+        - pnpm build si completa senza errori
+        - pnpm lint passa
+        - Nessun warning nuovo
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: Task
+      description: "Passaggi tecnici per completare la modifica."
+      placeholder: |
+        - [ ] Modificare tsconfig.json
+        - [ ] Verificare build con pnpm build
+        - [ ] Verificare lint con pnpm lint
+    validations:
+      required: true

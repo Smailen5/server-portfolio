@@ -1,0 +1,39 @@
+name: Continuous Integration
+description: Modifiche a CI/CD, GitHub Actions, workflow files e release-please
+title: 'ci: [descrizione breve]'
+labels: ['ci']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Modifiche ai processi di integrazione continua, distribuzione e automazione.
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrizione
+      description: "Cosa va modificato nella CI/CD?"
+      placeholder: "Aggiungere validazione del titolo della PR nel workflow CI."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Criteri di Accettazione
+      description: "Come verifichiamo che la CI funzioni?"
+      placeholder: |
+        - Workflow si completa con successo su PR
+        - Lint e build passano in CI
+        - Nessun falso positivo
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: Task
+      description: "Passaggi tecnici per completare la modifica."
+      placeholder: |
+        - [ ] Modificare .github/workflows/ci.yml
+        - [ ] Aprire PR di test
+        - [ ] Verificare esecuzione su GitHub
+    validations:
+      required: true

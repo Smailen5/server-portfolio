@@ -28,8 +28,6 @@
     "octokit"
   ],
   "dependencies": {
-    "@types/bcrypt": "^5.0.2",
-    "@types/jsonwebtoken": "^9.0.10",
     "bcrypt": "^6.0.0",
     "body-parser": "^1.20.5",
     "cors": "^2.8.6",
@@ -48,7 +46,9 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
+    "@types/bcrypt": "^5.0.2",
     "@types/body-parser": "^1.19.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/morgan": "^1.9.10",

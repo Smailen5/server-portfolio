@@ -17,9 +17,9 @@ const UserSchema = new Schema({
   password: { type: String, required: true},
   role: { type: String, required: true, enum: ['admin', 'user']},
   isActive: { type: Boolean, default: true},
-  lastLogin: { type: Date, default: Date.now()},
-  createdAt: { type: Date, default: Date.now()},
-  updatedAt: { type: Date, default: Date.now()},
+  lastLogin: { type: Date, default: Date.now},
+  createdAt: { type: Date, default: Date.now},
+  updatedAt: { type: Date, default: Date.now},
 })
 
 export const User = mongoose.model<IUser>('User', UserSchema)

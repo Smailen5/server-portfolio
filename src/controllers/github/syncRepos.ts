@@ -86,10 +86,6 @@ export const syncRepos = [
 
           // Controlliamo se il progetto esiste già
           let project = await Project.findOne({ name: projectData.name });
-          // const [project, created] = await Project.findOrCreate({
-          //   where: { name: projectData.name },
-          //   defaults: projectData,
-          // });
 
           if (project) {
             // Aggiorniamo il progetto esistente con la data odierna

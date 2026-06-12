@@ -66,7 +66,7 @@ function mockReqRes() {
 
 describe('getRepos', () => {
   // Test 1: percorso felice — GitHub risponde, tutto ok
-  it('returns package info for each folder', async () => {
+  it('restituisce le info dei package per ogni cartella', async () => {
     // Predispongo i mock: dico loro cosa restituire
     vi.mocked(getProjectsFromGithub).mockResolvedValue(mockPackages)
     vi.mocked(getPackageJson).mockResolvedValue(mockPackageJson)
@@ -105,7 +105,7 @@ describe('getRepos', () => {
   })
 
   // Test 2: package.json mancante — deve usare il nome cartella come fallback
-  it('falls back to folder name when package.json is missing', async () => {
+  it('usa il nome cartella come fallback quando package.json manca', async () => {
     vi.mocked(getProjectsFromGithub).mockResolvedValue(mockPackages)
     // getPackageJson restituisce null → simula cartella senza package.json
     vi.mocked(getPackageJson).mockResolvedValue(null)
@@ -123,7 +123,7 @@ describe('getRepos', () => {
   })
 
   // Test 3: GitHub API non risponde — deve restituire 500
-  it('responds 500 when GitHub API fails', async () => {
+  it('risponde 500 quando GitHub API fallisce', async () => {
     // mockRejectedValue simula un'eccezione (Promise rifiutata)
     vi.mocked(getProjectsFromGithub).mockRejectedValue(new Error('API rate limit'))
 

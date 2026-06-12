@@ -84,7 +84,7 @@ describe('syncRepos', () => {
   })
 
   // Test 1: percorso felice — tutto funziona, progetti nuovi
-  it('syncs projects from GitHub to the database', async () => {
+  it('sincronizza i progetti da GitHub al database', async () => {
     // Configuro TUTTI i mock per simulare uno scenario completo
     vi.mocked(getProjectsFromGithub).mockResolvedValue(mockPackages)
     vi.mocked(getPackageJson).mockResolvedValue(mockPackageJson)
@@ -119,7 +119,7 @@ describe('syncRepos', () => {
   })
 
   // Test 2: progetto già esistente → deve aggiornare, non creare
-  it('updates existing projects instead of creating new ones', async () => {
+  it('aggiorna progetti esistenti invece di crearne di nuovi', async () => {
     vi.mocked(getProjectsFromGithub).mockResolvedValue(mockPackages)
     vi.mocked(getPackageJson).mockResolvedValue(mockPackageJson)
     vi.mocked(getScreenshot).mockResolvedValue('https://example.com/screenshot.webp')
@@ -141,7 +141,7 @@ describe('syncRepos', () => {
   })
 
   // Test 3: tutto fallisce — nessun progetto sincronizzato
-  it('returns error when no projects synced', async () => {
+  it('restituisce errore quando nessun progetto sincronizzato', async () => {
     // La struttura del controller ha un try/catch per ogni progetto.
     // Se getPackageJson e getScreenshot lanciano errore, il singolo
     // progetto viene saltato ma il controller non crasha.
@@ -163,7 +163,7 @@ describe('syncRepos', () => {
   })
 
   // Test 4: GitHub API non raggiungibile — errore totale
-  it('responds 500 when sync fails completely', async () => {
+  it('risponde 500 quando la sincronizzazione fallisce del tutto', async () => {
     // Se getProjectsFromGithub stesso fallisce, il try/catch ESTERNO
     // del controller cattura l'errore e risponde 500.
     vi.mocked(getProjectsFromGithub).mockRejectedValue(new Error('GitHub down'))

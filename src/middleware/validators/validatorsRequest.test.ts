@@ -2,6 +2,13 @@ import { describe, expect, it, vi } from 'vitest'
 import { validationResult } from 'express-validator'
 import { validateRequest } from './validatorsRequest'
 
+// AppLogger va mockato per primo: validateRequest importa
+// errorHandler che importa appLogger, che in CI crasha
+// perché i file path per i log non sono configurati.
+vi.mock('../../config/appLogger', () => ({
+  appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
+}))
+
 // ──────────────────────────────────────────────
 // Mock delle dipendenze
 // ──────────────────────────────────────────────

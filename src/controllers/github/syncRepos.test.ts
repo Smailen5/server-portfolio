@@ -23,6 +23,13 @@ const mockPackageJson = {
 // - githubUtils: 4 funzioni (invece di 2)
 // - models/Projects: per salvare su MongoDB
 
+// appLogger va mockato: syncRepos importa middleware che
+// a loro volta importano errorHandler → appLogger, che in
+// CI crasha perché i file path dei log non sono configurati.
+vi.mock('../../config/appLogger', () => ({
+  appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
+}))
+
 vi.mock('../../config', () => ({
   env: { githubToken: 'mock-token' },
 }))

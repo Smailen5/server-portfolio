@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.5](https://github.com/Smailen5/server-portfolio/compare/v2.0.4...v2.0.5) (2026-06-12)
+
+
+### Bug Fixes
+
+* crash CI per appLogger ([#77](https://github.com/Smailen5/server-portfolio/issues/77)) ([57a86f4](https://github.com/Smailen5/server-portfolio/commit/57a86f4fe09234090619f5a527d98159ed0a6dc4))
+
+
+### CI/CD
+
+* ottimizza CI e aggiunge test ([#76](https://github.com/Smailen5/server-portfolio/issues/76)) ([4336675](https://github.com/Smailen5/server-portfolio/commit/43366758bd918704297789d37bdd187b8f6d7ee2))
+
 ## [2.0.4](https://github.com/Smailen5/server-portfolio/compare/v2.0.3...v2.0.4) (2026-06-12)
 
 

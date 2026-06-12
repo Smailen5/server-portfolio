@@ -77,14 +77,4 @@ process.on('unhandledRejection', (reason: any) => {
   process.exit(1);
 });
 
-// TODO: valutare se serve una route dedicata per progetti
-// app.get('api/projects', async (req, res) => {
-//   try {
-//     const projects = await Project.find();
-//     res.status(200).json(projects);
-//   } catch (err) {
-//     res.status(500).json({ message: "Errore nel recupero dati", error: err})
-//   }
-// });
-
 startServer();

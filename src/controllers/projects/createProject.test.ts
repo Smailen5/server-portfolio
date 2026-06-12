@@ -15,6 +15,10 @@ const validBody = {
 // ──────────────────────────────────────────────
 // Mock delle dipendenze
 // ──────────────────────────────────────────────
+vi.mock('../../config/appLogger', () => ({
+  appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
+}))
+
 vi.mock('../../models/Projects', () => ({
   Project: { create: vi.fn() },
 }))

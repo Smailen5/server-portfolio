@@ -15,6 +15,10 @@ const existingProject = {
 // ──────────────────────────────────────────────
 // Mock delle dipendenze
 // ──────────────────────────────────────────────
+vi.mock('../../config/appLogger', () => ({
+  appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
+}))
+
 // Nota: non mocko Project.deleteOne, perché il controller
 // chiama project.deleteOne() sull'istanza, non sul modello.
 vi.mock('../../models/Projects', () => ({

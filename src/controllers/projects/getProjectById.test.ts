@@ -8,6 +8,13 @@ const mockProject = { _id: '1', name: 'Project A', description: 'First', technol
 // ──────────────────────────────────────────────
 // Mock delle dipendenze
 // ──────────────────────────────────────────────
+// appLogger va mockato per primo: i controller importano
+// validateRequest → errorHandler → appLogger, che in CI
+// crasha perché i file path per i log non sono configurati.
+vi.mock('../../config/appLogger', () => ({
+  appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
+}))
+
 vi.mock('../../models/Projects', () => ({
   Project: { findOne: vi.fn() },
 }))

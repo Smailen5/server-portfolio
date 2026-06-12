@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.4](https://github.com/Smailen5/server-portfolio/compare/v2.0.3...v2.0.4) (2026-06-12)
+
+
+### Chores
+
+* rimuove commenti ([#72](https://github.com/Smailen5/server-portfolio/issues/72)) ([e9cf383](https://github.com/Smailen5/server-portfolio/commit/e9cf383bb364988e491d9cf0042f3b07d1d47ac7))
+* rimuove index inutilizzato ([#68](https://github.com/Smailen5/server-portfolio/issues/68)) ([d949c30](https://github.com/Smailen5/server-portfolio/commit/d949c3073b0cb3de44ca21dc6baf1fadee2d208f))
+* riordina middleware index ([#73](https://github.com/Smailen5/server-portfolio/issues/73)) ([499efbb](https://github.com/Smailen5/server-portfolio/commit/499efbbf712a3e67bebebc13952d1e4d7317ae2a))
+
+
+### Tests
+
+* aggiunge test per CRUD progetti ([#69](https://github.com/Smailen5/server-portfolio/issues/69)) ([19031b2](https://github.com/Smailen5/server-portfolio/commit/19031b2de9e71d372391d3ab6922000391e4ffb7))
+* controller GitHub ([#71](https://github.com/Smailen5/server-portfolio/issues/71)) ([3c35342](https://github.com/Smailen5/server-portfolio/commit/3c3534299591ce4b268f154d0220860ddc45c547))
+* copre autenticazione API key e JWT ([#66](https://github.com/Smailen5/server-portfolio/issues/66)) ([0035ea1](https://github.com/Smailen5/server-portfolio/commit/0035ea1b0409b4419a9ff860c96faa304959ee6b))
+* copre validazione richieste ([#65](https://github.com/Smailen5/server-portfolio/issues/65)) ([e9164a7](https://github.com/Smailen5/server-portfolio/commit/e9164a7a0d1dce12acb7072e8bbaa95f0ab0cb42))
+* flusso login authController ([#67](https://github.com/Smailen5/server-portfolio/issues/67)) ([534c152](https://github.com/Smailen5/server-portfolio/commit/534c15236f1eb4f9d1ed3c3cef8e5e3aed2bc914))
+
 ## [2.0.3](https://github.com/Smailen5/server-portfolio/compare/v2.0.2...v2.0.3) (2026-06-11)
 
 

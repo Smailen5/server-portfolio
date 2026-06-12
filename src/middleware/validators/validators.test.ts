@@ -8,6 +8,12 @@ import {
   validateLoginInput,
 } from './validators'
 
+// ──────────────────────────────────────────────
+// Helper: esegue ogni validatore sul req e restituisce i risultati
+// ──────────────────────────────────────────────
+// express-validator funziona in modo diverso dai middleware normali:
+// ogni validatore va eseguito manualmente con v.run(req), poi si
+// controllano gli errori con validationResult(req).
 async function runValidation(req: Record<string, unknown>, validations: ReturnType<typeof createProjectValidator>) {
   for (const v of validations) {
     await v.run(req)
@@ -15,6 +21,12 @@ async function runValidation(req: Record<string, unknown>, validations: ReturnTy
   return validationResult(req)
 }
 
+// ──────────────────────────────────────────────
+// Test per createProjectValidator
+// ──────────────────────────────────────────────
+// Verifica la validazione del body per la creazione progetti:
+// name, link, image obbligatori, technologies array non vuoto,
+// description obbligatoria.
 describe('createProjectValidator', () => {
   const validBody = {
     name: 'My Project',
@@ -24,96 +36,112 @@ describe('createProjectValidator', () => {
     description: 'A cool project',
   }
 
-  it('passes with valid data', async () => {
+  it('passa con dati validi', async () => {
     const result = await runValidation({ body: validBody }, createProjectValidator)
     expect(result.isEmpty()).toBe(true)
   })
 
-  it('fails when name is missing', async () => {
+  it('fallisce quando name mancante', async () => {
     const { name, ...body } = validBody
     const result = await runValidation({ body }, createProjectValidator)
     expect(result.isEmpty()).toBe(false)
     expect(result.array().some(e => e.msg === 'Il nome è obbligatorio')).toBe(true)
   })
 
-  it('fails when link is missing', async () => {
+  it('fallisce quando link mancante', async () => {
     const { link, ...body } = validBody
     const result = await runValidation({ body }, createProjectValidator)
     expect(result.array().some(e => e.msg === 'Il link è obbligatorio')).toBe(true)
   })
 
-  it('fails when link is not a URL', async () => {
+  it('fallisce quando link non è un URL', async () => {
     const result = await runValidation({ body: { ...validBody, link: 'not-a-url' } }, createProjectValidator)
     expect(result.array().some(e => e.msg.toLowerCase().includes('url'))).toBe(true)
   })
 
-  it('fails when image is missing', async () => {
+  it('fallisce quando image mancante', async () => {
     const { image, ...body } = validBody
     const result = await runValidation({ body }, createProjectValidator)
     expect(result.array().some(e => e.msg.includes('immagine'))).toBe(true)
   })
 
-  it('fails when technologies is not an array', async () => {
+  it('fallisce quando technologies non è un array', async () => {
     const result = await runValidation({ body: { ...validBody, technologies: 'React' } }, createProjectValidator)
     expect(result.array().some(e => e.msg.includes('array'))).toBe(true)
   })
 
-  it('does not catch empty array (notEmpty ignores arrays)', async () => {
+  it('non intercetta array vuoto (notEmpty ignora gli array)', async () => {
+    // notEmpty() in express-validator funziona solo su stringhe,
+    // non su array. Questo test documenta il comportamento reale.
     const result = await runValidation({ body: { ...validBody, technologies: [] } }, createProjectValidator)
     expect(result.isEmpty()).toBe(true)
   })
 
-  it('fails when description is missing', async () => {
+  it('fallisce quando description mancante', async () => {
     const { description, ...body } = validBody
     const result = await runValidation({ body }, createProjectValidator)
     expect(result.array().some(e => e.msg.includes('descrizione'))).toBe(true)
   })
 })
 
+// ──────────────────────────────────────────────
+// Test per updateProjectValidator
+// ──────────────────────────────────────────────
+// Verifica che l'id sia un MongoId valido e che i campi
+// opzionali del body (name, link, image, etc.) siano del tipo giusto.
 describe('updateProjectValidator', () => {
   const validParams = { id: '507f1f77bcf86cd799439011' }
   const validBody = { name: 'Updated', technologies: ['Node'] }
 
-  it('passes with valid id and optional body', async () => {
+  it('passa con id valido e body opzionale', async () => {
     const result = await runValidation({ params: validParams, body: validBody }, updateProjectValidator)
     expect(result.isEmpty()).toBe(true)
   })
 
-  it('passes with valid id and empty body', async () => {
+  it('passa con id valido e body vuoto', async () => {
     const result = await runValidation({ params: validParams, body: {} }, updateProjectValidator)
     expect(result.isEmpty()).toBe(true)
   })
 
-  it('fails when id is not a valid MongoId', async () => {
+  it('fallisce quando id non è un MongoId valido', async () => {
     const result = await runValidation({ params: { id: 'invalid' }, body: {} }, updateProjectValidator)
     expect(result.array().some(e => e.msg === 'ID non valido')).toBe(true)
   })
 
-  it('fails when name is not a string', async () => {
+  it('fallisce quando name non è una stringa', async () => {
     const result = await runValidation({ params: validParams, body: { name: 123 } }, updateProjectValidator)
     expect(result.array().some(e => e.msg.includes('stringa'))).toBe(true)
   })
 })
 
+// ──────────────────────────────────────────────
+// Test per idValidator
+// ──────────────────────────────────────────────
+// Validatore semplice: controlla che il params.id sia un MongoId.
 describe('idValidator', () => {
-  it('passes with a valid MongoId', async () => {
+  it('passa con un MongoId valido', async () => {
     const result = await runValidation({ params: { id: '507f1f77bcf86cd799439011' } }, idValidator)
     expect(result.isEmpty()).toBe(true)
   })
 
-  it('fails with an invalid id', async () => {
+  it('fallisce con id non valido', async () => {
     const result = await runValidation({ params: { id: 'invalid' } }, idValidator)
     expect(result.array().some(e => e.msg === 'ID non valido')).toBe(true)
   })
 
-  it('fails when id is missing', async () => {
+  it('fallisce quando id mancante', async () => {
     const result = await runValidation({ params: {} }, idValidator)
     expect(result.isEmpty()).toBe(false)
   })
 })
 
+// ──────────────────────────────────────────────
+// Test per syncValidator
+// ──────────────────────────────────────────────
+// Valida l'header x-api-key: 20 caratteri, misto maiuscole,
+// minuscole e numeri.
 describe('syncValidator', () => {
-  it('passes with a valid API key header', async () => {
+  it('passa con header API key valido', async () => {
     const result = await runValidation(
       { headers: { 'x-api-key': 'AbcDefGhiJk1MnoPqrSt' } },
       syncValidator
@@ -121,12 +149,12 @@ describe('syncValidator', () => {
     expect(result.isEmpty()).toBe(true)
   })
 
-  it('fails when x-api-key is missing', async () => {
+  it('fallisce quando x-api-key mancante', async () => {
     const result = await runValidation({ headers: {} }, syncValidator)
     expect(result.array().some(e => e.msg.includes('chiave'))).toBe(true)
   })
 
-  it('fails when key is too short', async () => {
+  it('fallisce quando chiave troppo corta', async () => {
     const result = await runValidation(
       { headers: { 'x-api-key': 'short' } },
       syncValidator
@@ -134,7 +162,7 @@ describe('syncValidator', () => {
     expect(result.array().some(e => e.msg.includes('caratteri'))).toBe(true)
   })
 
-  it('fails when key has no uppercase letters', async () => {
+  it('fallisce quando chiave senza maiuscole', async () => {
     const result = await runValidation(
       { headers: { 'x-api-key': 'abcdefghijklmnopqrst' } },
       syncValidator
@@ -142,7 +170,7 @@ describe('syncValidator', () => {
     expect(result.array().some(e => e.msg.includes('maiuscole'))).toBe(true)
   })
 
-  it('fails when key has no lowercase letters', async () => {
+  it('fallisce quando chiave senza minuscole', async () => {
     const result = await runValidation(
       { headers: { 'x-api-key': 'ABCDEFGHIJKLMNOPQRST' } },
       syncValidator
@@ -150,7 +178,7 @@ describe('syncValidator', () => {
     expect(result.array().some(e => e.msg.includes('minuscole'))).toBe(true)
   })
 
-  it('fails when key has no numbers', async () => {
+  it('fallisce quando chiave senza numeri', async () => {
     const result = await runValidation(
       { headers: { 'x-api-key': 'Abcdefghijklmnopqrst' } },
       syncValidator
@@ -159,8 +187,13 @@ describe('syncValidator', () => {
   })
 })
 
+// ──────────────────────────────────────────────
+// Test per validateLoginInput
+// ──────────────────────────────────────────────
+// Valida i campi email e password per il login:
+// email obbligatoria e formato valido, password almeno 6 caratteri.
 describe('validateLoginInput', () => {
-  it('passes with valid email and password', async () => {
+  it('passa con email e password validi', async () => {
     const result = await runValidation(
       { body: { email: 'test@example.com', password: 'password123' } },
       validateLoginInput
@@ -168,22 +201,22 @@ describe('validateLoginInput', () => {
     expect(result.isEmpty()).toBe(true)
   })
 
-  it('fails when email is missing', async () => {
+  it('fallisce quando email mancante', async () => {
     const result = await runValidation({ body: { password: 'password123' } }, validateLoginInput)
     expect(result.array().some(e => e.msg.includes('email'))).toBe(true)
   })
 
-  it('fails with invalid email format', async () => {
+  it('fallisce con formato email non valido', async () => {
     const result = await runValidation({ body: { email: 'not-an-email', password: 'password123' } }, validateLoginInput)
     expect(result.array().some(e => e.msg.includes('email'))).toBe(true)
   })
 
-  it('fails when password is missing', async () => {
+  it('fallisce quando password mancante', async () => {
     const result = await runValidation({ body: { email: 'test@example.com' } }, validateLoginInput)
     expect(result.array().some(e => e.msg.includes('password'))).toBe(true)
   })
 
-  it('fails when password is too short', async () => {
+  it('fallisce quando password troppo corta', async () => {
     const result = await runValidation({ body: { email: 'test@example.com', password: '12' } }, validateLoginInput)
     expect(result.array().some(e => e.msg.includes('almeno 6'))).toBe(true)
   })

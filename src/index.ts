@@ -21,21 +21,21 @@ import initMongo from './config/initMongo';
 const app = express();
 // const conn = new DbConnection();
 
+// Protezione dai problemi di sicurezza
+app.use(helmet());
+
 // Middleware
 app.use(corsMiddleware);
 app.use(bodyParser.json());
 app.use(httpLogger);
 
+// Rate Limiting
+app.use(limiter);
+
 // Routes
 app.use('/api/projects', projectRoutes);
 app.use('/api/github', githubRoutes);
 app.use('/api/users', usersRoutes);
-
-// Rate Limiting
-app.use(limiter);
-
-// Protezione dai problemi di sicurezza
-app.use(helmet());
 
 // Gestisce le rotte non trovate
 app.all('*', notFoundHandler);

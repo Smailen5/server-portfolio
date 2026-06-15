@@ -1,4 +1,3 @@
-import bodyParser from 'body-parser';
 import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import { appLogger } from './config/appLogger';
@@ -26,7 +25,7 @@ app.use(helmet());
 
 // Middleware
 app.use(corsMiddleware);
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(httpLogger);
 
 // Rate Limiting

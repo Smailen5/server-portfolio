@@ -37,7 +37,7 @@ app.use('/api/github', githubRoutes);
 app.use('/api/users', usersRoutes);
 
 // Gestisce le rotte non trovate
-app.all('*', notFoundHandler);
+app.all('/{*splat}', notFoundHandler);
 
 // Gestisce tutti gli errori
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

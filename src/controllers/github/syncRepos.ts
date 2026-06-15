@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Octokit } from 'octokit';
 import { env } from '../../config';
+import { getOctokitInstance } from '../../utils/octokit';
 import {
   authMiddleware,
   syncValidator,
@@ -15,10 +15,6 @@ import {
   getReadme,
   getScreenshot,
 } from '../../utils/githubUtils';
-
-const octokit = new Octokit({
-  auth: env.githubToken,
-});
 
 export const syncRepos = [
   syncValidator,
@@ -35,7 +31,7 @@ export const syncRepos = [
         });
       }
 
-      const packageFolders = await getProjectsFromGithub(octokit);
+      const packageFolders = await getProjectsFromGithub(getOctokitInstance());
       let syncedCount = 0;
       let errors: string[] = [];
 
@@ -51,7 +47,7 @@ export const syncRepos = [
           };
 
           // Recuperiamo l'immagine di anteprima
-          const screenshot = await getScreenshot(octokit, folder.name);
+          const screenshot = await getScreenshot(getOctokitInstance(), folder.name);
           if (screenshot) {
             projectData.image = screenshot;
           } else {
@@ -61,7 +57,7 @@ export const syncRepos = [
           }
 
           // Recuperiamo il README.md
-          const readme = await getReadme(octokit, folder);
+          const readme = await getReadme(getOctokitInstance(), folder);
           if (readme) {
             projectData.readme = readme;
           } else {
@@ -69,7 +65,7 @@ export const syncRepos = [
           }
 
           // Recuperiamo il package.json
-          const packageData = await getPackageJson(octokit, folder);
+          const packageData = await getPackageJson(getOctokitInstance(), folder);
           if (packageData) {
             projectData = {
               ...projectData,

@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.6](https://github.com/Smailen5/server-portfolio/compare/v2.0.5...v2.0.6) (2026-06-15)
+
+
+### Chores
+
+* aggiorna express a v5 ([#83](https://github.com/Smailen5/server-portfolio/issues/83)) ([28c2939](https://github.com/Smailen5/server-portfolio/commit/28c2939c90bc606b50f9f44a9e746d29b7baba81))
+
+
+### Refactoring
+
+* condivide istanza Octokit ([#82](https://github.com/Smailen5/server-portfolio/issues/82)) ([c8de0eb](https://github.com/Smailen5/server-portfolio/commit/c8de0eb2cdb909ad77ab25b20b1c6e948412347b))
+
+
+### Tests
+
+* rimuove test di esempio ([#80](https://github.com/Smailen5/server-portfolio/issues/80)) ([1170ea2](https://github.com/Smailen5/server-portfolio/commit/1170ea22f2ca74210967b0f9d12acfcd5a1958f1))
+
 ## [2.0.5](https://github.com/Smailen5/server-portfolio/compare/v2.0.4...v2.0.5) (2026-06-12)
 
 

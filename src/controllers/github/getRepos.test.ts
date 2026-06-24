@@ -31,15 +31,18 @@ vi.mock('../../config', () => ({
   env: { githubToken: 'mock-token' },
 }))
 
-vi.mock('../../utils/githubUtils', () => ({
-  // vi.fn() crea una funzione "fantoccio" che non fa nulla.
-  // In ogni test decideremo cosa deve restituire.
-  getProjectsFromGithub: vi.fn(),
+const mockGitHubService = {
+  getRepositories: vi.fn(),
   getPackageJson: vi.fn(),
+  getScreenshot: vi.fn(),
+  getReadme: vi.fn(),
+}
+
+vi.mock('../../services/GitHubService', () => ({
+  createGitHubService: vi.fn(() => mockGitHubService),
 }))
 
-// Importiamo i mock DOPO i vi.mock() (vitest li sposta in alto automaticamente)
-import { getProjectsFromGithub, getPackageJson } from '../../utils/githubUtils'
+import { createGitHubService } from '../../services/GitHubService'
 
 // ──────────────────────────────────────────────
 // Helper: crea req e res finti come quelli di Express
@@ -68,8 +71,8 @@ describe('getRepos', () => {
   // Test 1: percorso felice — GitHub risponde, tutto ok
   it('restituisce le info dei package per ogni cartella', async () => {
     // Predispongo i mock: dico loro cosa restituire
-    vi.mocked(getProjectsFromGithub).mockResolvedValue(mockPackages)
-    vi.mocked(getPackageJson).mockResolvedValue(mockPackageJson)
+    mockGitHubService.getRepositories.mockResolvedValue(mockPackages)
+    mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson)
 
     // Importo il controller DOPO aver configurato i mock.
     // L'import dinamico (await import) è fondamentale:
@@ -81,9 +84,11 @@ describe('getRepos', () => {
     // Eseguo il controller come farebbe Express
     await getRepos(req, res, next)
 
-    // Verifico che abbia chiamato le funzioni mockate
-    expect(getProjectsFromGithub).toHaveBeenCalled()
-    expect(getPackageJson).toHaveBeenCalledTimes(2) // una per cartella
+    // Verifico che abbia creato il service chiamando la factory
+    expect(createGitHubService).toHaveBeenCalled()
+    // Verifico che abbia chiamato le funzioni del service
+    expect(mockGitHubService.getRepositories).toHaveBeenCalled()
+    expect(mockGitHubService.getPackageJson).toHaveBeenCalledTimes(2)
 
     // Verifico che abbia risposto con i dati giusti
     expect(res.json).toHaveBeenCalledWith([
@@ -106,9 +111,9 @@ describe('getRepos', () => {
 
   // Test 2: package.json mancante — deve usare il nome cartella come fallback
   it('usa il nome cartella come fallback quando package.json manca', async () => {
-    vi.mocked(getProjectsFromGithub).mockResolvedValue(mockPackages)
+    mockGitHubService.getRepositories.mockResolvedValue(mockPackages)
     // getPackageJson restituisce null → simula cartella senza package.json
-    vi.mocked(getPackageJson).mockResolvedValue(null)
+    mockGitHubService.getPackageJson.mockResolvedValue(null)
 
     const { getRepos } = await import('./getRepos')
     const { req, res, next } = mockReqRes()
@@ -125,7 +130,7 @@ describe('getRepos', () => {
   // Test 3: GitHub API non risponde — deve restituire 500
   it('risponde 500 quando GitHub API fallisce', async () => {
     // mockRejectedValue simula un'eccezione (Promise rifiutata)
-    vi.mocked(getProjectsFromGithub).mockRejectedValue(new Error('API rate limit'))
+    mockGitHubService.getRepositories.mockRejectedValue(new Error('API rate limit'))
 
     const { getRepos } = await import('./getRepos')
     const { req, res, next } = mockReqRes()

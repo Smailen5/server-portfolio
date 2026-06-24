@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { env } from '../../config';
+import { createGitHubService } from '../../services/GitHubService';
 import { getOctokitInstance } from '../../utils/octokit';
 import {
   authMiddleware,
@@ -9,12 +10,6 @@ import {
 import { jwtAuth } from '../../middleware/auth/jwtAuth';
 import { Project } from '../../models/Projects';
 import { ProjectData } from '../../types';
-import {
-  getPackageJson,
-  getProjectsFromGithub,
-  getReadme,
-  getScreenshot,
-} from '../../utils/githubUtils';
 
 export const syncRepos = [
   syncValidator,
@@ -31,7 +26,8 @@ export const syncRepos = [
         });
       }
 
-      const packageFolders = await getProjectsFromGithub(getOctokitInstance());
+      const github = createGitHubService(getOctokitInstance());
+      const packageFolders = await github.getRepositories();
       let syncedCount = 0;
       let errors: string[] = [];
 
@@ -47,7 +43,7 @@ export const syncRepos = [
           };
 
           // Recuperiamo l'immagine di anteprima
-          const screenshot = await getScreenshot(getOctokitInstance(), folder.name);
+          const screenshot = await github.getScreenshot(folder.name);
           if (screenshot) {
             projectData.image = screenshot;
           } else {
@@ -57,7 +53,7 @@ export const syncRepos = [
           }
 
           // Recuperiamo il README.md
-          const readme = await getReadme(getOctokitInstance(), folder);
+          const readme = await github.getReadme(folder);
           if (readme) {
             projectData.readme = readme;
           } else {
@@ -65,7 +61,7 @@ export const syncRepos = [
           }
 
           // Recuperiamo il package.json
-          const packageData = await getPackageJson(getOctokitInstance(), folder);
+          const packageData = await github.getPackageJson(folder);
           if (packageData) {
             projectData = {
               ...projectData,

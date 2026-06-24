@@ -34,11 +34,15 @@ vi.mock('../../config', () => ({
   env: { githubToken: 'mock-token' },
 }))
 
-vi.mock('../../utils/githubUtils', () => ({
-  getProjectsFromGithub: vi.fn(),
+const mockGitHubService = {
+  getRepositories: vi.fn(),
   getPackageJson: vi.fn(),
-  getReadme: vi.fn(),
   getScreenshot: vi.fn(),
+  getReadme: vi.fn(),
+}
+
+vi.mock('../../services/GitHubService', () => ({
+  createGitHubService: vi.fn(() => mockGitHubService),
 }))
 
 vi.mock('../../models/Projects', () => ({
@@ -49,7 +53,7 @@ vi.mock('../../models/Projects', () => ({
   },
 }))
 
-import { getProjectsFromGithub, getPackageJson, getReadme, getScreenshot } from '../../utils/githubUtils'
+import { createGitHubService } from '../../services/GitHubService'
 import { Project } from '../../models/Projects'
 
 // ──────────────────────────────────────────────
@@ -93,10 +97,10 @@ describe('syncRepos', () => {
   // Test 1: percorso felice — tutto funziona, progetti nuovi
   it('sincronizza i progetti da GitHub al database', async () => {
     // Configuro TUTTI i mock per simulare uno scenario completo
-    vi.mocked(getProjectsFromGithub).mockResolvedValue(mockPackages)
-    vi.mocked(getPackageJson).mockResolvedValue(mockPackageJson)
-    vi.mocked(getScreenshot).mockResolvedValue('https://example.com/screenshot.webp')
-    vi.mocked(getReadme).mockResolvedValue('# Readme content')
+    mockGitHubService.getRepositories.mockResolvedValue(mockPackages)
+    mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson)
+    mockGitHubService.getScreenshot.mockResolvedValue('https://example.com/screenshot.webp')
+    mockGitHubService.getReadme.mockResolvedValue('# Readme content')
 
     // Project.findOne restituisce null → il progetto NON esiste → verrà creato
     vi.mocked(Project.findOne).mockResolvedValue(null)
@@ -110,9 +114,10 @@ describe('syncRepos', () => {
     await handler(req, res, next)
 
     // Verifico che tutte le funzioni GitHub siano state chiamate
-    expect(getScreenshot).toHaveBeenCalled()
-    expect(getReadme).toHaveBeenCalled()
-    expect(getPackageJson).toHaveBeenCalled()
+    expect(createGitHubService).toHaveBeenCalled()
+    expect(mockGitHubService.getScreenshot).toHaveBeenCalled()
+    expect(mockGitHubService.getReadme).toHaveBeenCalled()
+    expect(mockGitHubService.getPackageJson).toHaveBeenCalled()
 
     // 2 progetti → 2 create (nessun update perché findOne ha restituito null)
     expect(Project.create).toHaveBeenCalledTimes(2)
@@ -127,10 +132,10 @@ describe('syncRepos', () => {
 
   // Test 2: progetto già esistente → deve aggiornare, non creare
   it('aggiorna progetti esistenti invece di crearne di nuovi', async () => {
-    vi.mocked(getProjectsFromGithub).mockResolvedValue(mockPackages)
-    vi.mocked(getPackageJson).mockResolvedValue(mockPackageJson)
-    vi.mocked(getScreenshot).mockResolvedValue('https://example.com/screenshot.webp')
-    vi.mocked(getReadme).mockResolvedValue('# Readme')
+    mockGitHubService.getRepositories.mockResolvedValue(mockPackages)
+    mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson)
+    mockGitHubService.getScreenshot.mockResolvedValue('https://example.com/screenshot.webp')
+    mockGitHubService.getReadme.mockResolvedValue('# Readme')
 
     // Project.findOne restituisce un oggetto → progetto ESISTE già
     vi.mocked(Project.findOne).mockResolvedValue({ _id: 'existing' } as any)
@@ -153,9 +158,9 @@ describe('syncRepos', () => {
     // Se getPackageJson e getScreenshot lanciano errore, il singolo
     // progetto viene saltato ma il controller non crasha.
     // Alla fine syncedCount = 0 → risponde 500.
-    vi.mocked(getProjectsFromGithub).mockResolvedValue(mockPackages)
-    vi.mocked(getPackageJson).mockRejectedValue(new Error('Fail'))
-    vi.mocked(getScreenshot).mockRejectedValue(new Error('Fail'))
+    mockGitHubService.getRepositories.mockResolvedValue(mockPackages)
+    mockGitHubService.getPackageJson.mockRejectedValue(new Error('Fail'))
+    mockGitHubService.getScreenshot.mockRejectedValue(new Error('Fail'))
 
     const { syncRepos } = await import('./syncRepos')
     const handler = getHandler(syncRepos)
@@ -171,9 +176,9 @@ describe('syncRepos', () => {
 
   // Test 4: GitHub API non raggiungibile — errore totale
   it('risponde 500 quando la sincronizzazione fallisce del tutto', async () => {
-    // Se getProjectsFromGithub stesso fallisce, il try/catch ESTERNO
+    // Se getRepositories stesso fallisce, il try/catch ESTERNO
     // del controller cattura l'errore e risponde 500.
-    vi.mocked(getProjectsFromGithub).mockRejectedValue(new Error('GitHub down'))
+    mockGitHubService.getRepositories.mockRejectedValue(new Error('GitHub down'))
 
     const { syncRepos } = await import('./syncRepos')
     const handler = getHandler(syncRepos)

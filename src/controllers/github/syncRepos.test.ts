@@ -20,7 +20,7 @@ const mockPackageJson = {
 // Mock delle dipendenze
 // ──────────────────────────────────────────────
 // syncRepos usa più dipendenze di getRepos:
-// - githubUtils: 4 funzioni (invece di 2)
+// - GitHubService: 4 metodi (invece di 2)
 // - models/Projects: per salvare su MongoDB
 
 // appLogger va mockato: syncRepos importa middleware che

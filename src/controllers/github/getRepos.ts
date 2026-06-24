@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express';
 import { env } from '../../config';
+import { createGitHubService } from '../../services/GitHubService';
 import { getOctokitInstance } from '../../utils/octokit';
-import { getPackageJson, getProjectsFromGithub } from '../../utils/githubUtils';
 
 export const getRepos = (async (_req: Request, res: Response) => {
   try {
@@ -12,12 +12,12 @@ export const getRepos = (async (_req: Request, res: Response) => {
       });
     }
 
-    const packageFolders = await getProjectsFromGithub(getOctokitInstance());
+    const github = createGitHubService(getOctokitInstance());
+    const packageFolders = await github.getRepositories();
 
-    // Per ogni cartella, otteniamo i dettagli del package.json
     const packagesInfo = await Promise.all(
       packageFolders.map(async (folder) => {
-        const packageData = await getPackageJson(getOctokitInstance(), folder);
+        const packageData = await github.getPackageJson(folder);
 
         return {
           name: packageData?.name || folder.name,

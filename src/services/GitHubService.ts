@@ -1,5 +1,5 @@
 import { Octokit } from 'octokit';
-import { GitHubContent, PackageJson } from '../types';
+import { GitHubContent, PackageJson } from '../types/index.js';
 
 export function createGitHubService(octokit: Octokit) {
   return {

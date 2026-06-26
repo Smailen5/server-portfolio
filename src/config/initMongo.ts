@@ -1,6 +1,6 @@
-import { appLogger } from './appLogger';
-import { connectMongo } from './mongodb';
-import { createAdminUser } from '../seeders/createAdminUser';
+import { appLogger } from './appLogger.js';
+import { connectMongo } from './mongodb.js';
+import { createAdminUser } from '../seeders/createAdminUser.js';
 
 const initMongo = async ()=>{
   try {

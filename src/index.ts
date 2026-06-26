@@ -1,21 +1,21 @@
 import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
-import { appLogger } from './config/appLogger';
+import { appLogger } from './config/appLogger.js';
 // import DbConnection from './config/mongodb';
-import { serverConfig } from './config/server';
-import { validateEnv } from './config/validateEnv';
-import { corsMiddleware } from './middleware/cors';
+import { serverConfig } from './config/server.js';
+import { validateEnv } from './config/validateEnv.js';
+import { corsMiddleware } from './middleware/cors.js';
 import {
   AppError,
   errorHandler,
   notFoundHandler,
-} from './middleware/errorHandler';
-import { httpLogger } from './middleware/httpLogger';
-import { limiter } from './middleware/rateLimiter';
-import githubRoutes from './routes/github';
-import projectRoutes from './routes/projects';
-import usersRoutes from './routes/users';
-import initMongo from './config/initMongo';
+} from './middleware/errorHandler.js';
+import { httpLogger } from './middleware/httpLogger.js';
+import { limiter } from './middleware/rateLimiter.js';
+import githubRoutes from './routes/github/index.js';
+import projectRoutes from './routes/projects/index.js';
+import usersRoutes from './routes/users/index.js';
+import initMongo from './config/initMongo.js';
 
 const app = express();
 // const conn = new DbConnection();

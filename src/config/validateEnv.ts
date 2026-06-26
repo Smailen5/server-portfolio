@@ -1,5 +1,5 @@
-import { AppError } from '../middleware/';
-import { env } from './env';
+import { AppError } from '../middleware/index.js';
+import { env } from './env.js';
 
 export const validateEnv = () => {
   const requireVars = [

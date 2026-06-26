@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.7](https://github.com/Smailen5/server-portfolio/compare/v2.0.6...v2.0.7) (2026-06-26)
+
+
+### Chores
+
+* aggiorna dipendenze post esm ([#90](https://github.com/Smailen5/server-portfolio/issues/90)) ([1401b9f](https://github.com/Smailen5/server-portfolio/commit/1401b9fca178cddb1a0bdeb57a4b4873a07fc837))
+* aggiorna mongoose v9 ([#84](https://github.com/Smailen5/server-portfolio/issues/84)) ([cf31729](https://github.com/Smailen5/server-portfolio/commit/cf31729172308bc80115c7ee03a14ab5d61000d0))
+
+
+### Refactoring
+
+* converte progetto a ESM ([#89](https://github.com/Smailen5/server-portfolio/issues/89)) ([a2d2cb0](https://github.com/Smailen5/server-portfolio/commit/a2d2cb0044e506cf814c91a3e5b101154403c564))
+* estrae GitHubService ([#85](https://github.com/Smailen5/server-portfolio/issues/85)) ([b6ea2c3](https://github.com/Smailen5/server-portfolio/commit/b6ea2c3514dc233b85a40393fedafa40777a78aa))
+* estrae ProjectService dai CRUD ([#91](https://github.com/Smailen5/server-portfolio/issues/91)) ([edbeed1](https://github.com/Smailen5/server-portfolio/commit/edbeed1acc0bc924e5dd291b3d294a7cd830ceab))
+
 ## [2.0.6](https://github.com/Smailen5/server-portfolio/compare/v2.0.5...v2.0.6) (2026-06-15)
 
 

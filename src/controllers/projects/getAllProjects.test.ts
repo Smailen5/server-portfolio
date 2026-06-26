@@ -11,14 +11,19 @@ const mockProjects = [
 // ──────────────────────────────────────────────
 // Mock delle dipendenze
 // ──────────────────────────────────────────────
-// getAllProjects usa solo Project.find(), quindi
+// getAllProjects usa solo ProjectService.getAll(), quindi
 // mocko solo quel metodo. Meno mock = test più leggibile.
-vi.mock('../../models/Projects', () => ({
-  Project: { find: vi.fn() },
+const mockProjectService = vi.hoisted(() => ({
+  create: vi.fn(),
+  getAll: vi.fn(),
+  getById: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn(),
 }))
 
-// Importo il modello DOPO vi.mock() (vitest lo sposta in alto)
-import { Project } from '../../models/Projects'
+vi.mock('../../services/ProjectService', () => ({
+  createProjectService: vi.fn(() => mockProjectService),
+}))
 
 // ──────────────────────────────────────────────
 // Helper: crea req, res, next finti come Express
@@ -36,14 +41,14 @@ function mockReqRes() {
 // Test per getAllProjects
 // ──────────────────────────────────────────────
 // getAllProjects è un controller semplice:
-// chiama Project.find().sort() e restituisce i risultati.
+// chiama ProjectService.getAll() e restituisce i risultati.
 // NON ha middleware, NON ha parametri dalla richiesta.
 
 describe('getAllProjects', () => {
   it('restituisce tutti i progetti ordinati per createdAt desc', async () => {
-    // Project.find() in Mongoose restituisce un oggetto query,
-    // non direttamente i dati. Per questo mocko anche .sort().
-    vi.mocked(Project.find).mockReturnValue({ sort: vi.fn().mockResolvedValue(mockProjects) } as any)
+    // Il servizio restituisce direttamente i dati (la logica di
+    // Project.find().sort() è incapsulata nel service layer).
+    mockProjectService.getAll.mockResolvedValue(mockProjects as any)
     const { req, res, next } = mockReqRes()
 
     // Import dinamico: i mock devono essere già attivi quando
@@ -51,13 +56,13 @@ describe('getAllProjects', () => {
     const { getAllProjects } = await import('./getAllProjects')
     await getAllProjects(req, res, next)
 
-    expect(Project.find).toHaveBeenCalled()
+    expect(mockProjectService.getAll).toHaveBeenCalled()
     expect(res.json).toHaveBeenCalledWith(mockProjects)
   })
 
   it('risponde 500 in caso di errore', async () => {
     // mockRejectedValue simula un'eccezione (es. DB down)
-    vi.mocked(Project.find).mockReturnValue({ sort: vi.fn().mockRejectedValue(new Error('DB fail')) } as any)
+    mockProjectService.getAll.mockRejectedValue(new Error('DB fail'))
     const { req, res, next } = mockReqRes()
 
     const { getAllProjects } = await import('./getAllProjects')

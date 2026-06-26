@@ -15,11 +15,18 @@ vi.mock('../../config/appLogger', () => ({
   appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }))
 
-vi.mock('../../models/Projects', () => ({
-  Project: { findOne: vi.fn() },
+const mockProjectService = vi.hoisted(() => ({
+  create: vi.fn(),
+  getAll: vi.fn(),
+  getById: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn(),
 }))
 
-import { Project } from '../../models/Projects'
+// Il controller ora usa ProjectService.getById() invece di Project.findOne().
+vi.mock('../../services/ProjectService', () => ({
+  createProjectService: vi.fn(() => mockProjectService),
+}))
 
 // ──────────────────────────────────────────────
 // Helper
@@ -43,7 +50,7 @@ function getHandler(controller: unknown[]): (...args: any[]) => any {
 
 describe('getProjectById', () => {
   it('restituisce il progetto quando trovato', async () => {
-    vi.mocked(Project.findOne).mockResolvedValue(mockProject as any)
+    mockProjectService.getById.mockResolvedValue(mockProject as any)
     const mod = await import('./getProjectById')
     const handler = getHandler(mod.getProjectById)
     const { req, res, next } = mockReqRes()
@@ -53,13 +60,13 @@ describe('getProjectById', () => {
     await handler(req, res, next)
 
     // Verifico che abbia cercato con l'id giusto
-    expect(Project.findOne).toHaveBeenCalledWith({ _id: '1' })
+    expect(mockProjectService.getById).toHaveBeenCalledWith('1')
     expect(res.json).toHaveBeenCalledWith(mockProject)
   })
 
   it('risponde 404 quando il progetto non esiste', async () => {
-    // findOne restituisce null → progetto inesistente
-    vi.mocked(Project.findOne).mockResolvedValue(null)
+    // getById restituisce null → progetto inesistente
+    mockProjectService.getById.mockResolvedValue(null)
     const mod = await import('./getProjectById')
     const handler = getHandler(mod.getProjectById)
     const { req, res, next } = mockReqRes()

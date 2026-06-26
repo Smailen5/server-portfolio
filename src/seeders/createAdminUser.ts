@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
-import { appLogger } from '../config/appLogger';
-import { env } from '../config/env';
-import { User } from '../models/User';
+import { appLogger } from '../config/appLogger.js';
+import { env } from '../config/env.js';
+import { User } from '../models/User.js';
 
 export const createAdminUser = async () => {
   try {

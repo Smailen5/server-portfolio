@@ -1,9 +1,9 @@
 import { Request, RequestHandler, Response } from 'express';
-import { authMiddleware } from '../../middleware/auth/auth';
-import { jwtAuth } from '../../middleware/auth/jwtAuth';
-import { createProjectValidator } from '../../middleware/validators/validators';
-import { validateRequest } from '../../middleware/validators/validatorsRequest';
-import {Project} from '../../models/Projects';
+import { authMiddleware } from '../../middleware/auth/auth.js';
+import { jwtAuth } from '../../middleware/auth/jwtAuth.js';
+import { createProjectValidator } from '../../middleware/validators/validators.js';
+import { validateRequest } from '../../middleware/validators/validatorsRequest.js';
+import {Project} from '../../models/Projects.js';
 
 interface ProjectRequest extends Request {
   body: {

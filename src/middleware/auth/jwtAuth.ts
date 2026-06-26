@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { appLogger } from '../../config/appLogger';
+import { appLogger } from '../../config/appLogger.js';
 
 interface AuthRequest extends Request {
   user?: JwtPayload;

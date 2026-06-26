@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express';
-import { env } from '../../config';
-import { createGitHubService } from '../../services/GitHubService';
-import { getOctokitInstance } from '../../utils/octokit';
+import { env } from '../../config/index.js';
+import { createGitHubService } from '../../services/GitHubService.js';
+import { getOctokitInstance } from '../../utils/octokit.js';
 
 export const getRepos = (async (_req: Request, res: Response) => {
   try {

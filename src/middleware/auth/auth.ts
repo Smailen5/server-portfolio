@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { env } from '../../config/env';
-import { AppError } from '../errorHandler';
+import { env } from '../../config/env.js';
+import { AppError } from '../errorHandler.js';
 
 export const authMiddleware = (
   req: Request,

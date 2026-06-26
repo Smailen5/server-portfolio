@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from 'express';
-import {Project} from '../../models/Projects';
+import {Project} from '../../models/Projects.js';
 
 export const getAllProjects = (async (_req: Request, res: Response) => {
   try {

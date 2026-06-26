@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
-import { env } from '../../config';
-import { createGitHubService } from '../../services/GitHubService';
-import { getOctokitInstance } from '../../utils/octokit';
+import { env } from '../../config/index.js';
+import { createGitHubService } from '../../services/GitHubService.js';
+import { getOctokitInstance } from '../../utils/octokit.js';
 import {
   authMiddleware,
   syncValidator,
   validateRequest,
-} from '../../middleware';
-import { jwtAuth } from '../../middleware/auth/jwtAuth';
-import { Project } from '../../models/Projects';
-import { ProjectData } from '../../types';
+} from '../../middleware/index.js';
+import { jwtAuth } from '../../middleware/auth/jwtAuth.js';
+import { Project } from '../../models/Projects.js';
+import { ProjectData } from '../../types/index.js';
 
 export const syncRepos = [
   syncValidator,

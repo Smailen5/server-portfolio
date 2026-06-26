@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { createProject } from '../../controllers/projects/createProject';
-import { deleteProject } from '../../controllers/projects/deleteProject';
-import { getAllProjects } from '../../controllers/projects/getAllProjects';
-import { getProjectById } from '../../controllers/projects/getProjectById';
-import { updateProject } from '../../controllers/projects/updateProject';
+import { createProject } from '../../controllers/projects/createProject.js';
+import { deleteProject } from '../../controllers/projects/deleteProject.js';
+import { getAllProjects } from '../../controllers/projects/getAllProjects.js';
+import { getProjectById } from '../../controllers/projects/getProjectById.js';
+import { updateProject } from '../../controllers/projects/updateProject.js';
 
 const router = Router();
 

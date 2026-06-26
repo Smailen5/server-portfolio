@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { appLogger } from '../config/appLogger';
-import { env } from '../config/env';
+import { appLogger } from '../config/appLogger.js';
+import { env } from '../config/env.js';
 
 // Classe personalizzata per gestire gli errori
 export class AppError extends Error {

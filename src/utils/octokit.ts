@@ -1,5 +1,5 @@
 import { Octokit } from 'octokit';
-import { env } from '../config';
+import { env } from '../config/index.js';
 
 let instance: Octokit | null = null;
 

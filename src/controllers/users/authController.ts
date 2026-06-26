@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { appLogger } from '../../config/appLogger';
-import {User} from '../../models/User';
+import { appLogger } from '../../config/appLogger.js';
+import {User} from '../../models/User.js';
 
 export const logUser = async (req: Request, res: Response): Promise<void> => {
   try {

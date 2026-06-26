@@ -1,14 +1,16 @@
 import { Request, RequestHandler, Response } from 'express';
 import { idValidator } from '../../middleware/validators/validators.js';
 import { validateRequest } from '../../middleware/validators/validatorsRequest.js';
-import {Project} from '../../models/Projects.js';
+import { createProjectService } from '../../services/ProjectService.js';
+
+const projectService = createProjectService();
 
 export const getProjectById = [
   idValidator,
   validateRequest,
   async (req: Request, res: Response) => {
     try {
-      const project = await Project.findOne({ _id: req.params.id });
+      const project = await projectService.getById(req.params.id as string);
       if (!project)
         return res.status(404).json({ message: 'Progetto non trovato' });
       return res.json(project);

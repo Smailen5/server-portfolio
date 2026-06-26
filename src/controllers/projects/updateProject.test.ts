@@ -17,11 +17,18 @@ vi.mock('../../config/appLogger', () => ({
   appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }))
 
-vi.mock('../../models/Projects', () => ({
-  Project: { findOneAndUpdate: vi.fn() },
+const mockProjectService = vi.hoisted(() => ({
+  create: vi.fn(),
+  getAll: vi.fn(),
+  getById: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn(),
 }))
 
-import { Project } from '../../models/Projects'
+// Il controller ora usa ProjectService.update() invece di Project.findOneAndUpdate().
+vi.mock('../../services/ProjectService', () => ({
+  createProjectService: vi.fn(() => mockProjectService),
+}))
 
 // ──────────────────────────────────────────────
 // Helper
@@ -45,9 +52,9 @@ function getHandler(controller: unknown[]): (...args: any[]) => any {
 
 describe('updateProject', () => {
   it('aggiorna e restituisce il progetto', async () => {
-    // Simulo MongoDB che trova e aggiorna il documento
+    // Simulo ProjectService.update che restituisce il documento aggiornato
     const updated = { _id: '1', ...updateBody }
-    vi.mocked(Project.findOneAndUpdate).mockResolvedValue(updated as any)
+    mockProjectService.update.mockResolvedValue(updated as any)
     const mod = await import('./updateProject')
     const handler = getHandler(mod.updateProject)
     const { req, res, next } = mockReqRes()
@@ -55,19 +62,15 @@ describe('updateProject', () => {
     req.body = updateBody
     await handler(req, res, next)
 
-    // Verifico TUTTI gli argomenti: filtro, dati, e opzione { new: true }.
-    // Quest'ultima è fondamentale: restituisce il documento AGGIORNATO.
-    expect(Project.findOneAndUpdate).toHaveBeenCalledWith(
-      { _id: '1' },
-      updateBody,
-      { new: true }
-    )
+    // Verifico TUTTI gli argomenti: id e dati. La logica { new: true }
+    // è incapsulata nel service, non serve testarla qui.
+    expect(mockProjectService.update).toHaveBeenCalledWith('1', updateBody)
     expect(res.json).toHaveBeenCalledWith(updated)
   })
 
   it('risponde 404 quando il progetto non esiste', async () => {
-    // findOneAndUpdate restituisce null → progetto non trovato
-    vi.mocked(Project.findOneAndUpdate).mockResolvedValue(null)
+    // update restituisce null → progetto non trovato
+    mockProjectService.update.mockResolvedValue(null)
     const mod = await import('./updateProject')
     const handler = getHandler(mod.updateProject)
     const { req, res, next } = mockReqRes()

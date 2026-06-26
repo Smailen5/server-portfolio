@@ -15,15 +15,24 @@ const validBody = {
 // ──────────────────────────────────────────────
 // Mock delle dipendenze
 // ──────────────────────────────────────────────
+// mockProjectService viene definito con vi.hoisted() per essere
+// disponibile prima di vi.mock() (vitest hoista i mock in cima).
+const mockProjectService = vi.hoisted(() => ({
+  create: vi.fn(),
+  getAll: vi.fn(),
+  getById: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn(),
+}))
+
 vi.mock('../../config/appLogger', () => ({
   appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }))
 
-vi.mock('../../models/Projects', () => ({
-  Project: { create: vi.fn() },
+// Il controller ora usa ProjectService invece di Project direttamente.
+vi.mock('../../services/ProjectService', () => ({
+  createProjectService: vi.fn(() => mockProjectService),
 }))
-
-import { Project } from '../../models/Projects'
 
 // ──────────────────────────────────────────────
 // Helper
@@ -47,9 +56,9 @@ function getHandler(controller: unknown[]): (...args: any[]) => any {
 
 describe('createProject', () => {
   it('crea e restituisce il progetto', async () => {
-    // Simulo MongoDB che restituisce il progetto con _id assegnato
+    // Simulo ProjectService.create che restituisce il progetto con _id assegnato
     const created = { _id: 'new', ...validBody }
-    vi.mocked(Project.create).mockResolvedValue(created as any)
+    mockProjectService.create.mockResolvedValue(created as any)
     const mod = await import('./createProject')
     const handler = getHandler(mod.createProject)
     const { req, res, next } = mockReqRes()
@@ -58,15 +67,15 @@ describe('createProject', () => {
     await handler(req, res, next)
 
     // Verifico che create sia stato chiamato con i dati esatti
-    expect(Project.create).toHaveBeenCalledWith(validBody)
+    expect(mockProjectService.create).toHaveBeenCalledWith(validBody)
     // 201 = Created, più preciso di 200 per le creazioni
     expect(res.status).toHaveBeenCalledWith(201)
     expect(res.json).toHaveBeenCalledWith(created)
   })
 
   it('risponde 500 in caso di errore', async () => {
-    // mockRejectedValue simula un errore MongoDB
-    vi.mocked(Project.create).mockRejectedValue(new Error('Validation failed'))
+    // mockRejectedValue simula un errore del servizio
+    mockProjectService.create.mockRejectedValue(new Error('Validation failed'))
     const mod = await import('./createProject')
     const handler = getHandler(mod.createProject)
     const { req, res, next } = mockReqRes()

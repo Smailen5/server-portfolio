@@ -3,13 +3,11 @@ import { describe, expect, it, vi } from 'vitest'
 // ──────────────────────────────────────────────
 // Dati finti: simulano un documento Mongoose trovato
 // ──────────────────────────────────────────────
-// deleteOne è un metodo dell'ISTANZA del documento,
-// non una funzione statica del modello Project.
-// Per questo mocko deleteOne DENTRO l'oggetto restituito da findOne.
+// Con il passaggio a findOneAndDelete, il servizio restituisce
+// direttamente il documento eliminato (o null se non trovato).
 const existingProject = {
   _id: '1',
   name: 'To Delete',
-  deleteOne: vi.fn().mockResolvedValue(undefined),
 }
 
 // ──────────────────────────────────────────────
@@ -19,13 +17,19 @@ vi.mock('../../config/appLogger', () => ({
   appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }))
 
-// Nota: non mocko Project.deleteOne, perché il controller
-// chiama project.deleteOne() sull'istanza, non sul modello.
-vi.mock('../../models/Projects', () => ({
-  Project: { findOne: vi.fn() },
+const mockProjectService = vi.hoisted(() => ({
+  create: vi.fn(),
+  getAll: vi.fn(),
+  getById: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn(),
 }))
 
-import { Project } from '../../models/Projects'
+// Il controller ora usa ProjectService.delete() invece di
+// Project.findOne() + project.deleteOne() sull'istanza.
+vi.mock('../../services/ProjectService', () => ({
+  createProjectService: vi.fn(() => mockProjectService),
+}))
 
 // ──────────────────────────────────────────────
 // Helper
@@ -49,22 +53,21 @@ function getHandler(controller: unknown[]): (...args: any[]) => any {
 
 describe('deleteProject', () => {
   it('elimina e conferma la rimozione', async () => {
-    // findOne restituisce un progetto esistente che ha deleteOne mockato
-    vi.mocked(Project.findOne).mockResolvedValue(existingProject as any)
+    // ProjectService.delete restituisce il documento eliminato
+    mockProjectService.delete.mockResolvedValue(existingProject as any)
     const mod = await import('./deleteProject')
     const handler = getHandler(mod.deleteProject)
     const { req, res, next } = mockReqRes()
     req.params.id = '1'
     await handler(req, res, next)
 
-    // Verifico la ricerca E la chiamata a deleteOne sull'istanza
-    expect(Project.findOne).toHaveBeenCalledWith({ _id: '1' })
-    expect(existingProject.deleteOne).toHaveBeenCalledWith({ _id: '1' })
+    // Verifico che delete sia stato chiamato con l'id corretto
+    expect(mockProjectService.delete).toHaveBeenCalledWith('1')
     expect(res.json).toHaveBeenCalledWith({ message: 'Project eliminato' })
   })
 
   it('risponde 404 quando il progetto non esiste', async () => {
-    vi.mocked(Project.findOne).mockResolvedValue(null)
+    mockProjectService.delete.mockResolvedValue(null)
     const mod = await import('./deleteProject')
     const handler = getHandler(mod.deleteProject)
     const { req, res, next } = mockReqRes()

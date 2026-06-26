@@ -3,7 +3,9 @@ import { authMiddleware } from '../../middleware/auth/auth.js';
 import { jwtAuth } from '../../middleware/auth/jwtAuth.js';
 import { createProjectValidator } from '../../middleware/validators/validators.js';
 import { validateRequest } from '../../middleware/validators/validatorsRequest.js';
-import {Project} from '../../models/Projects.js';
+import { createProjectService } from '../../services/ProjectService.js';
+
+const projectService = createProjectService();
 
 interface ProjectRequest extends Request {
   body: {
@@ -23,14 +25,7 @@ export const createProject = [
   jwtAuth,
   async (req: ProjectRequest, res: Response) => {
     try {
-      const project = await Project.create({
-        name: req.body.name,
-        link: req.body.link,
-        description: req.body.description,
-        image: req.body.image,
-        technologies: req.body.technologies,
-        readme: req.body.readme,
-      });
+      const project = await projectService.create(req.body);
 
       return res.status(201).json(project);
     } catch (error: any) {

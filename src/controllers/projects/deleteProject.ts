@@ -3,7 +3,9 @@ import { authMiddleware } from '../../middleware/index.js';
 import { jwtAuth } from '../../middleware/auth/jwtAuth.js';
 import { idValidator } from '../../middleware/validators/validators.js';
 import { validateRequest } from '../../middleware/validators/validatorsRequest.js';
-import {Project} from '../../models/Projects.js';
+import { createProjectService } from '../../services/ProjectService.js';
+
+const projectService = createProjectService();
 
 export const deleteProject = [
   idValidator,
@@ -12,11 +14,10 @@ export const deleteProject = [
   jwtAuth,
   async (req: Request, res: Response) => {
     try {
-      const project = await Project.findOne({ _id:req.params.id });
+      const project = await projectService.delete(req.params.id as string);
       if (!project)
         return res.status(404).json({ message: 'Project non trovato' });
 
-      await project.deleteOne({ _id: req.params.id });
       return res.json({ message: 'Project eliminato' });
     } catch (err: any) {
       return res.status(500).json({ message: err.message });

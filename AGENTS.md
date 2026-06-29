@@ -43,10 +43,18 @@
 - **GitHub sync**: Octokit per leggere repo `Smailen5/Frontend-mentor-challenge` da `packages/`
 - **Logs**: Winston + Morgan in `logs/`
 
+## File di contesto
+- I file `NOTE*.md` contengono la memoria di lavoro, lo storico e il contesto del progetto
+- I file `PLAN*.md` contengono piani di implementazione dettagliati
+- `CONVENTION.md` elenca le convenzioni su PR, issue, commit e nomenclatura
+- L'agente deve leggerli all'inizio di ogni sessione
+
 ## Convenzioni repo
 - **Commit, PR, issue, documentazione**: ITALIANO (obbligatorio)
 - **Codice sorgente (variabili, funzioni, classi, log)**: INGLESE
 - `.env.example` contiene placeholder, mai segreti veri
+- **Issue**: creare sempre con `gh issue create`, corpo via `--body-file`, template da `.github/ISSUE_TEMPLATE/`
+- **PR**: corpo dal template `.github/pull_request_template.md`, titolo conventional commit max 42 caratteri
 
 ## CI/CD (GitHub Actions)
 - **CI**: su ogni PR a `main` → lint + build + validazione titolo PR

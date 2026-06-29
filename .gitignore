@@ -53,4 +53,6 @@ coverage/
 # Specifici del Progetto
 # ==================================================
 database.sqlite
-NOTE-prossimi-passi.md
+NOTE*.md
+PLAN*.md
+CONVENTION.md

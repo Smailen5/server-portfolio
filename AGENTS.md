@@ -8,6 +8,13 @@
 | Build | `pnpm build` |
 | Avvio produzione | `pnpm start` |
 
+## File di contesto
+- `CONVENTION.md` — convenzioni complete (commit, PR, issue, template, lingua). **Leggere all'inizio di ogni sessione.**
+- `NOTE*.md` — memoria di lavoro, storico, contesto del progetto
+- `PLAN*.md` — piani di implementazione dettagliati
+- `.github/pull_request_template.md` — template obbligatorio per PR
+- `.github/ISSUE_TEMPLATE/` — template obbligatori per issue (usare `<tipo>.yaml`)
+
 ## Git workflow
 - **Branch**: sempre da `main`, nome `<tipo>/<descrizione>` (`feat/`, `fix/`, `docs/`, `chore/`, `refactor/`, `test/`)
 - **Mai commit su main** — solo PR con merge via GitHub
@@ -17,23 +24,9 @@
 - Pulire i rami locali dopo il merge con `git cleanup` (alias configurato)
 - Il merge su GitHub usa rebase, quindi `git branch -D` locale è sicuro anche se il branch non risulta fully merged
 
-## Commit (ferrei — fallisce in pre-commit e CI)
-```
-<tipo>: <testo in italiano, max 42 caratteri totali>
-
-<corpo descrittivo se serve, blank line obbligatoria se c'è>
-```
-- **Linus test**: "If applied, this commit will **<soggetto>**" deve avere senso
-- Dopo il prefisso, verbo al **presente indicativo 3a persona singolare** (es. `fix: rimuove`, `feat: aggiunge`, `docs: traduce`)
-- **Mai infinito** (`rimuovere`, `aggiungere`) — violazione grave
-- **Mai participio passato** (`rimosso`, `aggiunto`) — "will rimosso" non ha senso
-- Il commit stesso DEVE passare commitlint: header max 42, body-leading-blank
-
-## PR
-- **Titolo**: stesse regole dei commit (conventional + max 42 caratteri)
-- **Body**: usa il template in `.github/pull_request_template.md`
-- References: `Closes #numero` nel body per chiudere automaticamente le issue
-- **Mai** aprire PR duplicate o chiudere PR esistenti
+## Commit e PR
+Vedi `CONVENTION.md` per le regole complete su commit, PR, issue, lingua e template.
+- Il commit DEVE passare commitlint in pre-commit e CI (header max 42 caratteri, body-leading-blank)
 
 ## Architettura
 - **Stack**: Express + TypeScript + Mongoose (MongoDB), pnpm
@@ -42,11 +35,6 @@
 - **Database**: MongoDB via Mongoose (modelli in `src/models/`)
 - **GitHub sync**: Octokit per leggere repo `Smailen5/Frontend-mentor-challenge` da `packages/`
 - **Logs**: Winston + Morgan in `logs/`
-
-## Convenzioni repo
-- **Commit, PR, issue, documentazione**: ITALIANO (obbligatorio)
-- **Codice sorgente (variabili, funzioni, classi, log)**: INGLESE
-- `.env.example` contiene placeholder, mai segreti veri
 
 ## CI/CD (GitHub Actions)
 - **CI**: su ogni PR a `main` → lint + build + validazione titolo PR

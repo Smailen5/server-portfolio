@@ -1,5 +1,6 @@
 import { body } from 'express-validator';
 
+// Validazione utente
 export const validateLoginInput = [
   body('email')
     .notEmpty()

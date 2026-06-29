@@ -69,6 +69,8 @@ describe('createProjectValidator', () => {
   })
 
   it('non intercetta array vuoto (notEmpty ignora gli array)', async () => {
+    // notEmpty() in express-validator funziona solo su stringhe,
+    // non su array. Questo test documenta il comportamento reale.
     const result = await runValidation({ body: { ...validBody, technologies: [] } }, createProjectValidator)
     expect(result.isEmpty()).toBe(true)
   })

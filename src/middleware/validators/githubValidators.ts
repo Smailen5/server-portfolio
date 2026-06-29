@@ -1,5 +1,6 @@
 import { header } from 'express-validator';
 
+// Validazione per la sincronizzazione dei progetti
 export const syncValidator = [
   header('x-api-key')
     .notEmpty()

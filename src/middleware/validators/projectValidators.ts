@@ -11,7 +11,7 @@ export const createProjectValidator = [
     .notEmpty()
     .withMessage('Il link è obbligatorio')
     .isURL()
-    .withMessage('il link deve essere un URL valido'),
+    .withMessage('Il link deve essere un URL valido'),
   body('image')
     .notEmpty()
     .withMessage("L'immagine è obbligatoria")
@@ -21,7 +21,7 @@ export const createProjectValidator = [
     .isArray()
     .withMessage('Le tecnologie devono essere un array')
     .notEmpty()
-    .withMessage('Almeno una tecnologia e obbligatoria'),
+    .withMessage('Almeno una tecnologia è obbligatoria'),
   body('description')
     .notEmpty()
     .withMessage('La descrizione è obbligatoria')
@@ -47,7 +47,7 @@ export const updateProjectValidator = [
   body('technologies')
     .optional()
     .isArray()
-    .withMessage('Le tecnologie devono esser un array'),
+    .withMessage('Le tecnologie devono essere un array'),
   body('description')
     .optional()
     .isString()

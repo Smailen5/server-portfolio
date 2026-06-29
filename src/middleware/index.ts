@@ -3,5 +3,7 @@ export * from './cors.js';
 export * from './errorHandler.js';
 export * from './httpLogger.js';
 export * from './rateLimiter.js';
-export * from './validators/validators.js';
+export * from './validators/projectValidators.js';
+export * from './validators/githubValidators.js';
+export * from './validators/authValidators.js';
 export * from './validators/validatorsRequest.js';

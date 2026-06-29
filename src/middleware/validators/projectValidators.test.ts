@@ -4,9 +4,7 @@ import {
   createProjectValidator,
   updateProjectValidator,
   idValidator,
-  syncValidator,
-  validateLoginInput,
-} from './validators'
+} from './projectValidators'
 
 // ──────────────────────────────────────────────
 // Helper: esegue ogni validatore sul req e restituisce i risultati
@@ -132,92 +130,5 @@ describe('idValidator', () => {
   it('fallisce quando id mancante', async () => {
     const result = await runValidation({ params: {} }, idValidator)
     expect(result.isEmpty()).toBe(false)
-  })
-})
-
-// ──────────────────────────────────────────────
-// Test per syncValidator
-// ──────────────────────────────────────────────
-// Valida l'header x-api-key: 20 caratteri, misto maiuscole,
-// minuscole e numeri.
-describe('syncValidator', () => {
-  it('passa con header API key valido', async () => {
-    const result = await runValidation(
-      { headers: { 'x-api-key': 'AbcDefGhiJk1MnoPqrSt' } },
-      syncValidator
-    )
-    expect(result.isEmpty()).toBe(true)
-  })
-
-  it('fallisce quando x-api-key mancante', async () => {
-    const result = await runValidation({ headers: {} }, syncValidator)
-    expect(result.array().some(e => e.msg.includes('chiave'))).toBe(true)
-  })
-
-  it('fallisce quando chiave troppo corta', async () => {
-    const result = await runValidation(
-      { headers: { 'x-api-key': 'short' } },
-      syncValidator
-    )
-    expect(result.array().some(e => e.msg.includes('caratteri'))).toBe(true)
-  })
-
-  it('fallisce quando chiave senza maiuscole', async () => {
-    const result = await runValidation(
-      { headers: { 'x-api-key': 'abcdefghijklmnopqrst' } },
-      syncValidator
-    )
-    expect(result.array().some(e => e.msg.includes('maiuscole'))).toBe(true)
-  })
-
-  it('fallisce quando chiave senza minuscole', async () => {
-    const result = await runValidation(
-      { headers: { 'x-api-key': 'ABCDEFGHIJKLMNOPQRST' } },
-      syncValidator
-    )
-    expect(result.array().some(e => e.msg.includes('minuscole'))).toBe(true)
-  })
-
-  it('fallisce quando chiave senza numeri', async () => {
-    const result = await runValidation(
-      { headers: { 'x-api-key': 'Abcdefghijklmnopqrst' } },
-      syncValidator
-    )
-    expect(result.array().some(e => e.msg.includes('numeri'))).toBe(true)
-  })
-})
-
-// ──────────────────────────────────────────────
-// Test per validateLoginInput
-// ──────────────────────────────────────────────
-// Valida i campi email e password per il login:
-// email obbligatoria e formato valido, password almeno 6 caratteri.
-describe('validateLoginInput', () => {
-  it('passa con email e password validi', async () => {
-    const result = await runValidation(
-      { body: { email: 'test@example.com', password: 'password123' } },
-      validateLoginInput
-    )
-    expect(result.isEmpty()).toBe(true)
-  })
-
-  it('fallisce quando email mancante', async () => {
-    const result = await runValidation({ body: { password: 'password123' } }, validateLoginInput)
-    expect(result.array().some(e => e.msg.includes('email'))).toBe(true)
-  })
-
-  it('fallisce con formato email non valido', async () => {
-    const result = await runValidation({ body: { email: 'not-an-email', password: 'password123' } }, validateLoginInput)
-    expect(result.array().some(e => e.msg.includes('email'))).toBe(true)
-  })
-
-  it('fallisce quando password mancante', async () => {
-    const result = await runValidation({ body: { email: 'test@example.com' } }, validateLoginInput)
-    expect(result.array().some(e => e.msg.includes('password'))).toBe(true)
-  })
-
-  it('fallisce quando password troppo corta', async () => {
-    const result = await runValidation({ body: { email: 'test@example.com', password: '12' } }, validateLoginInput)
-    expect(result.array().some(e => e.msg.includes('almeno 6'))).toBe(true)
   })
 })

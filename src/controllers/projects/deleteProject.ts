@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express';
 import { authMiddleware } from '../../middleware/index.js';
 import { jwtAuth } from '../../middleware/auth/jwtAuth.js';
-import { idValidator } from '../../middleware/validators/validators.js';
+import { idValidator } from '../../middleware/validators/projectValidators.js';
 import { validateRequest } from '../../middleware/validators/validatorsRequest.js';
 import { createProjectService } from '../../services/ProjectService.js';
 

@@ -49,6 +49,11 @@
 - `CONVENTION.md` elenca le convenzioni su PR, issue, commit e nomenclatura
 - L'agente deve leggerli all'inizio di ogni sessione
 
+## Template — percorsi esatti (leggere PRIMA di creare)
+- **Issue**: `.github/ISSUE_TEMPLATE/` elenca i tipi. Leggi `.github/ISSUE_TEMPLATE/<tipo>.yaml` come struttura.
+- **PR**: `.github/pull_request_template.md` è la struttura obbligatoria.
+- **Regola d'oro**: MAI creare issue o PR senza aver prima letto il template corrispondente.
+
 ## Convenzioni repo
 - **Commit, PR, issue, documentazione**: ITALIANO (obbligatorio)
 - **Codice sorgente (variabili, funzioni, classi, log)**: INGLESE

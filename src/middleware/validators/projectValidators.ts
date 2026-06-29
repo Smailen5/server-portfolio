@@ -1,5 +1,6 @@
 import { body, param } from 'express-validator';
 
+// Validazione per la creazione di un progetto
 export const createProjectValidator = [
   body('name')
     .notEmpty()
@@ -28,6 +29,7 @@ export const createProjectValidator = [
     .withMessage('La descrizione deve essere una stringa'),
 ];
 
+// Validazione per l'aggiornamento di un progetto
 export const updateProjectValidator = [
   param('id').isMongoId().withMessage('ID non valido'),
   body('name')
@@ -52,4 +54,5 @@ export const updateProjectValidator = [
     .withMessage('La descrizione deve essere una stringa'),
 ];
 
+// Validazione per l'ID (usato in GET e DELETE)
 export const idValidator = [param('id').isMongoId().withMessage('ID non valido')];

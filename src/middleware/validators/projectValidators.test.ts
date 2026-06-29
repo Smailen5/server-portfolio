@@ -6,6 +6,12 @@ import {
   idValidator,
 } from './projectValidators'
 
+// ──────────────────────────────────────────────
+// Helper: esegue ogni validatore sul req e restituisce i risultati
+// ──────────────────────────────────────────────
+// express-validator funziona in modo diverso dai middleware normali:
+// ogni validatore va eseguito manualmente con v.run(req), poi si
+// controllano gli errori con validationResult(req).
 async function runValidation(req: Record<string, unknown>, validations: ReturnType<typeof createProjectValidator>) {
   for (const v of validations) {
     await v.run(req)
@@ -13,6 +19,12 @@ async function runValidation(req: Record<string, unknown>, validations: ReturnTy
   return validationResult(req)
 }
 
+// ──────────────────────────────────────────────
+// Test per createProjectValidator
+// ──────────────────────────────────────────────
+// Verifica la validazione del body per la creazione progetti:
+// name, link, image obbligatori, technologies array non vuoto,
+// description obbligatoria.
 describe('createProjectValidator', () => {
   const validBody = {
     name: 'My Project',
@@ -68,6 +80,11 @@ describe('createProjectValidator', () => {
   })
 })
 
+// ──────────────────────────────────────────────
+// Test per updateProjectValidator
+// ──────────────────────────────────────────────
+// Verifica che l'id sia un MongoId valido e che i campi
+// opzionali del body (name, link, image, etc.) siano del tipo giusto.
 describe('updateProjectValidator', () => {
   const validParams = { id: '507f1f77bcf86cd799439011' }
   const validBody = { name: 'Updated', technologies: ['Node'] }
@@ -93,6 +110,10 @@ describe('updateProjectValidator', () => {
   })
 })
 
+// ──────────────────────────────────────────────
+// Test per idValidator
+// ──────────────────────────────────────────────
+// Validatore semplice: controlla che il params.id sia un MongoId.
 describe('idValidator', () => {
   it('passa con un MongoId valido', async () => {
     const result = await runValidation({ params: { id: '507f1f77bcf86cd799439011' } }, idValidator)

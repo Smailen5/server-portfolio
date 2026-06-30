@@ -65,4 +65,36 @@ describe('syncValidator', () => {
     )
     expect(result.array().some(e => e.msg.includes('numeri'))).toBe(true)
   })
+
+  it('fallisce quando chiave supera 20 caratteri', async () => {
+    const result = await runValidation(
+      { headers: { 'x-api-key': 'A1bC2dE3fG4hI5jK6lM7n' } },
+      syncValidator
+    )
+    expect(result.array().some(e => e.msg.includes('20 caratteri'))).toBe(true)
+  })
+
+  it('fallisce quando chiave contiene caratteri speciali', async () => {
+    const result = await runValidation(
+      { headers: { 'x-api-key': 'AbcDefGhi!JklMnoPqrS' } },
+      syncValidator
+    )
+    expect(result.array().some(e => e.msg.includes('maiuscole'))).toBe(true)
+  })
+
+  it('fallisce quando chiave è stringa vuota', async () => {
+    const result = await runValidation(
+      { headers: { 'x-api-key': '' } },
+      syncValidator
+    )
+    expect(result.array().some(e => e.msg.includes('chiave'))).toBe(true)
+  })
+
+  it('fallisce quando chiave è un numero', async () => {
+    const result = await runValidation(
+      { headers: { 'x-api-key': 123 } },
+      syncValidator
+    )
+    expect(result.array().some(e => e.msg.includes('stringa'))).toBe(true)
+  })
 })

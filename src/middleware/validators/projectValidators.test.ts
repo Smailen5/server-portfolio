@@ -80,6 +80,31 @@ describe('createProjectValidator', () => {
     const result = await runValidation({ body }, createProjectValidator)
     expect(result.array().some(e => e.msg.includes('descrizione'))).toBe(true)
   })
+
+  it('fallisce quando name non è una stringa', async () => {
+    const result = await runValidation({ body: { ...validBody, name: 123 } }, createProjectValidator)
+    expect(result.array().some(e => e.msg.includes('stringa'))).toBe(true)
+  })
+
+  it("fallisce quando image non e' un URL", async () => {
+    const result = await runValidation({ body: { ...validBody, image: 'not-a-url' } }, createProjectValidator)
+    expect(result.array().some(e => e.msg.includes('URL'))).toBe(true)
+  })
+
+  it('fallisce quando description non è una stringa', async () => {
+    const result = await runValidation({ body: { ...validBody, description: 123 } }, createProjectValidator)
+    expect(result.array().some(e => e.msg.includes('stringa'))).toBe(true)
+  })
+
+  it('fallisce quando name è stringa vuota', async () => {
+    const result = await runValidation({ body: { ...validBody, name: '' } }, createProjectValidator)
+    expect(result.array().some(e => e.msg.includes('nome'))).toBe(true)
+  })
+
+  it('fallisce quando description è stringa vuota', async () => {
+    const result = await runValidation({ body: { ...validBody, description: '' } }, createProjectValidator)
+    expect(result.array().some(e => e.msg.includes('descrizione'))).toBe(true)
+  })
 })
 
 // ──────────────────────────────────────────────
@@ -109,6 +134,36 @@ describe('updateProjectValidator', () => {
   it('fallisce quando name non è una stringa', async () => {
     const result = await runValidation({ params: validParams, body: { name: 123 } }, updateProjectValidator)
     expect(result.array().some(e => e.msg.includes('stringa'))).toBe(true)
+  })
+
+  it('fallisce quando id mancante', async () => {
+    const result = await runValidation({ params: {}, body: {} }, updateProjectValidator)
+    expect(result.array().some(e => e.msg.includes('ID'))).toBe(true)
+  })
+
+  it("fallisce quando link non e' un URL", async () => {
+    const result = await runValidation({ params: validParams, body: { link: 'not-a-url' } }, updateProjectValidator)
+    expect(result.array().some(e => e.msg.includes('URL'))).toBe(true)
+  })
+
+  it("fallisce quando image non e' un URL", async () => {
+    const result = await runValidation({ params: validParams, body: { image: 'not-a-url' } }, updateProjectValidator)
+    expect(result.array().some(e => e.msg.includes('URL'))).toBe(true)
+  })
+
+  it('fallisce quando technologies non è un array', async () => {
+    const result = await runValidation({ params: validParams, body: { technologies: 'React' } }, updateProjectValidator)
+    expect(result.array().some(e => e.msg.includes('array'))).toBe(true)
+  })
+
+  it('fallisce quando description non è una stringa', async () => {
+    const result = await runValidation({ params: validParams, body: { description: 123 } }, updateProjectValidator)
+    expect(result.array().some(e => e.msg.includes('stringa'))).toBe(true)
+  })
+
+  it('passa con name vuoto (optional, stringa vuota valida)', async () => {
+    const result = await runValidation({ params: validParams, body: { name: '' } }, updateProjectValidator)
+    expect(result.isEmpty()).toBe(true)
   })
 })
 

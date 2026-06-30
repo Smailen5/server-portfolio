@@ -48,4 +48,53 @@ describe('validateLoginInput', () => {
     const result = await runValidation({ body: { email: 'test@example.com', password: '12' } }, validateLoginInput)
     expect(result.array().some(e => e.msg.includes('almeno 6'))).toBe(true)
   })
+
+  it('passa con password esattamente 6 caratteri', async () => {
+    const result = await runValidation(
+      { body: { email: 'test@example.com', password: '123456' } },
+      validateLoginInput
+    )
+    expect(result.isEmpty()).toBe(true)
+  })
+
+  it('fallisce quando email è stringa vuota', async () => {
+    const result = await runValidation(
+      { body: { email: '', password: 'password123' } },
+      validateLoginInput
+    )
+    expect(result.array().some(e => e.msg.includes('email'))).toBe(true)
+  })
+
+  it('fallisce quando password è stringa vuota', async () => {
+    const result = await runValidation(
+      { body: { email: 'test@example.com', password: '' } },
+      validateLoginInput
+    )
+    expect(result.array().some(e => e.msg.includes('password'))).toBe(true)
+  })
+
+  it('normalizza email con maiuscole e punti', async () => {
+    const result = await runValidation(
+      { body: { email: 'TEST@GMAIL.COM', password: 'password123' } },
+      validateLoginInput
+    )
+    expect(result.isEmpty()).toBe(true)
+    expect(result.array().length).toBe(0)
+  })
+
+  it("fallisce con email 'test@' senza dominio", async () => {
+    const result = await runValidation(
+      { body: { email: 'test@', password: 'password123' } },
+      validateLoginInput
+    )
+    expect(result.array().some(e => e.msg.includes('email'))).toBe(true)
+  })
+
+  it("fallisce con email '@example.com' senza parte locale", async () => {
+    const result = await runValidation(
+      { body: { email: '@example.com', password: 'password123' } },
+      validateLoginInput
+    )
+    expect(result.array().some(e => e.msg.includes('email'))).toBe(true)
+  })
 })

@@ -2,6 +2,12 @@ import { describe, expect, it, vi } from 'vitest'
 import { validationResult } from 'express-validator'
 import { handleLoginValidation } from './validatorsLogin'
 
+// ──────────────────────────────────────────────
+// Mock delle dipendenze
+// ──────────────────────────────────────────────
+// Sostituiamo solo validationResult, tenendo il resto
+// di express-validator originale. In questo modo possiamo
+// controllare cosa restituisce senza alterare altri comportamenti.
 vi.mock('express-validator', async () => {
   const actual = await vi.importActual<typeof import('express-validator')>('express-validator')
   return {
@@ -10,6 +16,9 @@ vi.mock('express-validator', async () => {
   }
 })
 
+// ──────────────────────────────────────────────
+// Helper
+// ──────────────────────────────────────────────
 function mockReqRes() {
   const req = {} as any
   const res: any = {
@@ -19,6 +28,14 @@ function mockReqRes() {
   const next = vi.fn()
   return { req, res, next }
 }
+
+// ──────────────────────────────────────────────
+// Test per handleLoginValidation
+// ──────────────────────────────────────────────
+// handleLoginValidation è un middleware che controlla se ci sono
+// errori di validazione (da express-validator):
+// - se ci sono errori → risponde con 400 e { success: false, errors: [...] }
+// - se non ci sono errori → chiama next()
 
 describe('handleLoginValidation', () => {
   it('restituisce 400 con success: false quando ci sono errori', () => {

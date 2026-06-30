@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.8](https://github.com/Smailen5/server-portfolio/compare/v2.0.7...v2.0.8) (2026-06-30)
+
+
+### Documentation
+
+* aggiunge commenti nel test login ([#101](https://github.com/Smailen5/server-portfolio/issues/101)) ([22fa27b](https://github.com/Smailen5/server-portfolio/commit/22fa27be2a75ff01195f5d816bed064b5e9f4c6e))
+
+
+### Chores
+
+* aggiorna convenzioni progetto ([#97](https://github.com/Smailen5/server-portfolio/issues/97)) ([67a4195](https://github.com/Smailen5/server-portfolio/commit/67a419505b4b40c22b5a0b06ba5a1fed5cd4f89a))
+
+
+### Refactoring
+
+* estrae runValidation in helper ([#102](https://github.com/Smailen5/server-portfolio/issues/102)) ([0dbe038](https://github.com/Smailen5/server-portfolio/commit/0dbe0387f4861a42931e603eb3520e5ffeb59771))
+* separa validatori in file propri ([#92](https://github.com/Smailen5/server-portfolio/issues/92)) ([90bbe1e](https://github.com/Smailen5/server-portfolio/commit/90bbe1e6fe4b53bef810a689aa1e5f9344a811bf))
+
+
+### Tests
+
+* aggiunge test per validatorsLogin ([#99](https://github.com/Smailen5/server-portfolio/issues/99)) ([0e8a796](https://github.com/Smailen5/server-portfolio/commit/0e8a796287c8b3e889f31c9c176c686549ba4237))
+* copre gap nei test dei validatori ([#100](https://github.com/Smailen5/server-portfolio/issues/100)) ([020bbe2](https://github.com/Smailen5/server-portfolio/commit/020bbe24be1156428d0a05fec6699251eb5485bc))
+
 ## [2.0.7](https://github.com/Smailen5/server-portfolio/compare/v2.0.6...v2.0.7) (2026-06-26)
 
 

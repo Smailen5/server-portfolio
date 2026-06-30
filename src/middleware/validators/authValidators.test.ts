@@ -1,21 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { validationResult } from 'express-validator'
 import { validateLoginInput } from './authValidators'
+import { runValidation } from './testHelpers'
 
-// ──────────────────────────────────────────────
-// Helper: esegue ogni validatore sul req e restituisce i risultati
-// ──────────────────────────────────────────────
-// express-validator funziona in modo diverso dai middleware normali:
-// ogni validatore va eseguito manualmente con v.run(req), poi si
-// controllano gli errori con validationResult(req).
-async function runValidation(req: Record<string, unknown>, validations: typeof validateLoginInput) {
-  for (const v of validations) {
-    await v.run(req)
-  }
-  return validationResult(req)
-}
-
-// ──────────────────────────────────────────────
+// ──────────────────────────────────────────────// ──────────────────────────────────────────────
 // Test per validateLoginInput
 // ──────────────────────────────────────────────
 // Valida i campi email e password per il login:

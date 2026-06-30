@@ -1,19 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { validationResult } from 'express-validator'
 import { syncValidator } from './githubValidators'
-
-// ──────────────────────────────────────────────
-// Helper: esegue ogni validatore sul req e restituisce i risultati
-// ──────────────────────────────────────────────
-// express-validator funziona in modo diverso dai middleware normali:
-// ogni validatore va eseguito manualmente con v.run(req), poi si
-// controllano gli errori con validationResult(req).
-async function runValidation(req: Record<string, unknown>, validations: typeof syncValidator) {
-  for (const v of validations) {
-    await v.run(req)
-  }
-  return validationResult(req)
-}
+import { runValidation } from './testHelpers'
 
 // ──────────────────────────────────────────────
 // Test per syncValidator

@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/Smailen5/server-portfolio/compare/v2.0.8...v2.1.0) (2026-07-01)
+
+
+### Features
+
+* aggiunge cache in-memory getRepos ([#112](https://github.com/Smailen5/server-portfolio/issues/112)) ([5ebe920](https://github.com/Smailen5/server-portfolio/commit/5ebe9208a993c59cd383c56f6a287ef0be4523f0))
+
+
+### Bug Fixes
+
+* aggiunge graceful shutdown ([#111](https://github.com/Smailen5/server-portfolio/issues/111)) ([68af2bf](https://github.com/Smailen5/server-portfolio/commit/68af2bf5723417709f62ba9bb4fdeb9580d0312d))
+* nasconde password nelle query User ([#109](https://github.com/Smailen5/server-portfolio/issues/109)) ([a0b41e1](https://github.com/Smailen5/server-portfolio/commit/a0b41e1db80912671b4a2385976ac2e3e32515e6))
+* valida env mancanti all'avvio ([#110](https://github.com/Smailen5/server-portfolio/issues/110)) ([e09fb25](https://github.com/Smailen5/server-portfolio/commit/e09fb254f07391caf6c12368b01f8a8f4055bb36))
+
+
+### Documentation
+
+* aggiunge Project Board in AGENTS.md ([#107](https://github.com/Smailen5/server-portfolio/issues/107)) ([c83c5ad](https://github.com/Smailen5/server-portfolio/commit/c83c5ada9199e38fec6858bd922bdc88e43e1389))
+
 ## [2.0.8](https://github.com/Smailen5/server-portfolio/compare/v2.0.7...v2.0.8) (2026-06-30)
 
 

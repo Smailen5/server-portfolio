@@ -1,7 +1,19 @@
 import { Request, RequestHandler, Response } from 'express';
 import { env } from '../../config/index.js';
 import { createGitHubService } from '../../services/GitHubService.js';
+import { cache } from '../../utils/cache.js';
 import { getOctokitInstance } from '../../utils/octokit.js';
+
+const CACHE_KEY = 'github:repos';
+const CACHE_TTL = 5 * 60 * 1000;
+
+interface PackageInfo {
+  name: string;
+  description: string;
+  url: string;
+  technologies: string[];
+  updated_at: string;
+}
 
 export const getRepos = (async (_req: Request, res: Response) => {
   try {
@@ -10,6 +22,11 @@ export const getRepos = (async (_req: Request, res: Response) => {
         message:
           'Token GitHub non configurato. Aggiungi GITHUB_TOKEN nel file .env',
       });
+    }
+
+    const cached = cache.get<PackageInfo[]>(CACHE_KEY);
+    if (cached) {
+      return res.json(cached);
     }
 
     const github = createGitHubService(getOctokitInstance());
@@ -29,6 +46,7 @@ export const getRepos = (async (_req: Request, res: Response) => {
       })
     );
 
+    cache.set(CACHE_KEY, packagesInfo, CACHE_TTL);
     return res.json(packagesInfo);
   } catch (err: any) {
     return res.status(500).json({ message: err.message });

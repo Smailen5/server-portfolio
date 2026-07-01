@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { appLogger } from '../../config/appLogger.js';
+import { env } from '../../config/index.js';
 
 interface AuthRequest extends Request {
   user?: JwtPayload;
@@ -24,7 +25,7 @@ export const jwtAuth = (
 
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET as string
+      env.jwtSecret as string
     ) as JwtPayload;
     req.user = decoded;
     next();

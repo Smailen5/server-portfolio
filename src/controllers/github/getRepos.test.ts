@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // ──────────────────────────────────────────────
 // Dati finti: simulano cosa restituirebbe GitHub
@@ -42,6 +42,17 @@ vi.mock('../../services/GitHubService', () => ({
   createGitHubService: vi.fn(() => mockGitHubService),
 }))
 
+const mockCache = {
+  get: vi.fn(),
+  set: vi.fn(),
+  invalidate: vi.fn(),
+  clear: vi.fn(),
+}
+
+vi.mock('../../utils/cache', () => ({
+  cache: mockCache,
+}))
+
 import { createGitHubService } from '../../services/GitHubService'
 
 // ──────────────────────────────────────────────
@@ -68,6 +79,11 @@ function mockReqRes() {
 // i dati formattati. NON tocca il database.
 
 describe('getRepos', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockCache.get.mockReturnValue(null)
+  })
+
   // Test 1: percorso felice — GitHub risponde, tutto ok
   it('restituisce le info dei package per ogni cartella', async () => {
     // Predispongo i mock: dico loro cosa restituire
@@ -139,5 +155,36 @@ describe('getRepos', () => {
 
     expect(res.status).toHaveBeenCalledWith(500)
     expect(res.json).toHaveBeenCalledWith({ message: 'API rate limit' })
+  })
+
+  // Test 4: cache hit — restituisce dati cached senza chiamare GitHub API
+  it('restituisce dati cached senza chiamare GitHub API', async () => {
+    const cachedData = [{ name: 'Cached Project', description: 'From cache', url: 'https://cached', technologies: [], updated_at: '2024-01-01' }]
+    mockCache.get.mockReturnValue(cachedData)
+
+    const { getRepos } = await import('./getRepos')
+    const { req, res, next } = mockReqRes()
+
+    await getRepos(req, res, next)
+
+    expect(mockCache.get).toHaveBeenCalledWith('github:repos')
+    expect(mockGitHubService.getRepositories).not.toHaveBeenCalled()
+    expect(res.json).toHaveBeenCalledWith(cachedData)
+  })
+
+  // Test 5: cache miss — chiama GitHub API e salva in cache
+  it('chiama GitHub API e salva in cache quando cache è vuota', async () => {
+    mockCache.get.mockReturnValue(null)
+    mockGitHubService.getRepositories.mockResolvedValue(mockPackages)
+    mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson)
+
+    const { getRepos } = await import('./getRepos')
+    const { req, res, next } = mockReqRes()
+
+    await getRepos(req, res, next)
+
+    expect(mockCache.get).toHaveBeenCalledWith('github:repos')
+    expect(mockGitHubService.getRepositories).toHaveBeenCalled()
+    expect(mockCache.set).toHaveBeenCalledWith('github:repos', expect.any(Array), 5 * 60 * 1000)
   })
 })

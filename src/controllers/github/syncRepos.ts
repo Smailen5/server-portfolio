@@ -9,7 +9,7 @@ import {
   validateRequest,
 } from '../../middleware/index.js';
 import { jwtAuth } from '../../middleware/auth/jwtAuth.js';
-import { Project } from '../../models/Projects.js';
+import { createProjectService } from '../../services/ProjectService.js';
 import { ProjectData } from '../../types/index.js';
 
 export const syncRepos = [
@@ -28,6 +28,7 @@ export const syncRepos = [
       }
 
       const github = createGitHubService(getOctokitInstance());
+      const projectService = createProjectService();
       const packageFolders = await github.getRepositories();
       let syncedCount = 0;
       let errors: string[] = [];
@@ -77,19 +78,7 @@ export const syncRepos = [
             errors.push(`Nessun package.json trovato per ${folder.name}`);
           }
 
-          // Controlliamo se il progetto esiste già
-          let project = await Project.findOne({ name: projectData.name });
-
-          if (project) {
-            // Aggiorniamo il progetto esistente con la data odierna
-            await Project.updateOne(
-              { name: projectData.name },
-              { ...projectData, updatedAt: new Date() }
-            );
-          } else {
-            // Creiamo un nuovo progetto
-            project = await Project.create(projectData)
-          }
+          await projectService.upsert(projectData.name, projectData);
 
           syncedCount++;
         } catch (error: any) {

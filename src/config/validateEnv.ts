@@ -11,6 +11,10 @@ export const validateEnv = () => {
     'rateLimitWindow',
     'rateLimitMax',
     'apiKey',
+    'jwtSecret',
+    'dbConnection',
+    'adminEmail',
+    'adminPassword',
   ] as const;
 
   for (const key of requireVars) {

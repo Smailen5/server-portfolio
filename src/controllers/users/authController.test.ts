@@ -18,8 +18,16 @@ const mockUser = {
 // Mock delle dipendenze
 // ──────────────────────────────────────────────
 // Sostituiamo User.findOne per evitare di chiamare MongoDB
+// Il mock supporta il chaining .select('+password')
+const { mockSelect } = vi.hoisted(() => ({
+  mockSelect: vi.fn(),
+}))
 vi.mock('../../models/User', () => ({
-  User: { findOne: vi.fn() },
+  User: {
+    findOne: vi.fn().mockReturnValue({
+      select: mockSelect,
+    }),
+  },
 }))
 
 // Sostituiamo appLogger per evitare output nei log
@@ -60,8 +68,8 @@ describe('logUser', () => {
   })
 
   it('risponde 401 quando l\'utente non esiste', async () => {
-    // User.findOne restituisce null → utente non trovato
-    vi.mocked(User.findOne).mockResolvedValue(null)
+    // User.findOne().select() restituisce null → utente non trovato
+    mockSelect.mockResolvedValue(null)
     const { req, res } = mockReqRes()
 
     await logUser(req, res)
@@ -71,7 +79,7 @@ describe('logUser', () => {
   })
 
   it('risponde 401 quando la password è errata', async () => {
-    vi.mocked(User.findOne).mockResolvedValue(mockUser as any)
+    mockSelect.mockResolvedValue(mockUser as any)
     // bcrypt.compare restituisce false → password sbagliata
     vi.spyOn(bcrypt, 'compare').mockResolvedValue(false as never)
     const { req, res } = mockReqRes()
@@ -83,7 +91,7 @@ describe('logUser', () => {
   })
 
   it('restituisce un token JWT al login riuscito', async () => {
-    vi.mocked(User.findOne).mockResolvedValue(mockUser as any)
+    mockSelect.mockResolvedValue(mockUser as any)
     vi.spyOn(bcrypt, 'compare').mockResolvedValue(true as never)
     vi.spyOn(jwt, 'sign').mockReturnValue('mock-token' as any)
     const { req, res } = mockReqRes()

@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { appLogger } from '../../config/appLogger.js';
+import { env } from '../../config/index.js';
 import {User} from '../../models/User.js';
 
 export const logUser = async (req: Request, res: Response): Promise<void> => {
@@ -43,7 +44,7 @@ export const logUser = async (req: Request, res: Response): Promise<void> => {
 
     const token = jwt.sign(
       { id: user._id },
-      process.env.JWT_SECRET as string,
+      env.jwtSecret as string,
       { expiresIn: '24h' }
     );
 

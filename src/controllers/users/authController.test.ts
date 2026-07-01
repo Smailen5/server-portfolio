@@ -35,6 +35,11 @@ vi.mock('../../config/appLogger', () => ({
   appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }))
 
+// Mock di env per controllare jwtSecret nei test
+vi.mock('../../config/env', () => ({
+  env: { jwtSecret: 'test-secret' },
+}))
+
 import { User } from '../../models/User'
 
 // ──────────────────────────────────────────────
@@ -61,10 +66,9 @@ function mockReqRes(overrides = {}) {
 // un token JWT con scadenza 24h.
 
 describe('logUser', () => {
-  // Ogni test parte con mock puliti e JWT_SECRET impostato
+  // Ogni test parte con mock puliti
   beforeEach(() => {
     vi.clearAllMocks()
-    process.env.JWT_SECRET = 'test-secret'
   })
 
   it('risponde 401 quando l\'utente non esiste', async () => {
@@ -111,7 +115,7 @@ describe('logUser', () => {
 
   it('risponde 500 in caso di errore imprevisto', async () => {
     // mockRejectedValue simula un'eccezione (es. DB down)
-    vi.mocked(User.findOne).mockRejectedValue(new Error('DB error'))
+    mockSelect.mockRejectedValue(new Error('DB error'))
     const { req, res } = mockReqRes()
 
     await logUser(req, res)

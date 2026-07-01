@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { env } from '../../config/index.js';
 import { createGitHubService } from '../../services/GitHubService.js';
+import { cache } from '../../utils/cache.js';
 import { getOctokitInstance } from '../../utils/octokit.js';
 import {
   authMiddleware,
@@ -104,6 +105,8 @@ export const syncRepos = [
           errors: errors,
         });
       }
+
+      cache.invalidate('github:repos');
 
       return res.json({
         message: `Sincronizzati ${syncedCount} progetti con successo`,

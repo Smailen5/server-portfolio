@@ -21,4 +21,5 @@ export const env = {
   adminEmail: process.env.ADMIN_EMAIL,
   adminPassword: process.env.ADMIN_PASSWORD,
   dbConnection: process.env.DB_CONNECTION,
+  jwtSecret: process.env.JWT_SECRET,
 };

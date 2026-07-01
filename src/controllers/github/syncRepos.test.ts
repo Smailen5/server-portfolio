@@ -53,6 +53,17 @@ vi.mock('../../models/Projects', () => ({
   },
 }))
 
+const mockCache = {
+  get: vi.fn(),
+  set: vi.fn(),
+  invalidate: vi.fn(),
+  clear: vi.fn(),
+}
+
+vi.mock('../../utils/cache', () => ({
+  cache: mockCache,
+}))
+
 import { createGitHubService } from '../../services/GitHubService'
 import { Project } from '../../models/Projects'
 
@@ -190,5 +201,24 @@ describe('syncRepos', () => {
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
       message: 'GitHub down',
     }))
+  })
+
+  // Test 5: invalida cache getRepos dopo sincronizzazione riuscita
+  it('invalida la cache getRepos dopo sincronizzazione', async () => {
+    mockGitHubService.getRepositories.mockResolvedValue(mockPackages)
+    mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson)
+    mockGitHubService.getScreenshot.mockResolvedValue('https://example.com/screenshot.webp')
+    mockGitHubService.getReadme.mockResolvedValue('# Readme content')
+
+    vi.mocked(Project.findOne).mockResolvedValue(null)
+    vi.mocked(Project.create).mockResolvedValue({} as any)
+
+    const { syncRepos } = await import('./syncRepos')
+    const handler = getHandler(syncRepos)
+    const { req, res, next } = mockReqRes()
+
+    await handler(req, res, next)
+
+    expect(mockCache.invalidate).toHaveBeenCalledWith('github:repos')
   })
 })

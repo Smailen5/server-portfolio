@@ -9,8 +9,9 @@
 | Avvio produzione | `pnpm start` |
 
 ## File di contesto
+- **GitHub Project Board** — fonte primaria per il lavoro pianificato. Query: `gh api graphql` su project "Portfolio" (id `PVT_kwHOB5CQhs4AO4_O`). Controllare status e data pianificata prima di leggere NOTE/PLAN. **Solo lettura** — le modifiche al board le fa Smailen.
 - `CONVENTION.md` — convenzioni complete (commit, PR, issue, template, lingua). **Leggere all'inizio di ogni sessione.**
-- `NOTE*.md` — memoria di lavoro, storico, contesto del progetto
+- `NOTE*.md` — memoria di lavoro, storico, contesto del progetto. Leggere per verificare allineamento col board.
 - `PLAN*.md` — piani di implementazione dettagliati
 - `.github/pull_request_template.md` — template obbligatorio per PR
 - `.github/ISSUE_TEMPLATE/` — template obbligatori per issue (usare `<tipo>.yaml`)

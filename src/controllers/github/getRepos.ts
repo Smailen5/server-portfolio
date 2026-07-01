@@ -1,5 +1,6 @@
-import { Request, RequestHandler, Response } from 'express';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { env } from '../../config/index.js';
+import { AppError } from '../../middleware/errorHandler.js';
 import { createGitHubService } from '../../services/GitHubService.js';
 import { cache } from '../../utils/cache.js';
 import { getOctokitInstance } from '../../utils/octokit.js';
@@ -15,13 +16,10 @@ interface PackageInfo {
   updated_at: string;
 }
 
-export const getRepos = (async (_req: Request, res: Response) => {
+export const getRepos = (async (_req: Request, res: Response, next: NextFunction) => {
   try {
     if (!env.githubToken) {
-      return res.status(500).json({
-        message:
-          'Token GitHub non configurato. Aggiungi GITHUB_TOKEN nel file .env',
-      });
+      return next(new AppError('Token GitHub non configurato. Aggiungi GITHUB_TOKEN nel file .env', 500));
     }
 
     const cached = cache.get<PackageInfo[]>(CACHE_KEY);
@@ -49,6 +47,6 @@ export const getRepos = (async (_req: Request, res: Response) => {
     cache.set(CACHE_KEY, packagesInfo, CACHE_TTL);
     return res.json(packagesInfo);
   } catch (err: any) {
-    return res.status(500).json({ message: err.message });
+    return next(new AppError(err.message, 500));
   }
 }) as unknown as RequestHandler;

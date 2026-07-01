@@ -1,6 +1,7 @@
-import { Request, RequestHandler, Response } from 'express';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { authMiddleware } from '../../middleware/auth/auth.js';
 import { jwtAuth } from '../../middleware/auth/jwtAuth.js';
+import { AppError } from '../../middleware/errorHandler.js';
 import { updateProjectValidator } from '../../middleware/validators/projectValidators.js';
 import { validateRequest } from '../../middleware/validators/validatorsRequest.js';
 import { createProjectService } from '../../services/ProjectService.js';
@@ -24,16 +25,16 @@ export const updateProject = [
   validateRequest,
   authMiddleware,
   jwtAuth,
-  async (req: ProjectRequest, res: Response) => {
+  async (req: ProjectRequest, res: Response, next: NextFunction) => {
     try {
       const project = await projectService.update(req.params.id, req.body);
 
       if (!project)
-        return res.status(404).json({ message: 'Project non trovato' });
+        return next(new AppError('Project non trovato', 404));
 
       return res.json(project);
     } catch (err: any) {
-      return res.status(400).json({ message: err.message });
+      return next(new AppError(err.message, 400));
     }
   },
 ] as unknown as RequestHandler[];

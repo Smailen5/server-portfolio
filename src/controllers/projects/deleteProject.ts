@@ -1,6 +1,7 @@
-import { Request, RequestHandler, Response } from 'express';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { authMiddleware } from '../../middleware/index.js';
 import { jwtAuth } from '../../middleware/auth/jwtAuth.js';
+import { AppError } from '../../middleware/errorHandler.js';
 import { idValidator } from '../../middleware/validators/projectValidators.js';
 import { validateRequest } from '../../middleware/validators/validatorsRequest.js';
 import { createProjectService } from '../../services/ProjectService.js';
@@ -12,15 +13,15 @@ export const deleteProject = [
   validateRequest,
   authMiddleware,
   jwtAuth,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await projectService.delete(req.params.id as string);
       if (!project)
-        return res.status(404).json({ message: 'Project non trovato' });
+        return next(new AppError('Project non trovato', 404));
 
       return res.json({ message: 'Project eliminato' });
     } catch (err: any) {
-      return res.status(500).json({ message: err.message });
+      return next(new AppError(err.message, 500));
     }
   },
 ] as unknown as RequestHandler[];

@@ -68,7 +68,9 @@ describe('getAllProjects', () => {
     const { getAllProjects } = await import('./getAllProjects')
     await getAllProjects(req, res, next)
 
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.json).toHaveBeenCalledWith({ message: 'DB fail' })
+    expect(next).toHaveBeenCalledWith(expect.objectContaining({
+      statusCode: 500,
+      message: 'DB fail',
+    }))
   })
 })

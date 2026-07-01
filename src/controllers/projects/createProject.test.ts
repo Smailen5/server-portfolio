@@ -82,7 +82,9 @@ describe('createProject', () => {
     req.body = validBody
     await handler(req, res, next)
 
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.json).toHaveBeenCalledWith({ message: 'Validation failed' })
+    expect(next).toHaveBeenCalledWith(expect.objectContaining({
+      statusCode: 500,
+      message: 'Validation failed',
+    }))
   })
 })

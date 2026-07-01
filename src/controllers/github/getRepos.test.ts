@@ -143,8 +143,8 @@ describe('getRepos', () => {
     expect(data[0].description).toBe('')
   })
 
-  // Test 3: GitHub API non risponde — deve restituire 500
-  it('risponde 500 quando GitHub API fallisce', async () => {
+  // Test 3: GitHub API non risponde — deve passare errore a next
+  it('passa errore a next quando GitHub API fallisce', async () => {
     // mockRejectedValue simula un'eccezione (Promise rifiutata)
     mockGitHubService.getRepositories.mockRejectedValue(new Error('API rate limit'))
 
@@ -153,8 +153,10 @@ describe('getRepos', () => {
 
     await getRepos(req, res, next)
 
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.json).toHaveBeenCalledWith({ message: 'API rate limit' })
+    expect(next).toHaveBeenCalledWith(expect.objectContaining({
+      statusCode: 500,
+      message: 'API rate limit',
+    }))
   })
 
   // Test 4: cache hit — restituisce dati cached senza chiamare GitHub API

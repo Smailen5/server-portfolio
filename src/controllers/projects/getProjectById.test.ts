@@ -73,7 +73,9 @@ describe('getProjectById', () => {
     req.params.id = 'nonexistent'
     await handler(req, res, next)
 
-    expect(res.status).toHaveBeenCalledWith(404)
-    expect(res.json).toHaveBeenCalledWith({ message: 'Progetto non trovato' })
+    expect(next).toHaveBeenCalledWith(expect.objectContaining({
+      statusCode: 404,
+      message: 'Progetto non trovato',
+    }))
   })
 })

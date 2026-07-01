@@ -78,7 +78,9 @@ describe('updateProject', () => {
     req.body = updateBody
     await handler(req, res, next)
 
-    expect(res.status).toHaveBeenCalledWith(404)
-    expect(res.json).toHaveBeenCalledWith({ message: 'Project non trovato' })
+    expect(next).toHaveBeenCalledWith(expect.objectContaining({
+      statusCode: 404,
+      message: 'Project non trovato',
+    }))
   })
 })

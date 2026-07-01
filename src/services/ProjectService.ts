@@ -21,6 +21,18 @@ export function createProjectService() {
     delete: async (id: string): Promise<IProject | null> => {
       return await Project.findOneAndDelete({ _id: id });
     },
+
+    upsert: async (name: string, data: Partial<IProject>): Promise<IProject> => {
+      const existing = await Project.findOne({ name });
+      if (existing) {
+        return (await Project.findOneAndUpdate(
+          { name },
+          { ...data, updatedAt: new Date() },
+          { new: true }
+        ))!;
+      }
+      return await Project.create(data);
+    },
   };
 }
 

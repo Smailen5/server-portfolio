@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
+import mongoose from 'mongoose';
 import { appLogger } from './config/appLogger.js';
-// import DbConnection from './config/mongodb';
 import { serverConfig } from './config/server.js';
 import { validateEnv } from './config/validateEnv.js';
 import { corsMiddleware } from './middleware/cors.js';
@@ -48,18 +48,27 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 const startServer = async () => {
   try {
     validateEnv();
-    // await initDatabase();
     await initMongo()
-    // await conn.getConnection();
-    app.listen(Number(serverConfig.port), '0.0.0.0', () => {
+    const server = app.listen(Number(serverConfig.port), '0.0.0.0', () => {
       appLogger.info(`Server in esecuzione sulla porta ${serverConfig.port}`);
     });
+
+    const gracefulShutdown = async (signal: string) => {
+      appLogger.info(`Ricevuto ${signal}, chiusura server in corso...`);
+      server.close(async () => {
+        await mongoose.connection.close();
+        appLogger.info('Connessione MongoDB chiusa');
+        process.exit(0);
+      });
+    };
+
+    process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+    process.on('SIGINT', () => gracefulShutdown('SIGINT'));
   } catch (error: any) {
-    // console.error("Errore durante l'avvio del server:", error);
     if (error instanceof AppError) {
-      console.error(`Errore di configurazione: ${error.message}`);
+      appLogger.error(`Errore di configurazione: ${error.message}`);
     } else {
-      console.error("Errore durante l'avvio del server:", error);
+      appLogger.error("Errore durante l'avvio del server:", error);
     }
     process.exit(1);
   }
@@ -67,12 +76,12 @@ const startServer = async () => {
 
 // Gestione degli errori non catturati
 process.on('uncaughtException', (error: Error) => {
-  // console.error('Errore non gestito:', error);
+  appLogger.error('Errore non gestito:', error);
   process.exit(1);
 });
 
 process.on('unhandledRejection', (reason: any) => {
-  // console.error('Promise rejection non gestita:', reason);
+  appLogger.error('Promise rejection non gestita:', reason);
   process.exit(1);
 });
 

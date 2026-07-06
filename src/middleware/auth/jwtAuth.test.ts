@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import jwt from 'jsonwebtoken'
+import { AppError } from '../errorHandler'
 import { jwtAuth } from './jwtAuth'
 
 // ──────────────────────────────────────────────
@@ -33,28 +34,36 @@ function mockReqRes() {
 // - se valido → setta req.user e chiama next()
 
 describe('jwtAuth', () => {
-  it('risponde 401 quando token mancante', () => {
+  it('chiama next con AppError quando token mancante', () => {
     const { req, res, next } = mockReqRes()
-    // Nessun header authorization → token non presente
 
     jwtAuth(req, res, next)
 
-    expect(res.status).toHaveBeenCalledWith(401)
-    expect(res.json).toHaveBeenCalledWith({ message: 'Accesso non autorizzato, token mancante' })
-    expect(next).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Accesso non autorizzato, token mancante',
+        statusCode: 401,
+      })
+    )
+    expect(res.status).not.toHaveBeenCalled()
+    expect(res.json).not.toHaveBeenCalled()
   })
 
-  it('risponde 401 quando token non valido', () => {
+  it('chiama next con AppError quando token non valido', () => {
     const { req, res, next } = mockReqRes()
     req.headers.authorization = 'Bearer invalid-token'
-    // jwt.verify lancia un'eccezione → token malformato
     vi.spyOn(jwt, 'verify').mockImplementation(() => { throw new Error('jwt malformed') })
 
     jwtAuth(req, res, next)
 
-    expect(res.status).toHaveBeenCalledWith(401)
-    expect(res.json).toHaveBeenCalledWith({ message: 'Token non valido' })
-    expect(next).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Token non valido',
+        statusCode: 401,
+      })
+    )
+    expect(res.status).not.toHaveBeenCalled()
+    expect(res.json).not.toHaveBeenCalled()
   })
 
   it('setta req.user e chiama next() con token valido', () => {
@@ -71,10 +80,9 @@ describe('jwtAuth', () => {
     expect(next).toHaveBeenCalledTimes(1)
   })
 
-  it('risponde 401 quando token scaduto', () => {
+  it('chiama next con AppError quando token scaduto', () => {
     const { req, res, next } = mockReqRes()
     req.headers.authorization = 'Bearer expired-token'
-    // Simulo un TokenExpiredError come farebbe jwt.verify
     vi.spyOn(jwt, 'verify').mockImplementation(() => {
       const err: any = new Error('jwt expired')
       err.name = 'TokenExpiredError'
@@ -83,8 +91,13 @@ describe('jwtAuth', () => {
 
     jwtAuth(req, res, next)
 
-    expect(res.status).toHaveBeenCalledWith(401)
-    expect(res.json).toHaveBeenCalledWith({ message: 'Token non valido' })
-    expect(next).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Token non valido',
+        statusCode: 401,
+      })
+    )
+    expect(res.status).not.toHaveBeenCalled()
+    expect(res.json).not.toHaveBeenCalled()
   })
 })

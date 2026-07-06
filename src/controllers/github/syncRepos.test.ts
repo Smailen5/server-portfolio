@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { AppError } from '../../middleware/errorHandler'
 
 // ──────────────────────────────────────────────
 // Dati finti
@@ -159,11 +160,7 @@ describe('syncRepos', () => {
   })
 
   // Test 3: tutto fallisce — nessun progetto sincronizzato
-  it('restituisce errore quando nessun progetto sincronizzato', async () => {
-    // La struttura del controller ha un try/catch per ogni progetto.
-    // Se getPackageJson e getScreenshot lanciano errore, il singolo
-    // progetto viene saltato ma il controller non crasha.
-    // Alla fine syncedCount = 0 -> risponde 500.
+  it('chiama next con AppError quando nessun progetto sincronizzato', async () => {
     mockGitHubService.getRepositories.mockResolvedValue(mockPackages)
     mockGitHubService.getPackageJson.mockRejectedValue(new Error('Fail'))
     mockGitHubService.getScreenshot.mockRejectedValue(new Error('Fail'))
@@ -174,16 +171,18 @@ describe('syncRepos', () => {
 
     await handler(req, res, next)
 
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-      message: 'Nessun progetto è stato sincronizzato con successo',
-    }))
+    expect(next).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Nessun progetto è stato sincronizzato con successo',
+        statusCode: 500,
+      })
+    )
+    expect(res.status).not.toHaveBeenCalled()
+    expect(res.json).not.toHaveBeenCalled()
   })
 
   // Test 4: GitHub API non raggiungibile — errore totale
-  it('risponde 500 quando la sincronizzazione fallisce del tutto', async () => {
-    // Se getRepositories stesso fallisce, il try/catch ESTERNO
-    // del controller cattura l'errore e risponde 500.
+  it('chiama next con AppError quando la sincronizzazione fallisce del tutto', async () => {
     mockGitHubService.getRepositories.mockRejectedValue(new Error('GitHub down'))
 
     const { syncRepos } = await import('./syncRepos')
@@ -192,10 +191,14 @@ describe('syncRepos', () => {
 
     await handler(req, res, next)
 
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-      message: 'GitHub down',
-    }))
+    expect(next).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'GitHub down',
+        statusCode: 500,
+      })
+    )
+    expect(res.status).not.toHaveBeenCalled()
+    expect(res.json).not.toHaveBeenCalled()
   })
 
   // Test 5: invalida cache getRepos dopo sincronizzazione riuscita

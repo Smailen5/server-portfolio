@@ -107,6 +107,5 @@ export const syncRepos = [
       const message = err instanceof Error ? err.message : 'Errore sconosciuto';
       return next(new AppError(message, 500));
     }
-    }
   },
 ];

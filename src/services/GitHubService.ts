@@ -45,7 +45,7 @@ export function createGitHubService(octokit: Octokit) {
           return JSON.parse(content);
         }
         return null;
-      } catch (error) {
+      } catch (_error) {
         return null;
       }
     },
@@ -62,7 +62,7 @@ export function createGitHubService(octokit: Octokit) {
           return screenshot.download_url;
         }
         return null;
-      } catch (error) {
+      } catch (_error) {
         return null;
       }
     },
@@ -79,7 +79,7 @@ export function createGitHubService(octokit: Octokit) {
           return Buffer.from(readme.content, 'base64').toString();
         }
         return null;
-      } catch (error) {
+      } catch (_error) {
         return null;
       }
     },

@@ -33,8 +33,9 @@ export const updateProject = [
         return next(new AppError('Project non trovato', 404));
 
       return res.json(project);
-    } catch (err: any) {
-      return next(new AppError(err.message, 400));
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Errore sconosciuto';
+      return next(new AppError(message, 400));
     }
   },
 ] as unknown as RequestHandler[];

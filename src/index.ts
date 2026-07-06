@@ -64,7 +64,7 @@ const startServer = async () => {
 
     process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
     process.on('SIGINT', () => gracefulShutdown('SIGINT'));
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof AppError) {
       appLogger.error(`Errore di configurazione: ${error.message}`);
     } else {
@@ -80,7 +80,7 @@ process.on('uncaughtException', (error: Error) => {
   process.exit(1);
 });
 
-process.on('unhandledRejection', (reason: any) => {
+process.on('unhandledRejection', (reason: unknown) => {
   appLogger.error('Promise rejection non gestita:', reason);
   process.exit(1);
 });

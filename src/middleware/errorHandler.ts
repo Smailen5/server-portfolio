@@ -23,7 +23,7 @@ export const errorHandler = (
   err: Error | AppError,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   // se è un errore personalizzato
   if (err instanceof AppError) {
@@ -36,7 +36,7 @@ export const errorHandler = (
   }
 
   // per errori non operativi (errori di programmazione)
-  console.error('ERROR 💥', err);
+  appLogger.error('ERROR 💥', err);
 
   appLogger.error(`500 - ${err.message}`);
   return res.status(500).json({

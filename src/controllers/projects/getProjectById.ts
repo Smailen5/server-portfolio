@@ -15,8 +15,9 @@ export const getProjectById = [
       if (!project)
         return next(new AppError('Progetto non trovato', 404));
       return res.json(project);
-    } catch (err: any) {
-      return next(new AppError(err.message, 500));
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Errore sconosciuto';
+      return next(new AppError(message, 500));
     }
   },
 ] as unknown as RequestHandler[];

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { appLogger } from '../../config/appLogger.js';
 import { env } from '../../config/index.js';
+import { AppError } from '../errorHandler.js';
 
 interface AuthRequest extends Request {
   user?: JwtPayload;
@@ -17,10 +18,9 @@ export const jwtAuth = (
 
     if (!token) {
       appLogger.warn('Tentativo di accesso senza token');
-      res
-        .status(401)
-        .json({ message: 'Accesso non autorizzato, token mancante' });
-      return;
+      return next(
+        new AppError('Accesso non autorizzato, token mancante', 401)
+      );
     }
 
     const decoded = jwt.verify(
@@ -31,6 +31,6 @@ export const jwtAuth = (
     next();
   } catch (error) {
     appLogger.error(`Errore di verifica token: ${error}`);
-    res.status(401).json({ message: 'Token non valido' });
+    return next(new AppError('Token non valido', 401));
   }
 };

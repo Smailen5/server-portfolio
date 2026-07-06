@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.1](https://github.com/Smailen5/server-portfolio/compare/v2.2.0...v2.2.1) (2026-07-06)
+
+
+### Bug Fixes
+
+* jwtAuth usa error handler centrale ([#138](https://github.com/Smailen5/server-portfolio/issues/138)) ([216de28](https://github.com/Smailen5/server-portfolio/commit/216de282f16dcb9b6237c47b93c101eae527386c))
+* syncRepos usa error handler centrale ([#139](https://github.com/Smailen5/server-portfolio/issues/139)) ([4a32291](https://github.com/Smailen5/server-portfolio/commit/4a3229107bb61aa9fe78f7ef8c21d2592fd7a291))
+
+
+### Chores
+
+* aggiunge ESLint e typescript-eslint ([#140](https://github.com/Smailen5/server-portfolio/issues/140)) ([2a812d2](https://github.com/Smailen5/server-portfolio/commit/2a812d28b09c5eddde5b654b05d8ad71c38d7d3a))
+
 ## [2.2.0](https://github.com/Smailen5/server-portfolio/compare/v2.1.0...v2.2.0) (2026-07-06)
 
 

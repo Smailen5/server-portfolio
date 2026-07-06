@@ -31,7 +31,7 @@ export const syncRepos = [
       const projectService = createProjectService();
       const packageFolders = await github.getRepositories();
       let syncedCount = 0;
-      let errors: string[] = [];
+      const errors: string[] = [];
 
       for (const folder of packageFolders) {
         try {
@@ -81,8 +81,8 @@ export const syncRepos = [
           await projectService.upsert(projectData.name, projectData);
 
           syncedCount++;
-        } catch (error: any) {
-          const errorMessage = `Errore nel recupero dei dati per ${folder.name}: ${error.message}`;
+        } catch (error: unknown) {
+          const errorMessage = `Errore nel recupero dei dati per ${folder.name}: ${error instanceof Error ? error.message : 'Errore sconosciuto'}`;
           errors.push(errorMessage);
         }
       }
@@ -104,9 +104,10 @@ export const syncRepos = [
         errors: errors,
         projects: packageFolders.map((folder) => folder.name),
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Errore sconosciuto';
       return res.status(500).json({
-        message: err.message,
+        message: message,
         errors: [],
       });
     }

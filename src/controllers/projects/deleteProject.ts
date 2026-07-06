@@ -20,8 +20,9 @@ export const deleteProject = [
         return next(new AppError('Project non trovato', 404));
 
       return res.json({ message: 'Project eliminato' });
-    } catch (err: any) {
-      return next(new AppError(err.message, 500));
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Errore sconosciuto';
+      return next(new AppError(message, 500));
     }
   },
 ] as unknown as RequestHandler[];

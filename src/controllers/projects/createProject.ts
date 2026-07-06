@@ -29,8 +29,9 @@ export const createProject = [
       const project = await projectService.create(req.body);
 
       return res.status(201).json(project);
-    } catch (error: any) {
-      return next(new AppError(error.message, 500));
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
+      return next(new AppError(message, 500));
     }
   },
 ] as unknown as RequestHandler[];

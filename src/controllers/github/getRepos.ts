@@ -46,7 +46,8 @@ export const getRepos = (async (_req: Request, res: Response, next: NextFunction
 
     cache.set(CACHE_KEY, packagesInfo, CACHE_TTL);
     return res.json(packagesInfo);
-  } catch (err: any) {
-    return next(new AppError(err.message, 500));
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Errore sconosciuto';
+    return next(new AppError(message, 500));
   }
 }) as unknown as RequestHandler;

@@ -8,7 +8,8 @@ export const getAllProjects = (async (_req: Request, res: Response, next: NextFu
   try {
     const projects = await projectService.getAll();
     return res.json(projects);
-  } catch (err: any) {
-    return next(new AppError(err.message, 500));
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Errore sconosciuto';
+    return next(new AppError(message, 500));
   }
 }) as unknown as RequestHandler;

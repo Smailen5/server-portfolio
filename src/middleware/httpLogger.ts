@@ -7,5 +7,5 @@ const logFormat =
 // Middleware per il logging delle richieste HTTP
 export const httpLogger = morgan(logFormat, {
   // Log solo in development
-  skip: (req, res) => process.env.NODE_ENV === 'production',
+  skip: (_req, _res) => process.env.NODE_ENV === 'production',
 });

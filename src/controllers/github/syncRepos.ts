@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { env } from '../../config/index.js';
 import { createGitHubService } from '../../services/GitHubService.js';
 import { cache } from '../../utils/cache.js';
@@ -9,6 +9,7 @@ import {
   validateRequest,
 } from '../../middleware/index.js';
 import { jwtAuth } from '../../middleware/auth/jwtAuth.js';
+import { AppError } from '../../middleware/errorHandler.js';
 import { createProjectService } from '../../services/ProjectService.js';
 import { ProjectData } from '../../types/index.js';
 
@@ -17,14 +18,13 @@ export const syncRepos = [
   validateRequest,
   authMiddleware,
   jwtAuth,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       if (!env.githubToken) {
-        return res.status(500).json({
-          message:
-            'Token GitHub non configurato. Aggiungi GITHUB_TOKEN nel file .env',
-          errors: [],
-        });
+        return next(new AppError(
+          'Token GitHub non configurato. Aggiungi GITHUB_TOKEN nel file .env',
+          500
+        ));
       }
 
       const github = createGitHubService(getOctokitInstance());
@@ -87,12 +87,11 @@ export const syncRepos = [
         }
       }
 
-      // Se non è stato sincronizzato nessun progetto, restituiamo un errore
       if (syncedCount === 0) {
-        return res.status(500).json({
-          message: 'Nessun progetto è stato sincronizzato con successo',
-          errors: errors,
-        });
+        return next(new AppError(
+          'Nessun progetto è stato sincronizzato con successo',
+          500
+        ));
       }
 
       cache.invalidate('github:repos');
@@ -106,10 +105,8 @@ export const syncRepos = [
       });
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Errore sconosciuto';
-      return res.status(500).json({
-        message: message,
-        errors: [],
-      });
+      return next(new AppError(message, 500));
+    }
     }
   },
 ];

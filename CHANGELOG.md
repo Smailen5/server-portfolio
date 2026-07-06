@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/Smailen5/server-portfolio/compare/v2.1.0...v2.2.0) (2026-07-06)
+
+
+### Features
+
+* invalida cache dopo sync ([#113](https://github.com/Smailen5/server-portfolio/issues/113)) ([d4b8eb1](https://github.com/Smailen5/server-portfolio/commit/d4b8eb16817ef96c2f8912ab5d0579fc28241fbc))
+
+
+### Refactoring
+
+* logga tentativi login falliti ([#118](https://github.com/Smailen5/server-portfolio/issues/118)) ([bc88a33](https://github.com/Smailen5/server-portfolio/commit/bc88a336f983adc7c09be63093548d9966a57066))
+* syncRepos usa ProjectService ([#117](https://github.com/Smailen5/server-portfolio/issues/117)) ([8ebc465](https://github.com/Smailen5/server-portfolio/commit/8ebc4658c76babbd66bb5d7fe391d422d9b9016b))
+* uniforma error handling ([#115](https://github.com/Smailen5/server-portfolio/issues/115)) ([0a2805c](https://github.com/Smailen5/server-portfolio/commit/0a2805c762fadb474d98c804537b54107a7acde8))
+
 ## [2.1.0](https://github.com/Smailen5/server-portfolio/compare/v2.0.8...v2.1.0) (2026-07-01)
 
 

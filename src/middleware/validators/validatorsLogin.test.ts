@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { validationResult } from 'express-validator'
+import { AppError } from '../errorHandler.js'
 import { handleLoginValidation } from './validatorsLogin'
 import { appLogger } from '../../config/appLogger.js'
 
@@ -7,9 +8,7 @@ import { appLogger } from '../../config/appLogger.js'
 // Mock delle dipendenze
 // ──────────────────────────────────────────────
 vi.mock('../../config/appLogger.js', () => ({
-  appLogger: {
-    warn: vi.fn(),
-  },
+  appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }))
 
 // Sostituiamo solo validationResult, tenendo il resto
@@ -28,10 +27,7 @@ vi.mock('express-validator', async () => {
 // ──────────────────────────────────────────────
 function mockReqRes() {
   const req = {} as any
-  const res: any = {
-    status: vi.fn().mockReturnThis(),
-    json: vi.fn().mockReturnThis(),
-  }
+  const res = {} as any
   const next = vi.fn()
   return { req, res, next }
 }
@@ -41,7 +37,7 @@ function mockReqRes() {
 // ──────────────────────────────────────────────
 // handleLoginValidation è un middleware che controlla se ci sono
 // errori di validazione (da express-validator):
-// - se ci sono errori → risponde con 400 e { success: false, errors: [...] }
+// - se ci sono errori → passa AppError a next()
 // - se non ci sono errori → chiama next()
 
 describe('handleLoginValidation', () => {
@@ -49,7 +45,7 @@ describe('handleLoginValidation', () => {
     vi.clearAllMocks()
   })
 
-  it('restituisce 400 con success: false quando ci sono errori', () => {
+  it('passa AppError a next quando ci sono errori', () => {
     vi.mocked(validationResult).mockReturnValue({
       isEmpty: () => false,
       array: () => [{ msg: 'Campo obbligatorio' }],
@@ -58,18 +54,19 @@ describe('handleLoginValidation', () => {
     const { req, res, next } = mockReqRes()
     handleLoginValidation(req, res, next)
 
-    expect(res.status).toHaveBeenCalledWith(400)
-    expect(res.json).toHaveBeenCalledWith(
-      expect.objectContaining({ success: false })
-    )
-    expect(next).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalledTimes(1)
+    const error = next.mock.calls[0][0]
+    expect(error).toBeInstanceOf(AppError)
+    expect(error.statusCode).toBe(400)
+    expect(error.status).toBe('fail')
+    expect(error.message).toBe('Campo obbligatorio')
     expect(appLogger.warn).toHaveBeenCalledTimes(1)
     expect(appLogger.warn).toHaveBeenCalledWith(
       expect.stringContaining('Campo obbligatorio')
     )
   })
 
-  it("restituisce l'array di messaggi corretto quando ci sono errori", () => {
+  it('concatena messaggi multipli separati da virgola in AppError', () => {
     const errori = [{ msg: 'Campo A' }, { msg: 'Campo B' }]
     vi.mocked(validationResult).mockReturnValue({
       isEmpty: () => false,
@@ -79,10 +76,10 @@ describe('handleLoginValidation', () => {
     const { req, res, next } = mockReqRes()
     handleLoginValidation(req, res, next)
 
-    expect(res.json).toHaveBeenCalledWith({
-      success: false,
-      errors: errori,
-    })
+    expect(next).toHaveBeenCalledTimes(1)
+    const error = next.mock.calls[0][0]
+    expect(error).toBeInstanceOf(AppError)
+    expect(error.message).toBe('Campo A, Campo B')
     expect(appLogger.warn).toHaveBeenCalledWith(
       expect.stringContaining('Campo A; Campo B')
     )

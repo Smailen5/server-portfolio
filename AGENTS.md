@@ -27,7 +27,8 @@
 
 ## Commit e PR
 Vedi `CONVENTION.md` per le regole complete su commit, PR, issue, lingua e template.
-- Il commit DEVE passare commitlint in pre-commit e CI (header max 42 caratteri, body-leading-blank)
+- Il commit locale DEVE passare commitlint in pre-commit (header max 42 caratteri, body-leading-blank)
+- Il titolo PR (commit finale dopo squash merge) DEVE passare la CI `validate-pr-title` (header max 72 caratteri, body-leading-blank)
 
 ## Architettura
 - **Stack**: Express + TypeScript + Mongoose (MongoDB), pnpm
@@ -38,7 +39,7 @@ Vedi `CONVENTION.md` per le regole complete su commit, PR, issue, lingua e templ
 - **Logs**: Winston + Morgan in `logs/`
 
 ## CI/CD (GitHub Actions)
-- **CI**: su ogni PR a `main` → lint + build + validazione titolo PR
+- **CI**: su ogni PR a `main` → job `lint-build-test` (lint + build + test) + job `validate-pr-title`
 - **Release-please**: su push a `main` → crea/aggiorna release PR, genera tag e changelog
 - Config release-please: `release-type: node`, `include-component-in-tag: false` (usa tag `vX.Y.Z`), `changelog-sections` completo
 

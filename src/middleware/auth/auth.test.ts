@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { authMiddleware } from './auth'
+import { AppError } from '../errorHandler'
 
 // ──────────────────────────────────────────────
 // Mock delle dipendenze
@@ -28,33 +29,28 @@ function mockReqRes() {
 // - se valida → chiama next()
 
 describe('authMiddleware', () => {
-  it('lancia AppError quando API key mancante', () => {
+  it('passa AppError a next() quando API key mancante', () => {
     const { req, res, next } = mockReqRes()
 
-    // Il middleware lancia un'eccezione (non usa res.status().json())
-    // quindi la catturiamo con try/catch
-    try {
-      authMiddleware(req, res, next)
-      expect.fail('Doveva lanciare un errore')
-    } catch (err: any) {
-      expect(err.message).toBe('API Key mancante')
-      expect(err.statusCode).toBe(401)
-    }
-    expect(next).not.toHaveBeenCalled()
+    // authMiddleware passa l'errore a next() invece di lanciarlo
+    authMiddleware(req, res, next)
+    expect(next).toHaveBeenCalledTimes(1)
+    const error = next.mock.calls[0][0]
+    expect(error).toBeInstanceOf(AppError)
+    expect(error.message).toBe('API Key mancante')
+    expect(error.statusCode).toBe(401)
   })
 
-  it('lancia AppError quando API key errata', () => {
+  it('passa AppError a next() quando API key errata', () => {
     const { req, res, next } = mockReqRes()
     req.headers['x-api-key'] = 'wrong-key'
 
-    try {
-      authMiddleware(req, res, next)
-      expect.fail('Doveva lanciare un errore')
-    } catch (err: any) {
-      expect(err.message).toBe('API Key non valida')
-      expect(err.statusCode).toBe(401)
-    }
-    expect(next).not.toHaveBeenCalled()
+    authMiddleware(req, res, next)
+    expect(next).toHaveBeenCalledTimes(1)
+    const error = next.mock.calls[0][0]
+    expect(error).toBeInstanceOf(AppError)
+    expect(error.message).toBe('API Key non valida')
+    expect(error.statusCode).toBe(401)
   })
 
   it('chiama next() quando API key valida', () => {

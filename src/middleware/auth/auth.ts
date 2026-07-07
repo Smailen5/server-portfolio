@@ -10,11 +10,11 @@ export const authMiddleware = (
   const apiKey = req.headers['x-api-key'] as string;
 
   if (!apiKey) {
-    throw new AppError('API Key mancante', 401);
+    return next (new AppError('API Key mancante', 401));
   }
 
   if (apiKey !== env.apiKey) {
-    throw new AppError('API Key non valida', 401);
+    return next (new AppError('API Key non valida', 401));
   }
 
   next();

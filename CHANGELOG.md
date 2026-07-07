@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.2](https://github.com/Smailen5/server-portfolio/compare/v2.2.1...v2.2.2) (2026-07-07)
+
+
+### Bug Fixes
+
+* rimuove skip del httpLogger in produzione ([#149](https://github.com/Smailen5/server-portfolio/issues/149)) ([641914e](https://github.com/Smailen5/server-portfolio/commit/641914e937a5bf3ead247acc81a2ec45f52daa8b))
+* rimuove template literal dal log di createAdminUser ([#148](https://github.com/Smailen5/server-portfolio/issues/148)) ([b47355c](https://github.com/Smailen5/server-portfolio/commit/b47355c6fe892a5b8db35407b4a1aed87af0695a))
+
+
+### Chores
+
+* aggiorna pnpm da v9 a v11 ([#142](https://github.com/Smailen5/server-portfolio/issues/142)) ([3458d80](https://github.com/Smailen5/server-portfolio/commit/3458d80e8625f34e2673685fe96577f57fc948cc))
+
+
+### Refactoring
+
+* adegua loginValid a AppError ([#144](https://github.com/Smailen5/server-portfolio/issues/144)) ([38fa878](https://github.com/Smailen5/server-portfolio/commit/38fa8780048c35678aa2477806b143bf8994afe7))
+* next() invece di throw in auth ([#145](https://github.com/Smailen5/server-portfolio/issues/145)) ([82b8597](https://github.com/Smailen5/server-portfolio/commit/82b85977891d53bed465b3865ec9648d6f1bea29))
+
+
+### CI/CD
+
+* aggiorna limite titolo PR e nomi job ([#146](https://github.com/Smailen5/server-portfolio/issues/146)) ([8d3f62d](https://github.com/Smailen5/server-portfolio/commit/8d3f62d88fb241ed0dfa399eca05326ebcec2a20))
+
 ## [2.2.1](https://github.com/Smailen5/server-portfolio/compare/v2.2.0...v2.2.1) (2026-07-06)
 
 

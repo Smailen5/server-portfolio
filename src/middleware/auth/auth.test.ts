@@ -29,11 +29,10 @@ function mockReqRes() {
 // - se valida → chiama next()
 
 describe('authMiddleware', () => {
-  it('lancia AppError quando API key mancante', () => {
+  it('passa AppError a next() quando API key mancante', () => {
     const { req, res, next } = mockReqRes()
 
-    // Il middleware lancia un'eccezione (non usa res.status().json())
-    // quindi la catturiamo con try/catch
+    // authMiddleware passa l'errore a next() invece di lanciarlo
     authMiddleware(req, res, next)
     expect(next).toHaveBeenCalledTimes(1)
     const error = next.mock.calls[0][0]
@@ -42,7 +41,7 @@ describe('authMiddleware', () => {
     expect(error.statusCode).toBe(401)
   })
 
-  it('lancia AppError quando API key errata', () => {
+  it('passa AppError a next() quando API key errata', () => {
     const { req, res, next } = mockReqRes()
     req.headers['x-api-key'] = 'wrong-key'
 

@@ -115,3 +115,34 @@ describe('errorHandler', () => {
     )
   })
 })
+
+describe('notFoundHandler', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('risponde 404 con status "fail" e originalUrl nel messaggio', () => {
+    const { req, res } = mockReqRes({ originalUrl: '/api/inesistente' })
+
+    notFoundHandler(req, res)
+
+    expect(res.status).toHaveBeenCalledWith(404)
+    expect(res.json).toHaveBeenCalledWith({
+      status: 'fail',
+      message: 'Non è possibile trovare /api/inesistente su questo server',
+    })
+  })
+
+  it('logga un warn con appLogger', () => {
+    const { req, res } = mockReqRes({ originalUrl: '/api/inesistente' })
+
+    notFoundHandler(req, res)
+
+    expect(appLogger.warn).toHaveBeenCalledWith(
+      expect.stringContaining('404')
+    )
+    expect(appLogger.warn).toHaveBeenCalledWith(
+      expect.stringContaining('/api/inesistente')
+    )
+  })
+})

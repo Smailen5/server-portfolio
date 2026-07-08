@@ -9,6 +9,6 @@ export const syncValidator = [
     .withMessage('La chiave API deve essere una stringa')
     .isLength({ min: 16, max: 64 })
     .withMessage('Chiave API non valida')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{20}$/)
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{16,64}$/)
     .withMessage('Chiave API non valida'),
 ];

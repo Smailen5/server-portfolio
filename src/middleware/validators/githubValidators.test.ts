@@ -5,8 +5,7 @@ import { runValidation } from './testHelpers'
 // ──────────────────────────────────────────────
 // Test per syncValidator
 // ──────────────────────────────────────────────
-// Valida l'header x-api-key: 20 caratteri, misto maiuscole,
-// minuscole e numeri.
+// Valida l'header x-api-key: 16-64 caratteri alfanumerici misti.
 describe('syncValidator', () => {
   it('passa con header API key valido', async () => {
     const result = await runValidation(
@@ -26,7 +25,7 @@ describe('syncValidator', () => {
       { headers: { 'x-api-key': 'short' } },
       syncValidator
     )
-    expect(result.array().some(e => e.msg.includes('caratteri'))).toBe(true)
+    expect(result.array().some(e => e.msg.includes('Chiave API non valida'))).toBe(true)
   })
 
   it('fallisce quando chiave senza maiuscole', async () => {
@@ -34,7 +33,7 @@ describe('syncValidator', () => {
       { headers: { 'x-api-key': 'abcdefghijklmnopqrst' } },
       syncValidator
     )
-    expect(result.array().some(e => e.msg.includes('maiuscole'))).toBe(true)
+    expect(result.array().some(e => e.msg.includes('Chiave API non valida'))).toBe(true)
   })
 
   it('fallisce quando chiave senza minuscole', async () => {
@@ -42,7 +41,7 @@ describe('syncValidator', () => {
       { headers: { 'x-api-key': 'ABCDEFGHIJKLMNOPQRST' } },
       syncValidator
     )
-    expect(result.array().some(e => e.msg.includes('minuscole'))).toBe(true)
+    expect(result.array().some(e => e.msg.includes('Chiave API non valida'))).toBe(true)
   })
 
   it('fallisce quando chiave senza numeri', async () => {
@@ -50,7 +49,7 @@ describe('syncValidator', () => {
       { headers: { 'x-api-key': 'Abcdefghijklmnopqrst' } },
       syncValidator
     )
-    expect(result.array().some(e => e.msg.includes('numeri'))).toBe(true)
+    expect(result.array().some(e => e.msg.includes('Chiave API non valida'))).toBe(true)
   })
 
   it('fallisce quando chiave supera 20 caratteri', async () => {
@@ -58,7 +57,7 @@ describe('syncValidator', () => {
       { headers: { 'x-api-key': 'A1bC2dE3fG4hI5jK6lM7n' } },
       syncValidator
     )
-    expect(result.array().some(e => e.msg.includes('20 caratteri'))).toBe(true)
+    expect(result.array().some(e => e.msg.includes('Chiave API non valida'))).toBe(true)
   })
 
   it('fallisce quando chiave contiene caratteri speciali', async () => {
@@ -66,7 +65,7 @@ describe('syncValidator', () => {
       { headers: { 'x-api-key': 'AbcDefGhi!JklMnoPqrS' } },
       syncValidator
     )
-    expect(result.array().some(e => e.msg.includes('maiuscole'))).toBe(true)
+    expect(result.array().some(e => e.msg.includes('Chiave API non valida'))).toBe(true)
   })
 
   it('fallisce quando chiave è stringa vuota', async () => {

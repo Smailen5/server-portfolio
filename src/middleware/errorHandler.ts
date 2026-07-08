@@ -38,7 +38,7 @@ export const errorHandler = (
   // per errori non operativi (errori di programmazione)
   appLogger.error('ERROR 💥', err);
 
-  appLogger.error(`500 - ${err.message}`);
+  appLogger.error(`500 - ${err.message || 'Errore sconosciuto'}`);
   return res.status(500).json({
     status: 'error',
     message: env.isDevelopment ? err.message : 'Qualcosa è andato storto!',

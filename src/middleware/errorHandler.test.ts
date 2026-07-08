@@ -47,3 +47,71 @@ describe('AppError', () => {
     })
   })
 })
+
+describe('errorHandler', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('AppError in produzione → { status, message }, niente stack', () => {
+    vi.mocked(env).isDevelopment = false
+    const { req, res, next } = mockReqRes()
+    const err = new AppError('Dati non validi', 422)
+
+    errorHandler(err, req, res, next)
+
+    expect(res.status).toHaveBeenCalledWith(422)
+    expect(res.json).toHaveBeenCalledWith({
+      status: 'fail',
+      message: 'Dati non validi',
+    })
+  })
+
+  it('AppError in development → { status, message, stack }', () => {
+    vi.mocked(env).isDevelopment = true
+    const { req, res, next } = mockReqRes()
+    const err = new AppError('Dati non validi', 422)
+
+    errorHandler(err, req, res, next)
+
+    expect(res.status).toHaveBeenCalledWith(422)
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        status: 'fail',
+        message: 'Dati non validi',
+        stack: expect.any(String),
+      })
+    )
+  })
+
+  it('Errore generico in produzione → 500 con messaggio generico', () => {
+    vi.mocked(env).isDevelopment = false
+    const { req, res, next } = mockReqRes()
+    const err = new Error('DB connection failed')
+
+    errorHandler(err, req, res, next)
+
+    expect(res.status).toHaveBeenCalledWith(500)
+    expect(res.json).toHaveBeenCalledWith({
+      status: 'error',
+      message: 'Qualcosa è andato storto!',
+    })
+  })
+
+  it('Errore generico in development → 500 con messaggio originale + stack', () => {
+    vi.mocked(env).isDevelopment = true
+    const { req, res, next } = mockReqRes()
+    const err = new Error('DB connection failed')
+
+    errorHandler(err, req, res, next)
+
+    expect(res.status).toHaveBeenCalledWith(500)
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        status: 'error',
+        message: 'DB connection failed',
+        stack: expect.any(String),
+      })
+    )
+  })
+})

@@ -46,7 +46,7 @@ const transports = [
     format: consoleFormat,
   }),
 
-  ...(env.isDevelopment && env.errorLogFilePath && env.logFilePath
+  ...(env.errorLogFilePath && env.logFilePath
     ? [
         // File per gli errori (senza colori)
         new winston.transports.File({

@@ -3,14 +3,14 @@ import { env } from '../config/env.js';
 
 export const limiter = rateLimit({
   windowMs: env.rateLimitWindow
-    ? parseInt(env.rateLimitWindow)
+    ? Number(env.rateLimitWindow)
     : 15 * 60 * 1000, // 15 minuti
-  max: env.rateLimitMax ? parseInt(env.rateLimitMax) : 100, // Limite di 100 richieste per finestra
+  max: env.rateLimitMax ? Number(env.rateLimitMax) : 100, // Limite di 100 richieste per finestra
 });
 
 export const loginLimiter = rateLimit({
   windowMs: env.rateLimitWindow
-    ? parseInt(env.rateLimitWindow)
+    ? Number(env.rateLimitWindow)
     : 15 * 60 * 1000,
   max: 5, // Limite di 5 richieste per finestra
   message: {

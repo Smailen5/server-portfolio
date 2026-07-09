@@ -10,11 +10,6 @@ const levels = {
   debug: 4,
 };
 
-// Scegliamo il livello di log in base all'ambiente
-const level = () => {
-  return env.isDevelopment ? 'debug' : 'info';
-};
-
 // Definisce i colori per i livelli di log
 const colors = {
   error: 'red',
@@ -74,7 +69,7 @@ const transports = [
 
 // Crea il logger
 export const appLogger = winston.createLogger({
-  level: level(),
+  level: env.logLevel,
   levels,
   transports,
 });

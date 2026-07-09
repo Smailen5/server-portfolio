@@ -40,7 +40,7 @@ export const logUser = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Aggiorna lastLogin
-    await user.updateOne({ _id: user._id }, { lastLogin: new Date() });
+    await user.updateOne({ lastLogin: new Date() });
 
     const token = jwt.sign(
       { id: user._id },

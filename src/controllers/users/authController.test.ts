@@ -103,7 +103,7 @@ describe('logUser', () => {
     await logUser(req, res)
 
     // Verifico che abbia aggiornato lastLogin
-    expect(mockUser.updateOne).toHaveBeenCalled()
+    expect(mockUser.updateOne).toHaveBeenCalledWith({ lastLogin: expect.any(Date) })
     // Verifico che abbia firmato il token con i dati giusti
     expect(jwt.sign).toHaveBeenCalledWith(
       { id: mockUser._id },

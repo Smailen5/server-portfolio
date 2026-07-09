@@ -54,14 +54,18 @@ const transports = [
           level: 'error',
           format: fileFormat,
           options: { flags: 'a' },
-          maxFiles: 50, // mantiene gli ultimi 50 log
+          maxsize: 5 * 1024 * 1024, // ruota a 5 MB
+          maxFiles: 5, // mantiene al massimo 5 file ruotati
+          tailable: true, // il file corrente resta quello con il nome originale
         }),
         // File per tutti i log
         new winston.transports.File({
           filename: env.logFilePath,
           format: fileFormat,
           options: { flags: 'a' },
-          maxFiles: 50, // mantiene gli ultimi 50 log
+          maxsize: 5 * 1024 * 1024, // ruota a 5 MB
+          maxFiles: 5, // mantiene al massimo 5 file ruotati
+          tailable: true, // il file corrente resta quello con il nome originale
         }),
       ]
     : []),

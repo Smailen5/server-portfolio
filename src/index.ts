@@ -18,7 +18,6 @@ import usersRoutes from './routes/users/index.js';
 import initMongo from './config/initMongo.js';
 
 const app = express();
-// const conn = new DbConnection();
 
 // Protezione dai problemi di sicurezza
 app.use(helmet());

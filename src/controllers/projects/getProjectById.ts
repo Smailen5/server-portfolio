@@ -1,7 +1,9 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
-import { AppError } from '../../middleware/errorHandler.js';
-import { idValidator } from '../../middleware/validators/projectValidators.js';
-import { validateRequest } from '../../middleware/validators/validatorsRequest.js';
+import { 
+  AppError,
+  idValidator,
+  validateRequest
+} from '../../middleware/index.js';
 import { createProjectService } from '../../services/ProjectService.js';
 
 const projectService = createProjectService();

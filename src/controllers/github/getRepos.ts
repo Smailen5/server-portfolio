@@ -1,6 +1,6 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { env } from '../../config/index.js';
-import { AppError } from '../../middleware/errorHandler.js';
+import { AppError } from '../../middleware/index.js';
 import { createGitHubService } from '../../services/GitHubService.js';
 import { cache } from '../../utils/cache.js';
 import { getOctokitInstance } from '../../utils/octokit.js';

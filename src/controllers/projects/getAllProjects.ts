@@ -1,5 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
-import { AppError } from '../../middleware/errorHandler.js';
+import { AppError } from '../../middleware/index.js';
 import { createProjectService } from '../../services/ProjectService.js';
 
 const projectService = createProjectService();

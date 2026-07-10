@@ -1,10 +1,12 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
-import { authMiddleware } from '../../middleware/auth/auth.js';
-import { jwtAuth } from '../../middleware/auth/jwtAuth.js';
-import { AppError } from '../../middleware/errorHandler.js';
-import { createProjectValidator } from '../../middleware/validators/projectValidators.js';
-import { validateRequest } from '../../middleware/validators/validatorsRequest.js';
-import { createProjectService } from '../../services/ProjectService.js';
+import { NextFunction, Request, RequestHandler, Response } from "express";
+import {
+  authMiddleware,
+  jwtAuth,
+  AppError,
+  createProjectValidator,
+  validateRequest,
+} from "../../middleware/index.js";
+import { createProjectService } from "../../services/ProjectService.js";
 
 const projectService = createProjectService();
 
@@ -30,7 +32,8 @@ export const createProject = [
 
       return res.status(201).json(project);
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
+      const message =
+        error instanceof Error ? error.message : "Errore sconosciuto";
       return next(new AppError(message, 500));
     }
   },

@@ -1,23 +1,23 @@
-import { describe, expect, it, vi } from 'vitest'
-import { authMiddleware } from './auth'
-import { AppError } from '../errorHandler'
+import { describe, expect, it, vi } from "vitest";
+import { authMiddleware } from "./auth";
+import { AppError } from "../errorHandler";
 
 // ──────────────────────────────────────────────
 // Mock delle dipendenze
 // ──────────────────────────────────────────────
 // Forniamo un apiKey finto invece di leggerlo dal .env
-vi.mock('../../config/env', () => ({
-  env: { apiKey: 'valid-api-key' },
-}))
+vi.mock("../../config/env", () => ({
+  env: { apiKey: "valid-api-key" },
+}));
 
 // ──────────────────────────────────────────────
 // Helper: crea req, res, next finti per Express
 // ──────────────────────────────────────────────
 function mockReqRes() {
-  const req = { headers: {} } as any
-  const res = {} as any
-  const next = vi.fn()
-  return { req, res, next }
+  const req = { headers: {} } as any;
+  const res = {} as any;
+  const next = vi.fn();
+  return { req, res, next };
 }
 
 // ──────────────────────────────────────────────
@@ -28,37 +28,37 @@ function mockReqRes() {
 // - se errata → AppError 401
 // - se valida → chiama next()
 
-describe('authMiddleware', () => {
-  it('passa AppError a next() quando API key mancante', () => {
-    const { req, res, next } = mockReqRes()
+describe("authMiddleware", () => {
+  it("passa AppError a next() quando API key mancante", () => {
+    const { req, res, next } = mockReqRes();
 
     // authMiddleware passa l'errore a next() invece di lanciarlo
-    authMiddleware(req, res, next)
-    expect(next).toHaveBeenCalledTimes(1)
-    const error = next.mock.calls[0][0]
-    expect(error).toBeInstanceOf(AppError)
-    expect(error.message).toBe('API Key mancante')
-    expect(error.statusCode).toBe(401)
-  })
+    authMiddleware(req, res, next);
+    expect(next).toHaveBeenCalledTimes(1);
+    const error = next.mock.calls[0][0];
+    expect(error).toBeInstanceOf(AppError);
+    expect(error.message).toBe("API Key mancante");
+    expect(error.statusCode).toBe(401);
+  });
 
-  it('passa AppError a next() quando API key errata', () => {
-    const { req, res, next } = mockReqRes()
-    req.headers['x-api-key'] = 'wrong-key'
+  it("passa AppError a next() quando API key errata", () => {
+    const { req, res, next } = mockReqRes();
+    req.headers["x-api-key"] = "wrong-key";
 
-    authMiddleware(req, res, next)
-    expect(next).toHaveBeenCalledTimes(1)
-    const error = next.mock.calls[0][0]
-    expect(error).toBeInstanceOf(AppError)
-    expect(error.message).toBe('API Key non valida')
-    expect(error.statusCode).toBe(401)
-  })
+    authMiddleware(req, res, next);
+    expect(next).toHaveBeenCalledTimes(1);
+    const error = next.mock.calls[0][0];
+    expect(error).toBeInstanceOf(AppError);
+    expect(error.message).toBe("API Key non valida");
+    expect(error.statusCode).toBe(401);
+  });
 
-  it('chiama next() quando API key valida', () => {
-    const { req, res, next } = mockReqRes()
+  it("chiama next() quando API key valida", () => {
+    const { req, res, next } = mockReqRes();
     // Uso la stessa chiave definita nel mock di env
-    req.headers['x-api-key'] = 'valid-api-key'
+    req.headers["x-api-key"] = "valid-api-key";
 
-    authMiddleware(req, res, next)
-    expect(next).toHaveBeenCalledTimes(1)
-  })
-})
+    authMiddleware(req, res, next);
+    expect(next).toHaveBeenCalledTimes(1);
+  });
+});

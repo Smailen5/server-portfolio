@@ -1,5 +1,5 @@
-import { Octokit } from 'octokit';
-import { GitHubContent, PackageJson } from '../types/index.js';
+import { Octokit } from "octokit";
+import { GitHubContent, PackageJson } from "../types/index.js";
 
 export function createGitHubService(octokit: Octokit) {
   return {
@@ -10,15 +10,15 @@ export function createGitHubService(octokit: Octokit) {
 
       while (true) {
         const { data: packages } = await octokit.rest.repos.getContent({
-          owner: 'Smailen5',
-          repo: 'Frontend-mentor-challenge',
-          path: 'packages',
+          owner: "Smailen5",
+          repo: "Frontend-mentor-challenge",
+          path: "packages",
           per_page: perPage,
           page: page,
         });
 
         if (!Array.isArray(packages)) {
-          throw new Error('La cartella packages non è stata trovata');
+          throw new Error("La cartella packages non è stata trovata");
         }
 
         if (packages.length === 0) break;
@@ -29,19 +29,21 @@ export function createGitHubService(octokit: Octokit) {
         if (packages.length < perPage) break;
       }
 
-      return allPackages.filter((item: GitHubContent) => item.type === 'dir');
+      return allPackages.filter((item: GitHubContent) => item.type === "dir");
     },
 
-    getPackageJson: async (folder: GitHubContent): Promise<PackageJson | null> => {
+    getPackageJson: async (
+      folder: GitHubContent
+    ): Promise<PackageJson | null> => {
       try {
         const { data: packageJson } = await octokit.rest.repos.getContent({
-          owner: 'Smailen5',
-          repo: 'Frontend-mentor-challenge',
+          owner: "Smailen5",
+          repo: "Frontend-mentor-challenge",
           path: `${folder.path}/package.json`,
         });
 
-        if ('content' in packageJson) {
-          const content = Buffer.from(packageJson.content, 'base64').toString();
+        if ("content" in packageJson) {
+          const content = Buffer.from(packageJson.content, "base64").toString();
           return JSON.parse(content);
         }
         return null;
@@ -53,12 +55,12 @@ export function createGitHubService(octokit: Octokit) {
     getScreenshot: async (folderName: string): Promise<string | null> => {
       try {
         const { data: screenshot } = await octokit.rest.repos.getContent({
-          owner: 'Smailen5',
-          repo: 'Frontend-mentor-challenge',
+          owner: "Smailen5",
+          repo: "Frontend-mentor-challenge",
           path: `screen-capture/${folderName}.webp`,
         });
 
-        if ('download_url' in screenshot) {
+        if ("download_url" in screenshot) {
           return screenshot.download_url;
         }
         return null;
@@ -70,13 +72,13 @@ export function createGitHubService(octokit: Octokit) {
     getReadme: async (folder: GitHubContent): Promise<string | null> => {
       try {
         const { data: readme } = await octokit.rest.repos.getContent({
-          owner: 'Smailen5',
-          repo: 'Frontend-mentor-challenge',
+          owner: "Smailen5",
+          repo: "Frontend-mentor-challenge",
           path: `${folder.path}/README.md`,
         });
 
-        if ('content' in readme) {
-          return Buffer.from(readme.content, 'base64').toString();
+        if ("content" in readme) {
+          return Buffer.from(readme.content, "base64").toString();
         }
         return null;
       } catch (_error) {

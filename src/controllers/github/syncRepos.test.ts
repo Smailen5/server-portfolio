@@ -1,21 +1,31 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { AppError } from '../../middleware/errorHandler'
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { AppError } from "../../middleware/errorHandler";
 
 // ──────────────────────────────────────────────
 // Dati finti
 // ──────────────────────────────────────────────
 
 const mockPackages = [
-  { name: 'react-app', path: 'packages/react-app', type: 'dir', html_url: 'https://github.com/repo/react-app' },
-  { name: 'vue-app', path: 'packages/vue-app', type: 'dir', html_url: 'https://github.com/repo/vue-app' },
-]
+  {
+    name: "react-app",
+    path: "packages/react-app",
+    type: "dir",
+    html_url: "https://github.com/repo/react-app",
+  },
+  {
+    name: "vue-app",
+    path: "packages/vue-app",
+    type: "dir",
+    html_url: "https://github.com/repo/vue-app",
+  },
+];
 
 const mockPackageJson = {
-  name: 'React App',
-  description: 'A React project',
-  technologies: ['react', 'vite'],
-  createdAt: '2024-01-01',
-}
+  name: "React App",
+  description: "A React project",
+  technologies: ["react", "vite"],
+  createdAt: "2024-01-01",
+};
 
 // ──────────────────────────────────────────────
 // Mock delle dipendenze
@@ -27,65 +37,65 @@ const mockPackageJson = {
 // appLogger va mockato: syncRepos importa middleware che
 // a loro volta importano errorHandler -> appLogger, che in
 // CI crasha perché i file path dei log non sono configurati.
-vi.mock('../../config/appLogger', () => ({
+vi.mock("../../config/appLogger", () => ({
   appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
-}))
+}));
 
-vi.mock('../../config', () => ({
-  env: { githubToken: 'mock-token' },
-}))
+vi.mock("../../config", () => ({
+  env: { githubToken: "mock-token" },
+}));
 
 const mockGitHubService = {
   getRepositories: vi.fn(),
   getPackageJson: vi.fn(),
   getScreenshot: vi.fn(),
   getReadme: vi.fn(),
-}
+};
 
-vi.mock('../../services/GitHubService', () => ({
+vi.mock("../../services/GitHubService", () => ({
   createGitHubService: vi.fn(() => mockGitHubService),
-}))
+}));
 
 const mockProjectService = {
   upsert: vi.fn(),
-}
+};
 
-vi.mock('../../services/ProjectService', () => ({
+vi.mock("../../services/ProjectService", () => ({
   createProjectService: vi.fn(() => mockProjectService),
-}))
+}));
 
 const mockCache = {
   get: vi.fn(),
   set: vi.fn(),
   invalidate: vi.fn(),
   clear: vi.fn(),
-}
+};
 
-vi.mock('../../utils/cache', () => ({
+vi.mock("../../utils/cache", () => ({
   cache: mockCache,
-}))
+}));
 
-import { createGitHubService } from '../../services/GitHubService'
+import { createGitHubService } from "../../services/GitHubService";
 
 // ──────────────────────────────────────────────
 // Helper
 // ──────────────────────────────────────────────
 
 function mockReqRes() {
-  const req = { headers: {}, body: {} } as any
+  const req = { headers: {}, body: {} } as any;
   const res = {
     status: vi.fn().mockReturnThis(),
     json: vi.fn().mockReturnThis(),
-  } as any
-  const next = vi.fn()
-  return { req, res, next }
+  } as any;
+  const next = vi.fn();
+  return { req, res, next };
 }
 
 // syncRepos è un array: [syncValidator, validateRequest, authMiddleware, jwtAuth, handler].
 // L'ultimo elemento è sempre il vero handler. Questa funzione lo estrae.
 // In questo modo testiamo SOLO la logica del controller, saltando i middleware.
 function getHandler(controller: unknown[]): (...args: any[]) => any {
-  return controller[controller.length - 1] as any
+  return controller[controller.length - 1] as any;
 }
 
 // ──────────────────────────────────────────────
@@ -97,125 +107,135 @@ function getHandler(controller: unknown[]): (...args: any[]) => any {
 // 3. Usa projectService.upsert() per salvare ogni progetto
 // 4. Restituisce un riepilogo di quanti sincronizzati
 
-describe('syncRepos', () => {
+describe("syncRepos", () => {
   // Ogni test parte con i mock "puliti" — nessuna chiamata
   // precedente registrata. Evita che un test influenzi l'altro.
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   // Test 1: percorso felice — tutto funziona, upsert crea progetti nuovi
-  it('sincronizza i progetti da GitHub al database', async () => {
+  it("sincronizza i progetti da GitHub al database", async () => {
     // Configuro TUTTI i mock per simulare uno scenario completo
-    mockGitHubService.getRepositories.mockResolvedValue(mockPackages)
-    mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson)
-    mockGitHubService.getScreenshot.mockResolvedValue('https://example.com/screenshot.webp')
-    mockGitHubService.getReadme.mockResolvedValue('# Readme content')
+    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
+    mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson);
+    mockGitHubService.getScreenshot.mockResolvedValue(
+      "https://example.com/screenshot.webp"
+    );
+    mockGitHubService.getReadme.mockResolvedValue("# Readme content");
 
-    mockProjectService.upsert.mockResolvedValue({} as any)
+    mockProjectService.upsert.mockResolvedValue({} as any);
 
     // Import dinamico dopo i mock
-    const { syncRepos } = await import('./syncRepos')
-    const handler = getHandler(syncRepos)
-    const { req, res, next } = mockReqRes()
+    const { syncRepos } = await import("./syncRepos");
+    const handler = getHandler(syncRepos);
+    const { req, res, next } = mockReqRes();
 
-    await handler(req, res, next)
+    await handler(req, res, next);
 
     // Verifico che tutte le funzioni GitHub siano state chiamate
-    expect(createGitHubService).toHaveBeenCalled()
-    expect(mockGitHubService.getScreenshot).toHaveBeenCalled()
-    expect(mockGitHubService.getReadme).toHaveBeenCalled()
-    expect(mockGitHubService.getPackageJson).toHaveBeenCalled()
+    expect(createGitHubService).toHaveBeenCalled();
+    expect(mockGitHubService.getScreenshot).toHaveBeenCalled();
+    expect(mockGitHubService.getReadme).toHaveBeenCalled();
+    expect(mockGitHubService.getPackageJson).toHaveBeenCalled();
 
     // 2 progetti -> 2 upsert
-    expect(mockProjectService.upsert).toHaveBeenCalledTimes(2)
+    expect(mockProjectService.upsert).toHaveBeenCalledTimes(2);
 
     // Uso expect.objectContaining per verificare SOLO le proprietà
     // che mi interessano, ignorando campi dinamici come errors[]
-    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-      syncedProjects: 2,
-      totalProjects: 2,
-    }))
-  })
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        syncedProjects: 2,
+        totalProjects: 2,
+      })
+    );
+  });
 
   // Test 2: comportamento upsert (aggiorna o crea a seconda dei casi)
-  it('usa upsert per aggiornare o creare progetti', async () => {
-    mockGitHubService.getRepositories.mockResolvedValue(mockPackages)
-    mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson)
-    mockGitHubService.getScreenshot.mockResolvedValue('https://example.com/screenshot.webp')
-    mockGitHubService.getReadme.mockResolvedValue('# Readme')
+  it("usa upsert per aggiornare o creare progetti", async () => {
+    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
+    mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson);
+    mockGitHubService.getScreenshot.mockResolvedValue(
+      "https://example.com/screenshot.webp"
+    );
+    mockGitHubService.getReadme.mockResolvedValue("# Readme");
 
-    mockProjectService.upsert.mockResolvedValue({} as any)
+    mockProjectService.upsert.mockResolvedValue({} as any);
 
-    const { syncRepos } = await import('./syncRepos')
-    const handler = getHandler(syncRepos)
-    const { req, res, next } = mockReqRes()
+    const { syncRepos } = await import("./syncRepos");
+    const handler = getHandler(syncRepos);
+    const { req, res, next } = mockReqRes();
 
-    await handler(req, res, next)
+    await handler(req, res, next);
 
     // upsert gestisce internamente create e update,
     // il controller chiama sempre upsert
-    expect(mockProjectService.upsert).toHaveBeenCalled()
-    expect(mockProjectService.upsert).toHaveBeenCalledTimes(2)
-  })
+    expect(mockProjectService.upsert).toHaveBeenCalled();
+    expect(mockProjectService.upsert).toHaveBeenCalledTimes(2);
+  });
 
   // Test 3: tutto fallisce — nessun progetto sincronizzato
-  it('chiama next con AppError quando nessun progetto sincronizzato', async () => {
-    mockGitHubService.getRepositories.mockResolvedValue(mockPackages)
-    mockGitHubService.getPackageJson.mockRejectedValue(new Error('Fail'))
-    mockGitHubService.getScreenshot.mockRejectedValue(new Error('Fail'))
+  it("chiama next con AppError quando nessun progetto sincronizzato", async () => {
+    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
+    mockGitHubService.getPackageJson.mockRejectedValue(new Error("Fail"));
+    mockGitHubService.getScreenshot.mockRejectedValue(new Error("Fail"));
 
-    const { syncRepos } = await import('./syncRepos')
-    const handler = getHandler(syncRepos)
-    const { req, res, next } = mockReqRes()
+    const { syncRepos } = await import("./syncRepos");
+    const handler = getHandler(syncRepos);
+    const { req, res, next } = mockReqRes();
 
-    await handler(req, res, next)
+    await handler(req, res, next);
 
     expect(next).toHaveBeenCalledWith(
       expect.objectContaining({
-        message: 'Nessun progetto è stato sincronizzato con successo',
+        message: "Nessun progetto è stato sincronizzato con successo",
         statusCode: 500,
       })
-    )
-    expect(res.status).not.toHaveBeenCalled()
-    expect(res.json).not.toHaveBeenCalled()
-  })
+    );
+    expect(res.status).not.toHaveBeenCalled();
+    expect(res.json).not.toHaveBeenCalled();
+  });
 
   // Test 4: GitHub API non raggiungibile — errore totale
-  it('chiama next con AppError quando la sincronizzazione fallisce del tutto', async () => {
-    mockGitHubService.getRepositories.mockRejectedValue(new Error('GitHub down'))
+  it("chiama next con AppError quando la sincronizzazione fallisce del tutto", async () => {
+    mockGitHubService.getRepositories.mockRejectedValue(
+      new Error("GitHub down")
+    );
 
-    const { syncRepos } = await import('./syncRepos')
-    const handler = getHandler(syncRepos)
-    const { req, res, next } = mockReqRes()
+    const { syncRepos } = await import("./syncRepos");
+    const handler = getHandler(syncRepos);
+    const { req, res, next } = mockReqRes();
 
-    await handler(req, res, next)
+    await handler(req, res, next);
 
     expect(next).toHaveBeenCalledWith(
       expect.objectContaining({
-        message: 'GitHub down',
+        message: "GitHub down",
         statusCode: 500,
       })
-    )
-    expect(res.status).not.toHaveBeenCalled()
-    expect(res.json).not.toHaveBeenCalled()
-  })
+    );
+    expect(res.status).not.toHaveBeenCalled();
+    expect(res.json).not.toHaveBeenCalled();
+  });
 
   // Test 5: invalida cache getRepos dopo sincronizzazione riuscita
-  it('invalida la cache getRepos dopo sincronizzazione', async () => {
-    mockGitHubService.getRepositories.mockResolvedValue(mockPackages)
-    mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson)
-    mockGitHubService.getScreenshot.mockResolvedValue('https://example.com/screenshot.webp')
-    mockGitHubService.getReadme.mockResolvedValue('# Readme content')
+  it("invalida la cache getRepos dopo sincronizzazione", async () => {
+    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
+    mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson);
+    mockGitHubService.getScreenshot.mockResolvedValue(
+      "https://example.com/screenshot.webp"
+    );
+    mockGitHubService.getReadme.mockResolvedValue("# Readme content");
 
-    mockProjectService.upsert.mockResolvedValue({} as any)
+    mockProjectService.upsert.mockResolvedValue({} as any);
 
-    const { syncRepos } = await import('./syncRepos')
-    const handler = getHandler(syncRepos)
-    const { req, res, next } = mockReqRes()
+    const { syncRepos } = await import("./syncRepos");
+    const handler = getHandler(syncRepos);
+    const { req, res, next } = mockReqRes();
 
-    await handler(req, res, next)
+    await handler(req, res, next);
 
-    expect(mockCache.invalidate).toHaveBeenCalledWith('github:repos')
-  })
-})
+    expect(mockCache.invalidate).toHaveBeenCalledWith("github:repos");
+  });
+});

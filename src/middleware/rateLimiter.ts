@@ -1,5 +1,5 @@
-import rateLimit from 'express-rate-limit';
-import { env } from '../config/env.js';
+import rateLimit from "express-rate-limit";
+import { env } from "../config/env.js";
 
 export const limiter = rateLimit({
   windowMs: Number(env.rateLimitWindow) || 15 * 60 * 1000, // 15 minuti
@@ -11,7 +11,7 @@ export const loginLimiter = rateLimit({
   max: 5, // Limite di 5 richieste per finestra
   message: {
     success: false,
-    message: 'Troppi tentativi di accesso. Riprova più tardi.',
+    message: "Troppi tentativi di accesso. Riprova più tardi.",
   },
   standardHeaders: true,
   legacyHeaders: false,

@@ -1,4 +1,4 @@
-import { ValidationChain, validationResult } from 'express-validator'
+import { ValidationChain, validationResult } from "express-validator";
 
 // ──────────────────────────────────────────────
 // Helper condiviso per i test dei validatori
@@ -13,7 +13,7 @@ export async function runValidation(
   validations: ValidationChain[]
 ) {
   for (const v of validations) {
-    await v.run(req as any)
+    await v.run(req as any);
   }
-  return validationResult(req as any)
+  return validationResult(req as any);
 }

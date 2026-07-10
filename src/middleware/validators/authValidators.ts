@@ -1,17 +1,17 @@
-import { body } from 'express-validator';
+import { body } from "express-validator";
 
 // Validazione utente
 export const validateLoginInput = [
-  body('email')
+  body("email")
     .notEmpty()
     .withMessage("L'email è obbligatoria")
     .isEmail()
     .withMessage("Inserisci un'email valida")
     .normalizeEmail()
     .toLowerCase(),
-  body('password')
+  body("password")
     .notEmpty()
-    .withMessage('La password è obbligatoria')
+    .withMessage("La password è obbligatoria")
     .isLength({ min: 6 })
-    .withMessage('La password deve essere di almeno 6 caratteri'),
+    .withMessage("La password deve essere di almeno 6 caratteri"),
 ];

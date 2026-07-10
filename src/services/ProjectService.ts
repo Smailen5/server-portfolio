@@ -1,4 +1,4 @@
-import { Project, type IProject } from '../models/Projects.js';
+import { Project, type IProject } from "../models/Projects.js";
 
 export function createProjectService() {
   return {
@@ -14,7 +14,10 @@ export function createProjectService() {
       return await Project.findOne({ _id: id });
     },
 
-    update: async (id: string, data: Partial<IProject>): Promise<IProject | null> => {
+    update: async (
+      id: string,
+      data: Partial<IProject>
+    ): Promise<IProject | null> => {
       return await Project.findOneAndUpdate({ _id: id }, data, { new: true });
     },
 
@@ -22,7 +25,10 @@ export function createProjectService() {
       return await Project.findOneAndDelete({ _id: id });
     },
 
-    upsert: async (name: string, data: Partial<IProject>): Promise<IProject> => {
+    upsert: async (
+      name: string,
+      data: Partial<IProject>
+    ): Promise<IProject> => {
       const existing = await Project.findOne({ name });
       if (existing) {
         return (await Project.findOneAndUpdate(

@@ -1,13 +1,13 @@
-import { describe, expect, it, vi } from 'vitest'
-import { validationResult } from 'express-validator'
-import { validateRequest } from './validatorsRequest'
+import { describe, expect, it, vi } from "vitest";
+import { validationResult } from "express-validator";
+import { validateRequest } from "./validatorsRequest";
 
 // AppLogger va mockato per primo: validateRequest importa
 // errorHandler che importa appLogger, che in CI crasha
 // perché i file path per i log non sono configurati.
-vi.mock('../../config/appLogger', () => ({
+vi.mock("../../config/appLogger", () => ({
   appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
-}))
+}));
 
 // ──────────────────────────────────────────────
 // Mock delle dipendenze
@@ -15,22 +15,25 @@ vi.mock('../../config/appLogger', () => ({
 // Sostituiamo solo validationResult, tenendo il resto
 // di express-validator originale. In questo modo possiamo
 // controllare cosa restituisce senza alterare altri comportamenti.
-vi.mock('express-validator', async () => {
-  const actual = await vi.importActual<typeof import('express-validator')>('express-validator')
+vi.mock("express-validator", async () => {
+  const actual =
+    await vi.importActual<typeof import("express-validator")>(
+      "express-validator"
+    );
   return {
     ...actual,
     validationResult: vi.fn(),
-  }
-})
+  };
+});
 
 // ──────────────────────────────────────────────
 // Helper
 // ──────────────────────────────────────────────
 function mockReqRes() {
-  const req = {} as any
-  const res = {} as any
-  const next = vi.fn()
-  return { req, res, next }
+  const req = {} as any;
+  const res = {} as any;
+  const next = vi.fn();
+  return { req, res, next };
 }
 
 // ──────────────────────────────────────────────
@@ -41,34 +44,36 @@ function mockReqRes() {
 // - se non ci sono errori → chiama next()
 // - se ci sono errori → lancia AppError con i messaggi concatenati
 
-describe('validateRequest', () => {
-  it('chiama next() quando non ci sono errori', () => {
+describe("validateRequest", () => {
+  it("chiama next() quando non ci sono errori", () => {
     // validationResult.isEmpty() = true → nessun errore
     vi.mocked(validationResult).mockReturnValue({
       isEmpty: () => true,
       array: vi.fn(),
-    } as any)
+    } as any);
 
-    const { req, res, next } = mockReqRes()
-    validateRequest(req, res, next)
+    const { req, res, next } = mockReqRes();
+    validateRequest(req, res, next);
 
-    expect(next).toHaveBeenCalledTimes(1)
-  })
+    expect(next).toHaveBeenCalledTimes(1);
+  });
 
-  it('lancia AppError con messaggi concatenati quando ci sono errori', () => {
+  it("lancia AppError con messaggi concatenati quando ci sono errori", () => {
     // validationResult.isEmpty() = false → ci sono errori
     vi.mocked(validationResult).mockReturnValue({
       isEmpty: () => false,
       array: () => [
-        { msg: 'Campo obbligatorio' },
-        { msg: 'Formato non valido' },
+        { msg: "Campo obbligatorio" },
+        { msg: "Formato non valido" },
       ],
-    } as any)
+    } as any);
 
-    const { req, res, next } = mockReqRes()
+    const { req, res, next } = mockReqRes();
 
     // Il middleware lancia un'eccezione, la catturiamo per verificarla
-    expect(() => validateRequest(req, res, next)).toThrow('Campo obbligatorio, Formato non valido')
-    expect(next).not.toHaveBeenCalled()
-  })
-})
+    expect(() => validateRequest(req, res, next)).toThrow(
+      "Campo obbligatorio, Formato non valido"
+    );
+    expect(next).not.toHaveBeenCalled();
+  });
+});

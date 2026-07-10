@@ -1,4 +1,24 @@
+# Build e output
 dist
 node_modules
 logs
+coverage
+
+# Lock file e workspace
 pnpm-lock.yaml
+pnpm-workspace.yaml
+
+# Configurazioni progetto
+.github
+AGENTS.md
+CHANGELOG.md
+commitlint.config.cjs
+NOTE*.md
+PLAN*.md
+CONVENTION.md
+
+# Variabili d'ambiente
+.env*
+
+# File di sistema
+.DS_Store

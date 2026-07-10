@@ -1,15 +1,15 @@
-import bcrypt from 'bcrypt';
-import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import { appLogger } from '../../config/appLogger.js';
-import { env } from '../../config/index.js';
-import {User} from '../../models/User.js';
+import bcrypt from "bcrypt";
+import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import { appLogger } from "../../config/appLogger.js";
+import { env } from "../../config/index.js";
+import { User } from "../../models/User.js";
 
 export const logUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       appLogger.warn(
@@ -17,16 +17,13 @@ export const logUser = async (req: Request, res: Response): Promise<void> => {
       );
       res.status(401).json({
         success: false,
-        message: 'Credenziali non valide',
+        message: "Credenziali non valide",
       });
       return;
     }
 
     // Verifica la password con bcrypt
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       appLogger.warn(
@@ -34,7 +31,7 @@ export const logUser = async (req: Request, res: Response): Promise<void> => {
       );
       res.status(401).json({
         success: false,
-        message: 'Credenziali non valide',
+        message: "Credenziali non valide",
       });
       return;
     }
@@ -42,11 +39,9 @@ export const logUser = async (req: Request, res: Response): Promise<void> => {
     // Aggiorna lastLogin
     await user.updateOne({ lastLogin: new Date() });
 
-    const token = jwt.sign(
-      { id: user._id },
-      env.jwtSecret as string,
-      { expiresIn: '24h' }
-    );
+    const token = jwt.sign({ id: user._id }, env.jwtSecret as string, {
+      expiresIn: "24h",
+    });
 
     appLogger.info(`Login effettuato con successo: ${email}`);
     res.json({ token });
@@ -54,7 +49,7 @@ export const logUser = async (req: Request, res: Response): Promise<void> => {
     appLogger.error(`Errore durante il login: ${error}`);
     res.status(500).json({
       success: false,
-      message: 'Errore durante il login',
+      message: "Errore durante il login",
     });
   }
 };

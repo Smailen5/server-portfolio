@@ -1,20 +1,20 @@
-import { AppError } from '../middleware/index.js';
-import { env } from './env.js';
+import { AppError } from "../middleware/index.js";
+import { env } from "./env.js";
 
 export const validateEnv = () => {
   const requireVars = [
-    'githubToken',
-    'logFilePath',
-    'errorLogFilePath',
-    'corsOrigins',
-    'devOrigin',
-    'rateLimitWindow',
-    'rateLimitMax',
-    'apiKey',
-    'jwtSecret',
-    'dbConnection',
-    'adminEmail',
-    'adminPassword',
+    "githubToken",
+    "logFilePath",
+    "errorLogFilePath",
+    "corsOrigins",
+    "devOrigin",
+    "rateLimitWindow",
+    "rateLimitMax",
+    "apiKey",
+    "jwtSecret",
+    "dbConnection",
+    "adminEmail",
+    "adminPassword",
   ] as const;
 
   for (const key of requireVars) {

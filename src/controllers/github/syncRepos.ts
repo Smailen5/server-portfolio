@@ -1,17 +1,17 @@
-import { NextFunction, Request, Response } from 'express';
-import { env } from '../../config/index.js';
-import { createGitHubService } from '../../services/GitHubService.js';
-import { cache } from '../../utils/cache.js';
-import { getOctokitInstance } from '../../utils/octokit.js';
+import { NextFunction, Request, Response } from "express";
+import { env } from "../../config/index.js";
+import { createGitHubService } from "../../services/GitHubService.js";
+import { cache } from "../../utils/cache.js";
+import { getOctokitInstance } from "../../utils/octokit.js";
 import {
   authMiddleware,
   syncValidator,
   validateRequest,
   jwtAuth,
-  AppError
-} from '../../middleware/index.js';
-import { createProjectService } from '../../services/ProjectService.js';
-import { ProjectData } from '../../types/index.js';
+  AppError,
+} from "../../middleware/index.js";
+import { createProjectService } from "../../services/ProjectService.js";
+import { ProjectData } from "../../types/index.js";
 
 export const syncRepos = [
   syncValidator,
@@ -21,10 +21,12 @@ export const syncRepos = [
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       if (!env.githubToken) {
-        return next(new AppError(
-          'Token GitHub non configurato. Aggiungi GITHUB_TOKEN nel file .env',
-          500
-        ));
+        return next(
+          new AppError(
+            "Token GitHub non configurato. Aggiungi GITHUB_TOKEN nel file .env",
+            500
+          )
+        );
       }
 
       const github = createGitHubService(getOctokitInstance());
@@ -37,11 +39,11 @@ export const syncRepos = [
         try {
           let projectData: ProjectData = {
             name: folder.name,
-            description: '',
-            image: '', // Verrà aggiornato con l'immagine di anteprima
+            description: "",
+            image: "", // Verrà aggiornato con l'immagine di anteprima
             technologies: [] as string[],
             createdAt: new Date(),
-            readme: '',
+            readme: "",
           };
 
           // Recuperiamo l'immagine di anteprima
@@ -68,7 +70,7 @@ export const syncRepos = [
             projectData = {
               ...projectData,
               name: packageData.name || folder.name,
-              description: packageData.description || '',
+              description: packageData.description || "",
               technologies: packageData.technologies || [],
               createdAt: packageData.createdAt
                 ? new Date(packageData.createdAt)
@@ -82,19 +84,21 @@ export const syncRepos = [
 
           syncedCount++;
         } catch (error: unknown) {
-          const errorMessage = `Errore nel recupero dei dati per ${folder.name}: ${error instanceof Error ? error.message : 'Errore sconosciuto'}`;
+          const errorMessage = `Errore nel recupero dei dati per ${folder.name}: ${error instanceof Error ? error.message : "Errore sconosciuto"}`;
           errors.push(errorMessage);
         }
       }
 
       if (syncedCount === 0) {
-        return next(new AppError(
-          'Nessun progetto è stato sincronizzato con successo',
-          500
-        ));
+        return next(
+          new AppError(
+            "Nessun progetto è stato sincronizzato con successo",
+            500
+          )
+        );
       }
 
-      cache.invalidate('github:repos');
+      cache.invalidate("github:repos");
 
       return res.json({
         message: `Sincronizzati ${syncedCount} progetti con successo`,
@@ -104,7 +108,7 @@ export const syncRepos = [
         projects: packageFolders.map((folder) => folder.name),
       });
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Errore sconosciuto';
+      const message = err instanceof Error ? err.message : "Errore sconosciuto";
       return next(new AppError(message, 500));
     }
   },

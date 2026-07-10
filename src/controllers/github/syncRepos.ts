@@ -7,9 +7,9 @@ import {
   authMiddleware,
   syncValidator,
   validateRequest,
+  jwtAuth,
+  AppError
 } from '../../middleware/index.js';
-import { jwtAuth } from '../../middleware/auth/jwtAuth.js';
-import { AppError } from '../../middleware/errorHandler.js';
 import { createProjectService } from '../../services/ProjectService.js';
 import { ProjectData } from '../../types/index.js';
 

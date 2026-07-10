@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
 import { appLogger } from './config/appLogger.js';
-import { env } from './config/env.js';
+import { env } from './config/index.js';
 import { validateEnv } from './config/validateEnv.js';
 import { corsMiddleware } from './middleware/cors.js';
 import {

@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
 import { appLogger } from './config/appLogger.js';
-import { serverConfig } from './config/server.js';
+import { env } from './config/env.js';
 import { validateEnv } from './config/validateEnv.js';
 import { corsMiddleware } from './middleware/cors.js';
 import {
@@ -49,8 +49,8 @@ const startServer = async () => {
   try {
     validateEnv();
     await initMongo()
-    const server = app.listen(Number(serverConfig.port), '0.0.0.0', () => {
-      appLogger.info(`Server in esecuzione sulla porta ${serverConfig.port}`);
+    const server = app.listen(Number(env.port), '0.0.0.0', () => {
+      appLogger.info(`Server in esecuzione sulla porta ${env.port}`);
     });
 
     const gracefulShutdown = async (signal: string) => {

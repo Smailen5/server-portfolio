@@ -33,7 +33,7 @@ export function createProjectService() {
       if (existing) {
         return (await Project.findOneAndUpdate(
           { name },
-          { ...data, updatedAt: new Date() },
+          { ...data },
           { new: true }
         ))!;
       }

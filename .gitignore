@@ -53,6 +53,6 @@ coverage/
 # Specifici del Progetto
 # ==================================================
 database.sqlite
-NOTE*.md
-PLAN*.md
+.opencode/notes/NOTE*.md
+.opencode/plans/PLAN*.md
 CONVENTION.md

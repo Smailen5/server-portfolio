@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.3](https://github.com/Smailen5/server-portfolio/compare/v2.2.2...v2.2.3) (2026-07-13)
+
+
+### Bug Fixes
+
+* abilita la rotazione dei file di log in appLogger ([#168](https://github.com/Smailen5/server-portfolio/issues/168)) ([b5f7449](https://github.com/Smailen5/server-portfolio/commit/b5f7449bec91b828b1c43b8782bc9a6245a983b3))
+* abilita logging su file in produzione ([#160](https://github.com/Smailen5/server-portfolio/issues/160)) ([9ace01c](https://github.com/Smailen5/server-portfolio/commit/9ace01cb3d91317231d29d911a466e4235904f65))
+* aggiunge fallback per valori non numerici nel rateLimiter ([#166](https://github.com/Smailen5/server-portfolio/issues/166)) ([988a175](https://github.com/Smailen5/server-portfolio/commit/988a175de2aab699151efe3ecc8540e8ef731d9b))
+* aggiunge x-api-key a CORS ([#163](https://github.com/Smailen5/server-portfolio/issues/163)) ([6a408aa](https://github.com/Smailen5/server-portfolio/commit/6a408aa158abb0fd1c6c8a863d40a7af2e899e13))
+* authController usa error handler centralizzato ([#176](https://github.com/Smailen5/server-portfolio/issues/176)) ([9f9a984](https://github.com/Smailen5/server-portfolio/commit/9f9a984b6d50244af8021c0e978a970403fc6d95))
+* corregge l'aggiornamento di lastLogin in logUser ([#158](https://github.com/Smailen5/server-portfolio/issues/158)) ([7994490](https://github.com/Smailen5/server-portfolio/commit/7994490e58bde472999428d4597d60c695563348))
+* fallback per err.message undefined in errorHandler ([#153](https://github.com/Smailen5/server-portfolio/issues/153)) ([8394b46](https://github.com/Smailen5/server-portfolio/commit/8394b46701c2d164e84d62d01e528fbf36bc56a0))
+* rimuove opzione new deprecata da Mongoose ([#175](https://github.com/Smailen5/server-portfolio/issues/175)) ([2213764](https://github.com/Smailen5/server-portfolio/commit/2213764e2caf40da17963b004e530727d7213005))
+* syncValidator non rivela lunghezza API key ([#150](https://github.com/Smailen5/server-portfolio/issues/150)) ([29d4d2f](https://github.com/Smailen5/server-portfolio/commit/29d4d2f4ffbe1d1975e6f1538047edb041912b27))
+* usa env.logLevel in appLogger ([#159](https://github.com/Smailen5/server-portfolio/issues/159)) ([c3ef116](https://github.com/Smailen5/server-portfolio/commit/c3ef116c8e04c2f2108c8d0b2b426e682406824f))
+* usa Number() in rateLimiter ([#164](https://github.com/Smailen5/server-portfolio/issues/164)) ([a9c3f29](https://github.com/Smailen5/server-portfolio/commit/a9c3f298fe0a33ff4b0d34664e4b3d7d792c482f))
+* usa timestamps automatici di Mongoose ([#174](https://github.com/Smailen5/server-portfolio/issues/174)) ([e96f102](https://github.com/Smailen5/server-portfolio/commit/e96f102ed4264143f652882f5934d3778de44a22))
+
+
+### Chores
+
+* allinea commitlint a convenzioni ([#177](https://github.com/Smailen5/server-portfolio/issues/177)) ([ac0aae3](https://github.com/Smailen5/server-portfolio/commit/ac0aae3a3704dbd44ae74a1005c51fdf6c119fad))
+* integra Prettier con ESLint ([#173](https://github.com/Smailen5/server-portfolio/issues/173)) ([d691959](https://github.com/Smailen5/server-portfolio/commit/d69195900fdc7efc06fb009b5107839791cfa291))
+* rimuove mongodb e ts-node dalle dipendenze ([#171](https://github.com/Smailen5/server-portfolio/issues/171)) ([2eaf175](https://github.com/Smailen5/server-portfolio/commit/2eaf175dab8a1366aaebd3833e5b2f94b7c2255b))
+* sposta NOTE e PLAN in .opencode ([#179](https://github.com/Smailen5/server-portfolio/issues/179)) ([cfc175f](https://github.com/Smailen5/server-portfolio/commit/cfc175ff991efc0c72f94002cda05c10b7245874))
+
+
+### Refactoring
+
+* rimuove server.ts ([#169](https://github.com/Smailen5/server-portfolio/issues/169)) ([fc0ee74](https://github.com/Smailen5/server-portfolio/commit/fc0ee74a80b735d93dbc5773630a1809ab582bac))
+* separa typecheck da script lint ([#161](https://github.com/Smailen5/server-portfolio/issues/161)) ([f3c2a90](https://github.com/Smailen5/server-portfolio/commit/f3c2a90ca894b9bec0563874fd822af5e589ce7c))
+* uniforma bbarrel import per middleware, controllers, github e routes ([#172](https://github.com/Smailen5/server-portfolio/issues/172)) ([25d0d9a](https://github.com/Smailen5/server-portfolio/commit/25d0d9ab657679b569db418b0f90db758a11d6ba))
+* usa barrel per importare env ([#170](https://github.com/Smailen5/server-portfolio/issues/170)) ([01f87a9](https://github.com/Smailen5/server-portfolio/commit/01f87a94df8bd56b88e78e294b4d30cc1cef190f))
+
+
+### Tests
+
+* aggiunge test per errorHandler ([#152](https://github.com/Smailen5/server-portfolio/issues/152)) ([a1477bc](https://github.com/Smailen5/server-portfolio/commit/a1477bc4e8c6cda23885767c69656dfa86e9dd16))
+* aggiunge test per InMemoryCache ([#178](https://github.com/Smailen5/server-portfolio/issues/178)) ([88efaac](https://github.com/Smailen5/server-portfolio/commit/88efaac1c94217e50e2d0effb47fe61703644cf7))
+
 ## [2.2.2](https://github.com/Smailen5/server-portfolio/compare/v2.2.1...v2.2.2) (2026-07-07)
 
 

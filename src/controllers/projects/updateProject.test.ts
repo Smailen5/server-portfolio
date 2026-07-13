@@ -65,7 +65,7 @@ describe("updateProject", () => {
     req.body = updateBody;
     await handler(req, res, next);
 
-    // Verifico TUTTI gli argomenti: id e dati. La logica { new: true }
+    // Verifico TUTTI gli argomenti: id e dati.
     // è incapsulata nel service, non serve testarla qui.
     expect(mockProjectService.update).toHaveBeenCalledWith("1", updateBody);
     expect(res.json).toHaveBeenCalledWith(updated);

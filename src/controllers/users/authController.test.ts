@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { logUser } from "./authController";
+import { AppError } from "../../middleware/errorHandler.js";
 
 // ──────────────────────────────────────────────
 // Dati finti: simulano un utente MongoDB
@@ -55,7 +56,8 @@ function mockReqRes(overrides = {}) {
     status: vi.fn().mockReturnThis(),
     json: vi.fn().mockReturnThis(),
   } as any;
-  return { req, res };
+  const next = vi.fn();
+  return { req, res, next };
 }
 
 // ──────────────────────────────────────────────
@@ -74,39 +76,37 @@ describe("logUser", () => {
   it("risponde 401 quando l'utente non esiste", async () => {
     // User.findOne().select() restituisce null → utente non trovato
     mockSelect.mockResolvedValue(null);
-    const { req, res } = mockReqRes();
+    const { req, res, next } = mockReqRes();
 
-    await logUser(req, res);
+    await logUser(req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(401);
-    expect(res.json).toHaveBeenCalledWith({
-      success: false,
-      message: "Credenziali non valide",
-    });
+    expect(next).toHaveBeenCalledWith(expect.any(AppError));
+    const error = next.mock.calls[0][0];
+    expect(error.message).toBe("Credenziali non valide");
+    expect(error.statusCode).toBe(401);
   });
 
   it("risponde 401 quando la password è errata", async () => {
     mockSelect.mockResolvedValue(mockUser as any);
     // bcrypt.compare restituisce false → password sbagliata
     vi.spyOn(bcrypt, "compare").mockResolvedValue(false as never);
-    const { req, res } = mockReqRes();
+    const { req, res, next } = mockReqRes();
 
-    await logUser(req, res);
+    await logUser(req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(401);
-    expect(res.json).toHaveBeenCalledWith({
-      success: false,
-      message: "Credenziali non valide",
-    });
+    expect(next).toHaveBeenCalledWith(expect.any(AppError));
+    const error = next.mock.calls[0][0];
+    expect(error.message).toBe("Credenziali non valide");
+    expect(error.statusCode).toBe(401);
   });
 
   it("restituisce un token JWT al login riuscito", async () => {
     mockSelect.mockResolvedValue(mockUser as any);
     vi.spyOn(bcrypt, "compare").mockResolvedValue(true as never);
     vi.spyOn(jwt, "sign").mockReturnValue("mock-token" as any);
-    const { req, res } = mockReqRes();
+    const { req, res, next } = mockReqRes();
 
-    await logUser(req, res);
+    await logUser(req, res, next);
 
     // Verifico che abbia aggiornato lastLogin
     expect(mockUser.updateOne).toHaveBeenCalledWith({
@@ -122,14 +122,13 @@ describe("logUser", () => {
   it("risponde 500 in caso di errore imprevisto", async () => {
     // mockRejectedValue simula un'eccezione (es. DB down)
     mockSelect.mockRejectedValue(new Error("DB error"));
-    const { req, res } = mockReqRes();
+    const { req, res, next } = mockReqRes();
 
-    await logUser(req, res);
+    await logUser(req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({
-      success: false,
-      message: "Errore durante il login",
-    });
+    expect(next).toHaveBeenCalledWith(expect.any(AppError));
+    const error = next.mock.calls[0][0];
+    expect(error.message).toBe("Errore durante il login");
+    expect(error.statusCode).toBe(500);
   });
 });

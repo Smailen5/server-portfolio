@@ -1,11 +1,16 @@
 import bcrypt from "bcrypt";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { appLogger } from "../../config/appLogger.js";
 import { env } from "../../config/index.js";
 import { User } from "../../models/User.js";
+import { AppError } from "../../middleware/errorHandler.js";
 
-export const logUser = async (req: Request, res: Response): Promise<void> => {
+export const logUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { email, password } = req.body;
 
@@ -15,11 +20,7 @@ export const logUser = async (req: Request, res: Response): Promise<void> => {
       appLogger.warn(
         `Tentativo di login fallito: utente non trovato - ${email}`
       );
-      res.status(401).json({
-        success: false,
-        message: "Credenziali non valide",
-      });
-      return;
+      return next(new AppError("Credenziali non valide", 401));
     }
 
     // Verifica la password con bcrypt
@@ -29,11 +30,7 @@ export const logUser = async (req: Request, res: Response): Promise<void> => {
       appLogger.warn(
         `Tentativo di login fallito: password non valida - ${email}`
       );
-      res.status(401).json({
-        success: false,
-        message: "Credenziali non valide",
-      });
-      return;
+      return next(new AppError("Credenziali non valide", 401));
     }
 
     // Aggiorna lastLogin
@@ -47,9 +44,6 @@ export const logUser = async (req: Request, res: Response): Promise<void> => {
     res.json({ token });
   } catch (error) {
     appLogger.error(`Errore durante il login: ${error}`);
-    res.status(500).json({
-      success: false,
-      message: "Errore durante il login",
-    });
+    return next(new AppError("Errore durante il login", 500));
   }
 };

@@ -36,7 +36,7 @@ export function createProjectService() {
         return (await Project.findOneAndUpdate(
           { name },
           { ...data },
-          { new: true }
+          { returnDocument: "after" }
         ))!;
       }
       return await Project.create(data);

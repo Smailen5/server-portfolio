@@ -8,14 +8,12 @@ module.exports = {
         'feat', // ✨ Nuove funzionalità
         'fix', // 🐛 Bug fix
         'docs', // 📝 Documentazione
-        'style', // 💄 Stile
         'refactor', // ♻️ Refactoring
         'perf', // ⚡ Performance
         'test', // ✅ Test
         'build', // 👷 Build
         'ci', // 🔧 CI
         'chore', // 🧹 Chore
-        'revert', // ⏪ Revert
       ],
     ],
     'type-empty': [2, 'never'],

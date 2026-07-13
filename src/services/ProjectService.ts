@@ -18,7 +18,9 @@ export function createProjectService() {
       id: string,
       data: Partial<IProject>
     ): Promise<IProject | null> => {
-      return await Project.findOneAndUpdate({ _id: id }, data, { new: true });
+      return await Project.findOneAndUpdate({ _id: id }, data, {
+        returnDocument: "after",
+      });
     },
 
     delete: async (id: string): Promise<IProject | null> => {

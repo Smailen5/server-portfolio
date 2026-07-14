@@ -1,0 +1,37 @@
+name: Auto-add issue to project
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add single issue to project
+        if: github.event_name == 'issues'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh project item-add \
+            --owner Smailen5 \
+            --project 1 \
+            --url ${{ github.event.issue.html_url }}
+
+      - name: Sync all open issues to project
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Ottieni tutte le issue aperte del repo e aggiungile al project
+          # Quelle già presenti verranno ignorate automaticamente
+          gh issue list --state open --limit 100 --json url --jq '.[].url' | while read url; do
+            echo "Aggiungendo $url al project..."
+            gh project item-add \
+              --owner Smailen5 \
+              --project 1 \
+              --url "$url" || echo "Issue già presente o errore, continuo..."
+          done
+          
+          echo "Sync completato!"

@@ -14,9 +14,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh project item-add \
+          gh project item-add 1 \
             --owner Smailen5 \
-            --project 1 \
             --url ${{ github.event.issue.html_url }}
 
       - name: Sync all open issues to project
@@ -28,9 +27,8 @@ jobs:
           # Quelle già presenti verranno ignorate automaticamente
           gh issue list --state open --limit 100 --json url --jq '.[].url' | while read url; do
             echo "Aggiungendo $url al project..."
-            gh project item-add \
+            gh project item-add 1 \
               --owner Smailen5 \
-              --project 1 \
               --url "$url" || echo "Issue già presente o errore, continuo..."
           done
           

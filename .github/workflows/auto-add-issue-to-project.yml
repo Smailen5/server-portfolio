@@ -14,7 +14,7 @@ jobs:
       - name: Add single issue to project
         if: github.event_name == 'issues'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
         run: |
           gh project item-add 1 \
             --owner Smailen5 \
@@ -23,7 +23,7 @@ jobs:
       - name: Sync all open issues to project
         if: github.event_name == 'workflow_dispatch'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN }}
         run: |
           # Ottieni tutte le issue aperte del repo e aggiungile al project
           # Quelle già presenti verranno ignorate automaticamente

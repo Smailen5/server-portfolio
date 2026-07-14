@@ -9,6 +9,8 @@ jobs:
   add-to-project:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Add single issue to project
         if: github.event_name == 'issues'
         env:

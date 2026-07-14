@@ -1,0 +1,25 @@
+name: Auto-add issue to project
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      issue_url:
+        description: 'URL della issue da aggiungere al project'
+        required: true
+        type: string
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add issue to project
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_URL: ${{ github.event.inputs.issue_url || github.event.issue.html_url }}
+        run: |
+          gh project item-add \
+            --owner Smailen5 \
+            --project 1 \
+            --url "$ISSUE_URL"

@@ -55,4 +55,3 @@ coverage/
 database.sqlite
 .opencode/notes/NOTE*.md
 .opencode/plans/PLAN*.md
-CONVENTION.md

@@ -36,9 +36,10 @@ const mockPackageJson = {
 // qualsiasi import, quindi quando il controller verrà
 // caricato, troverà già i mock al posto dei moduli veri.
 
+const mockEnv = { githubToken: "mock-token" };
+
 vi.mock("../../config", () => ({
-  // Diamo un githubToken finto anziché leggere dal .env
-  env: { githubToken: "mock-token" },
+  env: mockEnv,
 }));
 
 const mockGitHubService = {
@@ -91,6 +92,7 @@ function mockReqRes() {
 describe("getRepos", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockEnv.githubToken = "mock-token";
     mockCache.get.mockReturnValue(null);
   });
 
@@ -135,7 +137,27 @@ describe("getRepos", () => {
     ]);
   });
 
-  // Test 2: package.json mancante — deve usare il nome cartella come fallback
+  // Test 2: token GitHub non configurato — deve passare errore a next
+  it("passa errore a next quando il token GitHub non è configurato", async () => {
+    mockEnv.githubToken = "";
+
+    const { getRepos } = await import("./getRepos");
+    const { req, res, next } = mockReqRes();
+
+    await getRepos(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(
+      expect.objectContaining({
+        statusCode: 500,
+        message:
+          "Token GitHub non configurato. Aggiungi GITHUB_TOKEN nel file .env",
+      })
+    );
+    expect(mockGitHubService.getRepositories).not.toHaveBeenCalled();
+    expect(res.json).not.toHaveBeenCalled();
+  });
+
+  // Test 3: package.json mancante — deve usare il nome cartella come fallback
   it("usa il nome cartella come fallback quando package.json manca", async () => {
     mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
     // getPackageJson restituisce null → simula cartella senza package.json

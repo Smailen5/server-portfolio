@@ -39,7 +39,7 @@ app.use("/api/users", usersRoutes);
 // Serve screenshot statici
 app.use(
   "/screenshots",
-  express.static(path.join(__dirname, "../public/screenshots")),
+  express.static(path.join(__dirname, "../public/screenshots"))
 );
 
 // Gestisce le rotte non trovate

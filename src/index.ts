@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import mongoose from "mongoose";
+import path from "path";
 import { appLogger } from "./config/appLogger.js";
 import { env } from "./config/index.js";
 import { validateEnv } from "./config/validateEnv.js";
@@ -34,6 +35,12 @@ app.use(limiter);
 app.use("/api/projects", projectRoutes);
 app.use("/api/github", githubRoutes);
 app.use("/api/users", usersRoutes);
+
+// Serve screenshot statici
+app.use(
+  "/screenshots",
+  express.static(path.join(__dirname, "../public/screenshots"))
+);
 
 // Gestisce le rotte non trovate
 app.all("/{*splat}", notFoundHandler);

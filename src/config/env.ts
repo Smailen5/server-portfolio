@@ -22,4 +22,6 @@ export const env = {
   adminPassword: process.env.ADMIN_PASSWORD,
   dbConnection: process.env.DB_CONNECTION,
   jwtSecret: process.env.JWT_SECRET,
+  projectPrefixes: process.env.PROJECT_PREFIXES?.split(",") || ["fm-"],
+  screenshotsDir: process.env.SCREENSHOTS_DIR || "./public/screenshots",
 };

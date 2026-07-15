@@ -246,7 +246,35 @@ describe("syncRepos", () => {
     expect(mockCache.invalidate).toHaveBeenCalledWith("github:repos");
   });
 
-  // Test 6: token GitHub non configurato — handler deve restituire 500
+  // Test 6: asset mancanti — screenshot, readme e package.json non trovati
+  it("registra errori quando screenshot, readme e package.json mancano", async () => {
+    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
+    mockGitHubService.getScreenshot.mockResolvedValue(null);
+    mockGitHubService.getReadme.mockResolvedValue(null);
+    mockGitHubService.getPackageJson.mockResolvedValue(null);
+
+    mockProjectService.upsert.mockResolvedValue({} as any);
+
+    const { syncRepos } = await import("./syncRepos");
+    const handler = getHandler(syncRepos);
+    const { req, res, next } = mockReqRes();
+
+    await handler(req, res, next);
+
+    expect(mockProjectService.upsert).toHaveBeenCalledTimes(2);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        syncedProjects: 2,
+        errors: expect.arrayContaining([
+          expect.stringContaining("Nessuna immagine di anteprima trovata"),
+          expect.stringContaining("Nessun README.md trovato"),
+          expect.stringContaining("Nessun package.json trovato"),
+        ]),
+      })
+    );
+  });
+
+  // Test 7: token GitHub non configurato — handler deve restituire 500
   it("passa errore a next quando il token GitHub non è configurato", async () => {
     mockEnv.githubToken = "";
 

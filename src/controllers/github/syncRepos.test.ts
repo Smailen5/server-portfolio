@@ -41,8 +41,14 @@ vi.mock("../../config/appLogger", () => ({
   appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }));
 
+const mockEnv = { githubToken: "mock-token" };
+
 vi.mock("../../config", () => ({
-  env: { githubToken: "mock-token" },
+  env: mockEnv,
+}));
+
+vi.mock("../../config/env", () => ({
+  env: { apiKey: "valid-api-key", jwtSecret: "valid-jwt-secret" },
 }));
 
 const mockGitHubService = {
@@ -112,6 +118,7 @@ describe("syncRepos", () => {
   // precedente registrata. Evita che un test influenzi l'altro.
   beforeEach(() => {
     vi.clearAllMocks();
+    mockEnv.githubToken = "mock-token";
   });
 
   // Test 1: percorso felice — tutto funziona, upsert crea progetti nuovi
@@ -237,5 +244,56 @@ describe("syncRepos", () => {
     await handler(req, res, next);
 
     expect(mockCache.invalidate).toHaveBeenCalledWith("github:repos");
+  });
+
+  // Test 6: token GitHub non configurato — handler deve restituire 500
+  it("passa errore a next quando il token GitHub non è configurato", async () => {
+    mockEnv.githubToken = "";
+
+    const { syncRepos } = await import("./syncRepos");
+    const handler = getHandler(syncRepos);
+    const { req, res, next } = mockReqRes();
+
+    await handler(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(
+      expect.objectContaining({
+        statusCode: 500,
+        message:
+          "Token GitHub non configurato. Aggiungi GITHUB_TOKEN nel file .env",
+      })
+    );
+    expect(mockGitHubService.getRepositories).not.toHaveBeenCalled();
+    expect(res.json).not.toHaveBeenCalled();
+  });
+
+  // Test 7: catena middleware nell'ordine corretto
+  it("applica la catena middleware nell'ordine corretto", async () => {
+    const { syncRepos } = await import("./syncRepos");
+    const { authMiddleware, jwtAuth, syncValidator, validateRequest } =
+      await import("../../middleware/index.js");
+
+    expect(syncRepos).toHaveLength(5);
+    expect(syncRepos[0]).toBe(syncValidator);
+    expect(syncRepos[1]).toBe(validateRequest);
+    expect(syncRepos[2]).toBe(authMiddleware);
+    expect(syncRepos[3]).toBe(jwtAuth);
+    expect(typeof syncRepos[4]).toBe("function");
+  });
+
+  // Test 8: richiesta senza autenticazione viene rifiutata con 401
+  it("rifiuta richieste senza autenticazione con 401", async () => {
+    const { syncRepos } = await import("./syncRepos");
+    const authMiddleware = syncRepos[2] as any;
+    const { req, res, next } = mockReqRes();
+
+    authMiddleware(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(
+      expect.objectContaining({
+        statusCode: 401,
+        message: "API Key mancante",
+      })
+    );
   });
 });

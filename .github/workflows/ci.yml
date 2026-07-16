@@ -42,7 +42,7 @@ jobs:
           TITLE: ${{ github.event.pull_request.title }}
         run: |
           MAX_LENGTH=72
-          PATTERN='^(feat|fix|docs|chore|refactor|test|perf|ci|build)(\(.+\))?: '
+          PATTERN='^(feat|fix|docs|chore|refactor|test|perf|ci|build)(\(.+\))?!?: '
 
           if ! echo "$TITLE" | grep -qE "$PATTERN"; then
             echo "❌ Il titolo deve iniziare con un prefisso conventional commit (feat:, fix:, docs:, ...)"

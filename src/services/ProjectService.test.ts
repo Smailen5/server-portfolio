@@ -195,6 +195,7 @@ describe("ProjectService", () => {
         createdAt: new Date("2024-12-31"),
         readme: "# README",
       };
+      const { createdAt: _, ...updateDataWithoutCreatedAt } = updateData;
       const updatedProject = { _id: "123", ...updateData };
       vi.spyOn(Project, "findOne").mockResolvedValue(existingProject as any);
       vi.spyOn(Project, "findOneAndUpdate").mockResolvedValue(
@@ -212,34 +213,10 @@ describe("ProjectService", () => {
       expect(Project.create).not.toHaveBeenCalled();
       expect(Project.findOneAndUpdate).toHaveBeenCalledWith(
         { name: "existing-project" },
-        expect.not.objectContaining({ createdAt: updateData.createdAt }),
+        updateDataWithoutCreatedAt,
         { returnDocument: "after" }
       );
       expect(result).toEqual(updatedProject);
-    });
-
-    it("non aggiorna createdAt durante l'upsert", async () => {
-      const existingProject = {
-        _id: "123",
-        name: "existing-project",
-        description: "Old description",
-      };
-      const updateData = {
-        name: "existing-project",
-        description: "Updated description",
-        createdAt: new Date("2024-12-31"),
-      };
-      vi.spyOn(Project, "findOne").mockResolvedValue(existingProject as any);
-      vi.spyOn(Project, "findOneAndUpdate").mockResolvedValue({
-        _id: "123",
-        ...updateData,
-      } as any);
-
-      await projectService.upsert("existing-project", updateData);
-
-      const [, secondArgument] = (Project.findOneAndUpdate as any).mock
-        .calls[0];
-      expect(secondArgument).not.toHaveProperty("createdAt");
     });
 
     it("gestisce la race condition quando findOne restituisce null ma create fallisce per chiave duplicata", async () => {

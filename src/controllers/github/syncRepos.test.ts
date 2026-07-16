@@ -5,18 +5,16 @@ import { AppError } from "../../middleware/errorHandler";
 // Dati finti
 // ──────────────────────────────────────────────
 
-const mockPackages = [
+const mockRepositories = [
   {
     name: "react-app",
-    path: "packages/react-app",
-    type: "dir",
     html_url: "https://github.com/repo/react-app",
+    description: "React app repository",
   },
   {
     name: "vue-app",
-    path: "packages/vue-app",
-    type: "dir",
     html_url: "https://github.com/repo/vue-app",
+    description: "Vue app repository",
   },
 ];
 
@@ -41,7 +39,7 @@ vi.mock("../../config/appLogger", () => ({
   appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }));
 
-const mockEnv = { githubToken: "mock-token" };
+const mockEnv = { githubToken: "mock-token", projectPrefixes: ["fm-"] };
 
 vi.mock("../../config", () => ({
   env: mockEnv,
@@ -54,7 +52,7 @@ vi.mock("../../config/env", () => ({
 const mockGitHubService = {
   getRepositories: vi.fn(),
   getPackageJson: vi.fn(),
-  getScreenshot: vi.fn(),
+  getScreenshots: vi.fn(),
   getReadme: vi.fn(),
 };
 
@@ -109,7 +107,7 @@ function getHandler(controller: unknown[]): (...args: any[]) => any {
 // ──────────────────────────────────────────────
 // syncRepos è più complesso di getRepos:
 // 1. Prende i progetti da GitHub (getProjectsFromGithub)
-// 2. Per ognuno: screenshot, readme, package.json
+// 2. Per ognuno: screenshots, readme, package.json
 // 3. Usa projectService.upsert() per salvare ogni progetto
 // 4. Restituisce un riepilogo di quanti sincronizzati
 
@@ -124,11 +122,11 @@ describe("syncRepos", () => {
   // Test 1: percorso felice — tutto funziona, upsert crea progetti nuovi
   it("sincronizza i progetti da GitHub al database", async () => {
     // Configuro TUTTI i mock per simulare uno scenario completo
-    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
+    mockGitHubService.getRepositories.mockResolvedValue(mockRepositories);
     mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson);
-    mockGitHubService.getScreenshot.mockResolvedValue(
-      "https://example.com/screenshot.webp"
-    );
+    mockGitHubService.getScreenshots.mockResolvedValue([
+      "https://example.com/screenshot.webp",
+    ]);
     mockGitHubService.getReadme.mockResolvedValue("# Readme content");
 
     mockProjectService.upsert.mockResolvedValue({} as any);
@@ -142,7 +140,7 @@ describe("syncRepos", () => {
 
     // Verifico che tutte le funzioni GitHub siano state chiamate
     expect(createGitHubService).toHaveBeenCalled();
-    expect(mockGitHubService.getScreenshot).toHaveBeenCalled();
+    expect(mockGitHubService.getScreenshots).toHaveBeenCalled();
     expect(mockGitHubService.getReadme).toHaveBeenCalled();
     expect(mockGitHubService.getPackageJson).toHaveBeenCalled();
 
@@ -161,11 +159,11 @@ describe("syncRepos", () => {
 
   // Test 2: comportamento upsert (aggiorna o crea a seconda dei casi)
   it("usa upsert per aggiornare o creare progetti", async () => {
-    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
+    mockGitHubService.getRepositories.mockResolvedValue(mockRepositories);
     mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson);
-    mockGitHubService.getScreenshot.mockResolvedValue(
-      "https://example.com/screenshot.webp"
-    );
+    mockGitHubService.getScreenshots.mockResolvedValue([
+      "https://example.com/screenshot.webp",
+    ]);
     mockGitHubService.getReadme.mockResolvedValue("# Readme");
 
     mockProjectService.upsert.mockResolvedValue({} as any);
@@ -184,9 +182,9 @@ describe("syncRepos", () => {
 
   // Test 3: tutto fallisce — nessun progetto sincronizzato
   it("chiama next con AppError quando nessun progetto sincronizzato", async () => {
-    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
+    mockGitHubService.getRepositories.mockResolvedValue(mockRepositories);
     mockGitHubService.getPackageJson.mockRejectedValue(new Error("Fail"));
-    mockGitHubService.getScreenshot.mockRejectedValue(new Error("Fail"));
+    mockGitHubService.getScreenshots.mockRejectedValue(new Error("Fail"));
 
     const { syncRepos } = await import("./syncRepos");
     const handler = getHandler(syncRepos);
@@ -228,11 +226,11 @@ describe("syncRepos", () => {
 
   // Test 5: invalida cache getRepos dopo sincronizzazione riuscita
   it("invalida la cache getRepos dopo sincronizzazione", async () => {
-    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
+    mockGitHubService.getRepositories.mockResolvedValue(mockRepositories);
     mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson);
-    mockGitHubService.getScreenshot.mockResolvedValue(
-      "https://example.com/screenshot.webp"
-    );
+    mockGitHubService.getScreenshots.mockResolvedValue([
+      "https://example.com/screenshot.webp",
+    ]);
     mockGitHubService.getReadme.mockResolvedValue("# Readme content");
 
     mockProjectService.upsert.mockResolvedValue({} as any);
@@ -246,10 +244,10 @@ describe("syncRepos", () => {
     expect(mockCache.invalidate).toHaveBeenCalledWith("github:repos");
   });
 
-  // Test 6: asset mancanti — screenshot, readme e package.json non trovati
-  it("registra errori quando screenshot, readme e package.json mancano", async () => {
-    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
-    mockGitHubService.getScreenshot.mockResolvedValue(null);
+  // Test 6: asset mancanti — screenshots, readme e package.json non trovati
+  it("registra errori quando screenshots, readme e package.json mancano", async () => {
+    mockGitHubService.getRepositories.mockResolvedValue(mockRepositories);
+    mockGitHubService.getScreenshots.mockResolvedValue([]);
     mockGitHubService.getReadme.mockResolvedValue(null);
     mockGitHubService.getPackageJson.mockResolvedValue(null);
 

@@ -4,23 +4,21 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 // Dati finti: simulano cosa restituirebbe GitHub
 // ──────────────────────────────────────────────
 
-// getProjectsFromGithub restituirà queste 2 cartelle
-const mockPackages = [
+// getRepositories restituirà queste 2 repo
+const mockRepositories = [
   {
     name: "react-app",
-    path: "packages/react-app",
-    type: "dir",
     html_url: "https://github.com/repo/react-app",
+    description: "React app repository",
   },
   {
     name: "vue-app",
-    path: "packages/vue-app",
-    type: "dir",
     html_url: "https://github.com/repo/vue-app",
+    description: "Vue app repository",
   },
 ];
 
-// getPackageJson restituirà questi dati per ogni cartella
+// getPackageJson restituirà questi dati per ogni repo
 const mockPackageJson = {
   name: "React App",
   description: "A React project",
@@ -36,7 +34,7 @@ const mockPackageJson = {
 // qualsiasi import, quindi quando il controller verrà
 // caricato, troverà già i mock al posto dei moduli veri.
 
-const mockEnv = { githubToken: "mock-token" };
+const mockEnv = { githubToken: "mock-token", projectPrefixes: ["fm-"] };
 
 vi.mock("../../config", () => ({
   env: mockEnv,
@@ -45,7 +43,6 @@ vi.mock("../../config", () => ({
 const mockGitHubService = {
   getRepositories: vi.fn(),
   getPackageJson: vi.fn(),
-  getScreenshot: vi.fn(),
   getReadme: vi.fn(),
 };
 
@@ -97,9 +94,9 @@ describe("getRepos", () => {
   });
 
   // Test 1: percorso felice — GitHub risponde, tutto ok
-  it("restituisce le info dei package per ogni cartella", async () => {
+  it("restituisce le info dei package per ogni repo", async () => {
     // Predispongo i mock: dico loro cosa restituire
-    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
+    mockGitHubService.getRepositories.mockResolvedValue(mockRepositories);
     mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson);
 
     // Importo il controller DOPO aver configurato i mock.
@@ -157,10 +154,10 @@ describe("getRepos", () => {
     expect(res.json).not.toHaveBeenCalled();
   });
 
-  // Test 3: package.json mancante — deve usare il nome cartella come fallback
-  it("usa il nome cartella come fallback quando package.json manca", async () => {
-    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
-    // getPackageJson restituisce null → simula cartella senza package.json
+  // Test 3: package.json mancante — deve usare il nome repo come fallback
+  it("usa il nome repo come fallback quando package.json manca", async () => {
+    mockGitHubService.getRepositories.mockResolvedValue(mockRepositories);
+    // getPackageJson restituisce null → simula repo senza package.json
     mockGitHubService.getPackageJson.mockResolvedValue(null);
 
     const { getRepos } = await import("./getRepos");
@@ -170,7 +167,7 @@ describe("getRepos", () => {
 
     // Prendo il primo argomento della prima chiamata a res.json
     const data = (res.json.mock.calls[0] as any[])[0];
-    // Il nome deve essere 'react-app' (nome cartella), non 'React App' (package.json)
+    // Il nome deve essere 'react-app' (nome repo), non 'React App' (package.json)
     expect(data[0].name).toBe("react-app");
     expect(data[0].description).toBe("");
   });
@@ -221,7 +218,7 @@ describe("getRepos", () => {
   // Test 5: cache miss — chiama GitHub API e salva in cache
   it("chiama GitHub API e salva in cache quando cache è vuota", async () => {
     mockCache.get.mockReturnValue(null);
-    mockGitHubService.getRepositories.mockResolvedValue(mockPackages);
+    mockGitHubService.getRepositories.mockResolvedValue(mockRepositories);
     mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson);
 
     const { getRepos } = await import("./getRepos");

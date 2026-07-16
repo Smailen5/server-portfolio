@@ -31,60 +31,57 @@ export const syncRepos = [
 
       const github = createGitHubService(getOctokitInstance());
       const projectService = createProjectService();
-      const packageFolders = await github.getRepositories();
+      const repositories = await github.getRepositories(env.projectPrefixes);
       let syncedCount = 0;
       const errors: string[] = [];
 
-      for (const folder of packageFolders) {
+      for (const repo of repositories) {
         try {
           let projectData: ProjectData = {
-            name: folder.name,
+            name: repo.name,
             description: "",
-            image: "", // Verrà aggiornato con l'immagine di anteprima
+            image: "",
             technologies: [] as string[],
-            createdAt: new Date(),
             readme: "",
           };
 
-          // Recuperiamo l'immagine di anteprima
-          const screenshot = await github.getScreenshot(folder.name);
-          if (screenshot) {
-            projectData.image = screenshot;
+          const screenshots = await github.getScreenshots(repo.name);
+          if (screenshots.length > 0) {
+            projectData.image = screenshots[0];
           } else {
             errors.push(
-              `Nessuna immagine di anteprima trovata per ${folder.name}`
+              `Nessuna immagine di anteprima trovata per ${repo.name}`
             );
           }
 
-          // Recuperiamo il README.md
-          const readme = await github.getReadme(folder);
+          const readme = await github.getReadme(repo.name);
           if (readme) {
             projectData.readme = readme;
           } else {
-            errors.push(`Nessun README.md trovato per ${folder.name}`);
+            errors.push(`Nessun README.md trovato per ${repo.name}`);
           }
 
-          // Recuperiamo il package.json
-          const packageData = await github.getPackageJson(folder);
+          const packageData = await github.getPackageJson(repo.name);
           if (packageData) {
             projectData = {
               ...projectData,
-              name: packageData.name || folder.name,
+              name: packageData.name || repo.name,
               description: packageData.description || "",
               technologies: packageData.technologies || [],
-              createdAt: packageData.createdAt
-                ? new Date(packageData.createdAt)
-                : new Date(),
             };
+
+            if (packageData.createdAt) {
+              projectData.createdAt = new Date(packageData.createdAt);
+            }
           } else {
-            errors.push(`Nessun package.json trovato per ${folder.name}`);
+            errors.push(`Nessun package.json trovato per ${repo.name}`);
           }
 
           await projectService.upsert(projectData.name, projectData);
 
           syncedCount++;
         } catch (error: unknown) {
-          const errorMessage = `Errore nel recupero dei dati per ${folder.name}: ${error instanceof Error ? error.message : "Errore sconosciuto"}`;
+          const errorMessage = `Errore nel recupero dei dati per ${repo.name}: ${error instanceof Error ? error.message : "Errore sconosciuto"}`;
           errors.push(errorMessage);
         }
       }
@@ -102,10 +99,10 @@ export const syncRepos = [
 
       return res.json({
         message: `Sincronizzati ${syncedCount} progetti con successo`,
-        totalProjects: packageFolders.length,
+        totalProjects: repositories.length,
         syncedProjects: syncedCount,
         errors: errors,
-        projects: packageFolders.map((folder) => folder.name),
+        projects: repositories.map((repo) => repo.name),
       });
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Errore sconosciuto";

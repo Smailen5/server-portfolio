@@ -1,48 +1,52 @@
 import { Octokit } from "octokit";
-import { GitHubContent, PackageJson } from "../types/index.js";
+import { GitHubRepo, PackageJson } from "../types/index.js";
+
+const OWNER = "Smailen5";
 
 export function createGitHubService(octokit: Octokit) {
   return {
-    getRepositories: async (): Promise<GitHubContent[]> => {
-      let allPackages: GitHubContent[] = [];
+    getRepositories: async (prefixes: string[]): Promise<GitHubRepo[]> => {
+      let allRepos: GitHubRepo[] = [];
       let page = 1;
       const perPage = 100;
 
       while (true) {
-        const { data: packages } = await octokit.rest.repos.getContent({
-          owner: "Smailen5",
-          repo: "Frontend-mentor-challenge",
-          path: "packages",
-          per_page: perPage,
-          page: page,
-        });
+        const { data: repos } =
+          await octokit.rest.repos.listForAuthenticatedUser({
+            per_page: perPage,
+            page: page,
+          });
 
-        if (!Array.isArray(packages)) {
-          throw new Error("La cartella packages non è stata trovata");
-        }
+        if (repos.length === 0) break;
 
-        if (packages.length === 0) break;
+        const filteredRepos = repos
+          .filter((repo) =>
+            prefixes.some((prefix) => repo.name.startsWith(prefix))
+          )
+          .map((repo) => ({
+            name: repo.name,
+            html_url: repo.html_url,
+            description: repo.description,
+          }));
 
-        allPackages = [...allPackages, ...packages];
+        allRepos = [...allRepos, ...filteredRepos];
         page++;
 
-        if (packages.length < perPage) break;
+        if (repos.length < perPage) break;
       }
 
-      return allPackages.filter((item: GitHubContent) => item.type === "dir");
+      return allRepos;
     },
 
-    getPackageJson: async (
-      folder: GitHubContent
-    ): Promise<PackageJson | null> => {
+    getPackageJson: async (repoName: string): Promise<PackageJson | null> => {
       try {
         const { data: packageJson } = await octokit.rest.repos.getContent({
-          owner: "Smailen5",
-          repo: "Frontend-mentor-challenge",
-          path: `${folder.path}/package.json`,
+          owner: OWNER,
+          repo: repoName,
+          path: "package.json",
         });
 
-        if ("content" in packageJson) {
+        if ("content" in packageJson && !Array.isArray(packageJson)) {
           const content = Buffer.from(packageJson.content, "base64").toString();
           return JSON.parse(content);
         }
@@ -52,32 +56,36 @@ export function createGitHubService(octokit: Octokit) {
       }
     },
 
-    getScreenshot: async (folderName: string): Promise<string | null> => {
+    getScreenshots: async (repoName: string): Promise<string[]> => {
       try {
-        const { data: screenshot } = await octokit.rest.repos.getContent({
-          owner: "Smailen5",
-          repo: "Frontend-mentor-challenge",
-          path: `screen-capture/${folderName}.webp`,
+        const { data: screenshots } = await octokit.rest.repos.getContent({
+          owner: OWNER,
+          repo: repoName,
+          path: "screenshots",
         });
 
-        if ("download_url" in screenshot) {
-          return screenshot.download_url;
+        if (!Array.isArray(screenshots)) {
+          return [];
         }
-        return null;
+
+        return screenshots
+          .filter((item) => item.type === "file")
+          .map((item) => item.download_url)
+          .filter((url): url is string => typeof url === "string");
       } catch (_error) {
-        return null;
+        return [];
       }
     },
 
-    getReadme: async (folder: GitHubContent): Promise<string | null> => {
+    getReadme: async (repoName: string): Promise<string | null> => {
       try {
         const { data: readme } = await octokit.rest.repos.getContent({
-          owner: "Smailen5",
-          repo: "Frontend-mentor-challenge",
-          path: `${folder.path}/README.md`,
+          owner: OWNER,
+          repo: repoName,
+          path: "README.md",
         });
 
-        if ("content" in readme) {
+        if ("content" in readme && !Array.isArray(readme)) {
           return Buffer.from(readme.content, "base64").toString();
         }
         return null;

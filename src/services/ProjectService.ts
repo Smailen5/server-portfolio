@@ -33,11 +33,15 @@ export function createProjectService() {
     ): Promise<IProject> => {
       const existing = await Project.findOne({ name });
       if (existing) {
-        return (await Project.findOneAndUpdate(
-          { name },
-          { ...data },
-          { returnDocument: "after" }
-        ))!;
+        // Esclude createdAt dai dati di aggiornamento per preservare la data di
+        // creazione originale del progetto. La variabile viene destrutturata per
+        // rimuoverla da updateData; ESLint la segnala come unused perché non viene
+        // usata esplicitamente, ma la sua esclusione è intenzionale.
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { createdAt, ...updateData } = data;
+        return (await Project.findOneAndUpdate({ name }, updateData, {
+          returnDocument: "after",
+        }))!;
       }
       return await Project.create(data);
     },

@@ -37,16 +37,16 @@ export const getRepos = (async (
     }
 
     const github = createGitHubService(getOctokitInstance());
-    const packageFolders = await github.getRepositories();
+    const repositories = await github.getRepositories(env.projectPrefixes);
 
     const packagesInfo = await Promise.all(
-      packageFolders.map(async (folder) => {
-        const packageData = await github.getPackageJson(folder);
+      repositories.map(async (repo) => {
+        const packageData = await github.getPackageJson(repo.name);
 
         return {
-          name: packageData?.name || folder.name,
+          name: packageData?.name || repo.name,
           description: packageData?.description || "",
-          url: folder.html_url,
+          url: repo.html_url,
           technologies: packageData?.technologies || [],
           updated_at: packageData?.createdAt || new Date().toISOString(),
         };

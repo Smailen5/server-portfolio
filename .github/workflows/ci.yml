@@ -31,8 +31,8 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Test
-        run: pnpm test
+      - name: Test con coverage
+        run: pnpm test:coverage
 
   validate-pr-title:
     runs-on: ubuntu-latest

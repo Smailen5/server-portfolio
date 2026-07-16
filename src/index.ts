@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import mongoose from "mongoose";
 import path from "path";
+import { fileURLToPath } from "url";
 import { appLogger } from "./config/appLogger.js";
 import { env } from "./config/index.js";
 import { validateEnv } from "./config/validateEnv.js";
@@ -17,6 +18,9 @@ import githubRoutes from "./routes/github/index.js";
 import projectRoutes from "./routes/projects/index.js";
 import usersRoutes from "./routes/users/index.js";
 import initMongo from "./config/initMongo.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 

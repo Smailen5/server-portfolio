@@ -33,11 +33,11 @@ export function createProjectService() {
     ): Promise<IProject> => {
       const existing = await Project.findOne({ name });
       if (existing) {
-        return (await Project.findOneAndUpdate(
-          { name },
-          { ...data },
-          { returnDocument: "after" }
-        ))!;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { createdAt, ...updateData } = data;
+        return (await Project.findOneAndUpdate({ name }, updateData, {
+          returnDocument: "after",
+        }))!;
       }
       return await Project.create(data);
     },

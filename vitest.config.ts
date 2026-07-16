@@ -20,7 +20,7 @@ export default defineConfig({
         "src/config/**",
         "src/index.ts",
         "src/routes/**",
-        "src/services/**",
+        "src/services/GitHubService.ts",
         "src/seeders/**",
       ],
       thresholds: {

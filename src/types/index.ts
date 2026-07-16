@@ -1,17 +1,14 @@
-export interface GitHubContent {
+export interface GitHubRepo {
   name: string;
-  path: string;
-  type: string;
-  html_url: string | null;
-  download_url?: string | null;
-  content?: string;
+  html_url: string;
+  description: string | null;
 }
 
 export interface PackageJson {
   name: string;
   description: string;
   technologies: string[];
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface ProjectData {
@@ -19,6 +16,6 @@ export interface ProjectData {
   description: string;
   image: string;
   technologies: string[];
-  createdAt: Date;
+  createdAt?: Date;
   readme: string;
 }

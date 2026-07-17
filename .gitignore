@@ -53,5 +53,6 @@ coverage/
 # Specifici del Progetto
 # ==================================================
 database.sqlite
+public/screenshots/
 .opencode/notes/NOTE*.md
 .opencode/plans/PLAN*.md

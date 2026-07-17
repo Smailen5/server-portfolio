@@ -39,7 +39,11 @@ vi.mock("../../config/appLogger", () => ({
   appLogger: { warn: vi.fn(), error: vi.fn(), info: vi.fn() },
 }));
 
-const mockEnv = { githubToken: "mock-token", projectPrefixes: ["fm-"] };
+const mockEnv = {
+  githubToken: "mock-token",
+  projectPrefixes: ["fm-"],
+  screenshotsDir: "./tmp/screenshots",
+};
 
 vi.mock("../../config", () => ({
   env: mockEnv,
@@ -66,6 +70,14 @@ const mockProjectService = {
 
 vi.mock("../../services/ProjectService", () => ({
   createProjectService: vi.fn(() => mockProjectService),
+}));
+
+const mockImageService = {
+  downloadAndConvert: vi.fn(),
+};
+
+vi.mock("../../services/ImageService", () => ({
+  createImageService: vi.fn(() => mockImageService),
 }));
 
 const mockCache = {
@@ -117,6 +129,7 @@ describe("syncRepos", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockEnv.githubToken = "mock-token";
+    mockImageService.downloadAndConvert.mockResolvedValue(null);
   });
 
   // Test 1: percorso felice — tutto funziona, upsert crea progetti nuovi
@@ -128,7 +141,9 @@ describe("syncRepos", () => {
       "https://example.com/screenshot.webp",
     ]);
     mockGitHubService.getReadme.mockResolvedValue("# Readme content");
-
+    mockImageService.downloadAndConvert.mockResolvedValue(
+      "/screenshots/react-app-screenshot.webp"
+    );
     mockProjectService.upsert.mockResolvedValue({} as any);
 
     // Import dinamico dopo i mock
@@ -165,7 +180,9 @@ describe("syncRepos", () => {
       "https://example.com/screenshot.webp",
     ]);
     mockGitHubService.getReadme.mockResolvedValue("# Readme");
-
+    mockImageService.downloadAndConvert.mockResolvedValue(
+      "/screenshots/react-app-screenshot.webp"
+    );
     mockProjectService.upsert.mockResolvedValue({} as any);
 
     const { syncRepos } = await import("./syncRepos");
@@ -232,7 +249,9 @@ describe("syncRepos", () => {
       "https://example.com/screenshot.webp",
     ]);
     mockGitHubService.getReadme.mockResolvedValue("# Readme content");
-
+    mockImageService.downloadAndConvert.mockResolvedValue(
+      "/screenshots/react-app-screenshot.webp"
+    );
     mockProjectService.upsert.mockResolvedValue({} as any);
 
     const { syncRepos } = await import("./syncRepos");

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { env } from "../../config/index.js";
 import { createGitHubService } from "../../services/GitHubService.js";
+import { createImageService } from "../../services/ImageService.js";
 import { cache } from "../../utils/cache.js";
 import { getOctokitInstance } from "../../utils/octokit.js";
 import {
@@ -31,6 +32,7 @@ export const syncRepos = [
 
       const github = createGitHubService(getOctokitInstance());
       const projectService = createProjectService();
+      const imageService = createImageService();
       const repositories = await github.getRepositories(env.projectPrefixes);
       let syncedCount = 0;
       const errors: string[] = [];
@@ -46,8 +48,20 @@ export const syncRepos = [
           };
 
           const screenshots = await github.getScreenshots(repo.name);
-          if (screenshots.length > 0) {
-            projectData.image = screenshots[0];
+          const localImages: string[] = [];
+
+          for (const screenshotUrl of screenshots) {
+            const localUrl = await imageService.downloadAndConvert(
+              screenshotUrl,
+              repo.name
+            );
+            if (localUrl) {
+              localImages.push(localUrl);
+            }
+          }
+
+          if (localImages.length > 0) {
+            projectData.image = localImages[0];
           } else {
             errors.push(
               `Nessuna immagine di anteprima trovata per ${repo.name}`

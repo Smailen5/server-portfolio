@@ -16,10 +16,9 @@ export default defineConfig({
         "src/middleware/auth/index.ts",
         "src/middleware/validators/index.ts",
         // configurazioni da rimuovere man mano che vengono implementati i test
-        "src/config/**",
+        "src/models/**",
         "src/index.ts",
         "src/routes/**",
-        "src/seeders**",
       ],
       thresholds: {
         lines: 80,

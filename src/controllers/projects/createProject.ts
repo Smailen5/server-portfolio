@@ -14,7 +14,7 @@ interface ProjectRequest extends Request {
   body: {
     name: string;
     link: string;
-    image: string;
+    images: string[];
     technologies: string[];
     description: string;
     readme: string;

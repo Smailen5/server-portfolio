@@ -16,7 +16,7 @@ export const createProjectValidator = [
     .isArray({ min: 1 })
     .withMessage("Le immagini devono essere un array non vuoto"),
   body("images.*")
-    .isURL()
+    .isURL({ require_tld: false, require_protocol: true })
     .withMessage("Ogni immagine deve essere un URL valido"),
   body("technologies")
     .isArray()
@@ -47,7 +47,7 @@ export const updateProjectValidator = [
     .withMessage("Le immagini devono essere un array"),
   body("images.*")
     .optional()
-    .isURL()
+    .isURL({ require_tld: false, require_protocol: true })
     .withMessage("Ogni immagine deve essere un URL valido"),
   body("technologies")
     .optional()

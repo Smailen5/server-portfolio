@@ -10,13 +10,13 @@ import { runValidation } from "./testHelpers";
 // Test per createProjectValidator
 // ──────────────────────────────────────────────
 // Verifica la validazione del body per la creazione progetti:
-// name, link, image obbligatori, technologies array non vuoto,
+// name, link, images obbligatori, technologies array non vuoto,
 // description obbligatoria.
 describe("createProjectValidator", () => {
   const validBody = {
     name: "My Project",
     link: "https://example.com",
-    image: "https://example.com/img.png",
+    images: ["https://example.com/img.png"],
     technologies: ["React"],
     description: "A cool project",
   };
@@ -56,10 +56,10 @@ describe("createProjectValidator", () => {
     ).toBe(true);
   });
 
-  it("fallisce quando image mancante", async () => {
-    const { image, ...body } = validBody;
+  it("fallisce quando images mancante", async () => {
+    const { images, ...body } = validBody;
     const result = await runValidation({ body }, createProjectValidator);
-    expect(result.array().some((e) => e.msg.includes("immagine"))).toBe(true);
+    expect(result.array().some((e) => e.msg.includes("immagini"))).toBe(true);
   });
 
   it("fallisce quando technologies non è un array", async () => {
@@ -96,9 +96,9 @@ describe("createProjectValidator", () => {
     expect(result.array().some((e) => e.msg.includes("stringa"))).toBe(true);
   });
 
-  it("fallisce quando image non e' un URL", async () => {
+  it("fallisce quando images contiene un URL non valido", async () => {
     const result = await runValidation(
-      { body: { ...validBody, image: "not-a-url" } },
+      { body: { ...validBody, images: ["not-a-url"] } },
       createProjectValidator
     );
     expect(result.array().some((e) => e.msg.includes("URL"))).toBe(true);
@@ -135,7 +135,7 @@ describe("createProjectValidator", () => {
 // Test per updateProjectValidator
 // ──────────────────────────────────────────────
 // Verifica che l'id sia un MongoId valido e che i campi
-// opzionali del body (name, link, image, etc.) siano del tipo giusto.
+// opzionali del body (name, link, images, etc.) siano del tipo giusto.
 describe("updateProjectValidator", () => {
   const validParams = { id: "507f1f77bcf86cd799439011" };
   const validBody = { name: "Updated", technologies: ["Node"] };
@@ -188,9 +188,9 @@ describe("updateProjectValidator", () => {
     expect(result.array().some((e) => e.msg.includes("URL"))).toBe(true);
   });
 
-  it("fallisce quando image non e' un URL", async () => {
+  it("fallisce quando images contiene un URL non valido", async () => {
     const result = await runValidation(
-      { params: validParams, body: { image: "not-a-url" } },
+      { params: validParams, body: { images: ["not-a-url"] } },
       updateProjectValidator
     );
     expect(result.array().some((e) => e.msg.includes("URL"))).toBe(true);

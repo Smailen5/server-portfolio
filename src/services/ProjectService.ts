@@ -1,3 +1,7 @@
+import fs from "fs";
+import path from "path";
+import { appLogger } from "../config/appLogger.js";
+import { env } from "../config/index.js";
 import { Project, type IProject } from "../models/Projects.js";
 
 export function createProjectService() {
@@ -24,7 +28,25 @@ export function createProjectService() {
     },
 
     delete: async (id: string): Promise<IProject | null> => {
-      return await Project.findOneAndDelete({ _id: id });
+      const project = await Project.findOneAndDelete({ _id: id });
+
+      if (project && Array.isArray(project.images)) {
+        for (const imageUrl of project.images) {
+          try {
+            const filename = path.basename(imageUrl);
+            const filePath = path.join(env.screenshotsDir, filename);
+            await fs.promises.unlink(filePath);
+          } catch (error: unknown) {
+            const message =
+              error instanceof Error ? error.message : "Errore sconosciuto";
+            appLogger.warn(
+              `Impossibile eliminare l'immagine ${imageUrl}: ${message}`
+            );
+          }
+        }
+      }
+
+      return project;
     },
 
     upsert: async (

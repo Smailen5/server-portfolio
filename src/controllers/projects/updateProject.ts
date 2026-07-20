@@ -13,7 +13,7 @@ const projectService = createProjectService();
 interface ProjectRequest extends Request {
   body: {
     name: string;
-    image: string;
+    images: string[];
     technologies: string[];
     description: string;
   };

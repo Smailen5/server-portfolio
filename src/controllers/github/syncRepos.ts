@@ -42,7 +42,7 @@ export const syncRepos = [
           let projectData: ProjectData = {
             name: repo.name,
             description: "",
-            image: "",
+            images: [],
             technologies: [] as string[],
             readme: "",
           };
@@ -61,7 +61,7 @@ export const syncRepos = [
           }
 
           if (localImages.length > 0) {
-            projectData.image = localImages[0];
+            projectData.images = localImages;
           } else {
             errors.push(
               `Nessuna immagine di anteprima trovata per ${repo.name}`

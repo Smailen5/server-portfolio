@@ -12,11 +12,12 @@ export const createProjectValidator = [
     .withMessage("Il link è obbligatorio")
     .isURL()
     .withMessage("Il link deve essere un URL valido"),
-  body("image")
-    .notEmpty()
-    .withMessage("L'immagine è obbligatoria")
-    .isURL()
-    .withMessage("L'immagine deve essere un URL valido"),
+  body("images")
+    .isArray({ min: 1 })
+    .withMessage("Le immagini devono essere un array non vuoto"),
+  body("images.*")
+    .isURL({ require_tld: false, require_protocol: true })
+    .withMessage("Ogni immagine deve essere un URL valido"),
   body("technologies")
     .isArray()
     .withMessage("Le tecnologie devono essere un array")
@@ -40,10 +41,14 @@ export const updateProjectValidator = [
     .optional()
     .isURL()
     .withMessage("Il link deve essere un URL valido"),
-  body("image")
+  body("images")
     .optional()
-    .isURL()
-    .withMessage("L'immagine deve essere un URL valido"),
+    .isArray()
+    .withMessage("Le immagini devono essere un array"),
+  body("images.*")
+    .optional()
+    .isURL({ require_tld: false, require_protocol: true })
+    .withMessage("Ogni immagine deve essere un URL valido"),
   body("technologies")
     .optional()
     .isArray()

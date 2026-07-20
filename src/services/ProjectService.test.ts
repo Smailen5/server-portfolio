@@ -1,4 +1,7 @@
+import fs from "fs";
+import path from "path";
 import { describe, expect, it, vi, beforeEach } from "vitest";
+import { env } from "../config/index.js";
 import { createProjectService } from "./ProjectService.js";
 import { Project } from "../models/Projects.js";
 
@@ -142,6 +145,51 @@ describe("ProjectService", () => {
       expect(result).toEqual(deletedProject);
     });
 
+    it("elimina i file immagine associati al progetto", async () => {
+      const deletedProject = {
+        _id: "123",
+        name: "test-project",
+        images: ["/screenshots/test-1.webp", "/screenshots/test-2.webp"],
+      };
+      vi.spyOn(Project, "findOneAndDelete").mockResolvedValue(
+        deletedProject as any
+      );
+      const unlinkSpy = vi
+        .spyOn(fs.promises, "unlink")
+        .mockResolvedValue(undefined);
+
+      const result = await projectService.delete("123");
+
+      expect(unlinkSpy).toHaveBeenCalledTimes(2);
+      expect(unlinkSpy).toHaveBeenCalledWith(
+        path.join(env.screenshotsDir, "test-1.webp")
+      );
+      expect(unlinkSpy).toHaveBeenCalledWith(
+        path.join(env.screenshotsDir, "test-2.webp")
+      );
+      expect(result).toEqual(deletedProject);
+    });
+
+    it("continua l'eliminazione se un file immagine non esiste", async () => {
+      const deletedProject = {
+        _id: "123",
+        name: "test-project",
+        images: ["/screenshots/missing.webp"],
+      };
+      vi.spyOn(Project, "findOneAndDelete").mockResolvedValue(
+        deletedProject as any
+      );
+      const error = new Error("ENOENT: no such file or directory");
+      const unlinkSpy = vi
+        .spyOn(fs.promises, "unlink")
+        .mockRejectedValue(error);
+
+      await expect(projectService.delete("123")).resolves.toEqual(
+        deletedProject
+      );
+      expect(unlinkSpy).toHaveBeenCalledTimes(1);
+    });
+
     it("restituisce null quando il progetto non esiste", async () => {
       vi.spyOn(Project, "findOneAndDelete").mockResolvedValue(null);
 
@@ -163,7 +211,7 @@ describe("ProjectService", () => {
       const projectData = {
         name: "new-project",
         description: "New project",
-        image: "https://example.com/image.webp",
+        images: ["https://example.com/image.webp"],
         technologies: ["react"],
         createdAt: new Date("2024-01-01"),
         readme: "# README",
@@ -190,7 +238,7 @@ describe("ProjectService", () => {
       const updateData = {
         name: "existing-project",
         description: "Updated description",
-        image: "https://example.com/image.webp",
+        images: ["https://example.com/image.webp"],
         technologies: ["react"],
         createdAt: new Date("2024-12-31"),
         readme: "# README",

@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 // ──────────────────────────────────────────────
 const updateBody = {
   name: "Updated",
-  image: "https://example.com/new.png",
+  images: ["https://example.com/new.png"],
   technologies: ["Node"],
   description: "Updated desc",
 };

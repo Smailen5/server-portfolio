@@ -1,0 +1,22 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+     - .env
+    depends_on:
+      - mongo
+    volumes:
+      - screenshots-data:/app/public/screenshots
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
+  screenshots-data:

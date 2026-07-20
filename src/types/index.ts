@@ -14,7 +14,7 @@ export interface PackageJson {
 export interface ProjectData {
   name: string;
   description: string;
-  image: string;
+  images: string[];
   technologies: string[];
   createdAt?: Date;
   readme: string;

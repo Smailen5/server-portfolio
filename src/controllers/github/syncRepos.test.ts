@@ -341,4 +341,42 @@ describe("syncRepos", () => {
       })
     );
   });
+
+  // Test 9: errore su singola repo non blocca le altre
+  it("continua la sincronizzazione quando una repo fallisce", async () => {
+    mockGitHubService.getRepositories.mockResolvedValue(mockRepositories);
+    mockGitHubService.getPackageJson.mockResolvedValue(mockPackageJson);
+    mockGitHubService.getScreenshots.mockResolvedValue([
+      "https://example.com/screenshot.webp",
+    ]);
+    mockGitHubService.getReadme.mockResolvedValue("# Readme content");
+    mockImageService.downloadAndConvert.mockResolvedValue(
+      "/screenshots/react-app-screenshot.webp"
+    );
+
+    // Prima repo fallisce, seconda riesce
+    mockProjectService.upsert
+      .mockRejectedValueOnce(new Error("DB error"))
+      .mockResolvedValueOnce({} as any);
+
+    const { syncRepos } = await import("./syncRepos");
+    const handler = getHandler(syncRepos);
+    const { req, res, next } = mockReqRes();
+
+    await handler(req, res, next);
+
+    // upsert chiamato 2 volte (una per repo)
+    expect(mockProjectService.upsert).toHaveBeenCalledTimes(2);
+
+    // 1 repo riuscita su 2
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        syncedProjects: 1,
+        totalProjects: 2,
+        errors: expect.arrayContaining([
+          expect.stringContaining("Errore nel recupero dei dati"),
+        ]),
+      })
+    );
+  });
 });

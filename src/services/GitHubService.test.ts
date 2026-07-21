@@ -112,6 +112,46 @@ describe("GitHubService", () => {
       );
     });
 
+    it("filtra repo con prefissi multipli", async () => {
+      const octokit = createMockOctokit();
+      octokit.rest.repos.listForAuthenticatedUser.mockResolvedValueOnce({
+        data: [
+          {
+            name: "fm-project-1",
+            html_url: "https://github.com/Smailen5/fm-project-1",
+            description: "Frontend Mentor",
+          },
+          {
+            name: "pm-project-1",
+            html_url: "https://github.com/Smailen5/pm-project-1",
+            description: "Project Manager",
+          },
+          {
+            name: "other-project",
+            html_url: "https://github.com/Smailen5/other-project",
+            description: "Should be excluded",
+          },
+        ],
+      });
+      const service = createGitHubService(octokit as unknown as Octokit);
+
+      const result = await service.getRepositories(["fm-", "pm-"]);
+
+      expect(result).toHaveLength(2);
+      expect(result).toEqual([
+        {
+          name: "fm-project-1",
+          html_url: "https://github.com/Smailen5/fm-project-1",
+          description: "Frontend Mentor",
+        },
+        {
+          name: "pm-project-1",
+          html_url: "https://github.com/Smailen5/pm-project-1",
+          description: "Project Manager",
+        },
+      ]);
+    });
+
     it("propaga gli errori di rete", async () => {
       const octokit = createMockOctokit();
       const error = new Error("Network error");

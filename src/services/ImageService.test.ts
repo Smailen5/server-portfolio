@@ -128,4 +128,21 @@ describe("ImageService", () => {
 
     expect(url).toBeNull();
   });
+
+  it("ritorna null se la conversione sharp fallisce", async () => {
+    mockExistsSync.mockReturnValueOnce(false).mockReturnValueOnce(false);
+    mockFetch.mockResolvedValue({
+      ok: true,
+      arrayBuffer: vi.fn().mockResolvedValue(Buffer.from("image-data").buffer),
+    });
+    mockToFile.mockRejectedValue(new Error("Conversion failed"));
+
+    const service = createImageService();
+    const url = await service.downloadAndConvert(
+      "https://example.com/screenshot.png",
+      "fm-test"
+    );
+
+    expect(url).toBeNull();
+  });
 });

@@ -24,4 +24,5 @@ export const env = {
   jwtSecret: process.env.JWT_SECRET,
   projectPrefixes: process.env.PROJECT_PREFIXES?.split(",") || ["fm-"],
   screenshotsDir: process.env.SCREENSHOTS_DIR || "./public/screenshots",
+  syncCron: process.env.SYNC_CRON || "0 * * * *",
 };

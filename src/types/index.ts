@@ -19,3 +19,10 @@ export interface ProjectData {
   createdAt?: Date;
   readme: string;
 }
+
+export interface SyncResult {
+  totalProjects: number;
+  syncedProjects: number;
+  errors: string[];
+  projects: string[];
+}

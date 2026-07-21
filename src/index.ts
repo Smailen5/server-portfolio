@@ -18,6 +18,7 @@ import githubRoutes from "./routes/github/index.js";
 import projectRoutes from "./routes/projects/index.js";
 import usersRoutes from "./routes/users/index.js";
 import initMongo from "./config/initMongo.js";
+import { createSchedulerService } from "./services/SchedulerService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -59,12 +60,15 @@ const startServer = async () => {
   try {
     validateEnv();
     await initMongo();
+    const scheduler = createSchedulerService();
+    scheduler.start();
     const server = app.listen(Number(env.port), "0.0.0.0", () => {
       appLogger.info(`Server in esecuzione sulla porta ${env.port}`);
     });
 
     const gracefulShutdown = async (signal: string) => {
       appLogger.info(`Ricevuto ${signal}, chiusura server in corso...`);
+      scheduler.stop();
       server.close(async () => {
         await mongoose.connection.close();
         appLogger.info("Connessione MongoDB chiusa");

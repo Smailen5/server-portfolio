@@ -1,10 +1,10 @@
-import cron from "node-cron";
+import cron, { ScheduledTask } from "node-cron";
 import { appLogger } from "../config/appLogger.js";
 import { env } from "../config/index.js";
 import { createSyncService } from "./SyncService.js";
 
 export function createSchedulerService() {
-  let task: cron.ScheduledTask | null = null;
+  let task: ScheduledTask | null = null;
 
   return {
     start: () => {

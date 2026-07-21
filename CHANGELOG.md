@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/Smailen5/server-portfolio/compare/v2.2.3...v3.0.0) (2026-07-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* sincronizza progetti da repo individuali ([#207](https://github.com/Smailen5/server-portfolio/issues/207))
+
+### Features
+
+* aggiunge schema images[] e cleanup file in delete progetto ([#216](https://github.com/Smailen5/server-portfolio/issues/216)) ([16c4e62](https://github.com/Smailen5/server-portfolio/commit/16c4e62bbaccfea490817ea0ae2fa56a6e942955))
+* aggiunge sincronizzazione automatica GitHub ogni ora ([#222](https://github.com/Smailen5/server-portfolio/issues/222)) ([2c2a1a2](https://github.com/Smailen5/server-portfolio/commit/2c2a1a2ea27f3393fa7c6bba1b74607c8a3bfe96))
+* converte le immagini dei repository in webp con caching locale ([#212](https://github.com/Smailen5/server-portfolio/issues/212)) ([e8b024c](https://github.com/Smailen5/server-portfolio/commit/e8b024c8f38e7379b274b74e2793c2609fa0a44d))
+* sincronizza progetti da repo individuali ([#207](https://github.com/Smailen5/server-portfolio/issues/207)) ([004ab64](https://github.com/Smailen5/server-portfolio/commit/004ab64d8ad39f02c0368c55b37ec51f0f998a50))
+
+
+### Bug Fixes
+
+* aggiunge checkout al workflow auto-add ([#198](https://github.com/Smailen5/server-portfolio/issues/198)) ([c90e8f7](https://github.com/Smailen5/server-portfolio/commit/c90e8f700de4f8c6013118d0704bc9e469a98019))
+* corregge sintassi gh project item-add ([#197](https://github.com/Smailen5/server-portfolio/issues/197)) ([a439ebc](https://github.com/Smailen5/server-portfolio/commit/a439ebccfad8f94d9a31e0de3b707f1b8ae58dc5))
+* usa action ufficiale per aggiungere issue al project ([#200](https://github.com/Smailen5/server-portfolio/issues/200)) ([9e55aeb](https://github.com/Smailen5/server-portfolio/commit/9e55aebdc0d86b0c7ded616501fd6c9274470a2e))
+* usa PROJECT_TOKEN per il workflow ([#199](https://github.com/Smailen5/server-portfolio/issues/199)) ([b1e35e8](https://github.com/Smailen5/server-portfolio/commit/b1e35e8df95ee7ab011cd290ff88aff42392f595))
+
+
+### Documentation
+
+* traccia CONVENTION.md e distingue titoli issue/commit/PR ([#203](https://github.com/Smailen5/server-portfolio/issues/203)) ([fa83c82](https://github.com/Smailen5/server-portfolio/commit/fa83c8278174617ec83c98ff920215e8e6122c7a))
+
+
+### Chores
+
+* aggiunge docker al progetto per il deploy ([#218](https://github.com/Smailen5/server-portfolio/issues/218)) ([f21248d](https://github.com/Smailen5/server-portfolio/commit/f21248d50381483e659c0c789eca6887ff6b61c2))
+* aggiunge variabili prefissi repo e middleware screenshots ([#202](https://github.com/Smailen5/server-portfolio/issues/202)) ([390ca58](https://github.com/Smailen5/server-portfolio/commit/390ca58307cad6c2cecf06250cbab3f2aadd5a41))
+* aggiungi workflow auto-add issue ([#194](https://github.com/Smailen5/server-portfolio/issues/194)) ([c08ce8c](https://github.com/Smailen5/server-portfolio/commit/c08ce8c3c2b5f54cd65b36caa70ed86a058746a6))
+* rimuovi workflow auto-add issue ([#201](https://github.com/Smailen5/server-portfolio/issues/201)) ([91be8e0](https://github.com/Smailen5/server-portfolio/commit/91be8e0332d3894e67636c646ff539ab22349580))
+
+
+### Tests
+
+* aggiunge test integrazione route con supertest ([#221](https://github.com/Smailen5/server-portfolio/issues/221)) ([0379260](https://github.com/Smailen5/server-portfolio/commit/0379260c208a888ae6f451eac4179efc50669ccf))
+* aggiunge test per middleware infrastrutturali ([#215](https://github.com/Smailen5/server-portfolio/issues/215)) ([e082f68](https://github.com/Smailen5/server-portfolio/commit/e082f6872ff421b5803ac338e0d9a513dce77393))
+* aggiunge test per modelli Mongoose Projects e User ([#213](https://github.com/Smailen5/server-portfolio/issues/213)) ([be4884d](https://github.com/Smailen5/server-portfolio/commit/be4884d63e24449c1bdcaeee78df96820756fd1c))
+* aggiunge test prefissi multipli, errore sharp e sync parziale ([#220](https://github.com/Smailen5/server-portfolio/issues/220)) ([af921c8](https://github.com/Smailen5/server-portfolio/commit/af921c86aa4fd8019463c1c1b783a8cc20adc3f2))
+* configura coverage vitest con provider v8 e soglia 80% ([#204](https://github.com/Smailen5/server-portfolio/issues/204)) ([a669f77](https://github.com/Smailen5/server-portfolio/commit/a669f7748d45fad7765312bb4a47a9d71da0ed9a))
+* copre branch mancanti controller GitHub ([#206](https://github.com/Smailen5/server-portfolio/issues/206)) ([00a770f](https://github.com/Smailen5/server-portfolio/commit/00a770fc4f0778046a9c15a1a3a71293ab68d826))
+* copre GitHubService e Octokit ([#210](https://github.com/Smailen5/server-portfolio/issues/210)) ([bfae584](https://github.com/Smailen5/server-portfolio/commit/bfae5848ae8e16dcd4bc4ed194b49e7f74d7d2cf))
+* copre ProjectService con test ([#209](https://github.com/Smailen5/server-portfolio/issues/209)) ([fe3846f](https://github.com/Smailen5/server-portfolio/commit/fe3846f19d13bb023e2b5f3652cf10ded9b80f0c))
+* testa config env, validateEnv, mongodb, initMongo e seeder admin ([#214](https://github.com/Smailen5/server-portfolio/issues/214)) ([590ceeb](https://github.com/Smailen5/server-portfolio/commit/590ceeb429c9dec0cac2972206e034f2b42fd41f))
+
+
+### CI/CD
+
+* aggiunge test coverage alla ci ([#211](https://github.com/Smailen5/server-portfolio/issues/211)) ([4696801](https://github.com/Smailen5/server-portfolio/commit/469680102c5d6894d1909904684b07f84ba506f1))
+* permette breaking change nel titolo PR ([#208](https://github.com/Smailen5/server-portfolio/issues/208)) ([d407f2f](https://github.com/Smailen5/server-portfolio/commit/d407f2fdfb3f81b562b06ab0ab52108abe057f22))
+
 ## [2.2.3](https://github.com/Smailen5/server-portfolio/compare/v2.2.2...v2.2.3) (2026-07-13)
 
 

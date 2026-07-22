@@ -10,8 +10,8 @@
     { "type": "refactor", "section": "Refactoring", "hidden": false },
     { "type": "test", "section": "Tests", "hidden": false },
     { "type": "perf", "section": "Performance", "hidden": false },
-    { "type": "ci", "section": "CI/CD", "hidden": false },
-    { "type": "build", "section": "Build", "hidden": false }
+    { "type": "ci", "section": "CI/CD", "hidden": true },
+    { "type": "build", "section": "Build", "hidden": true }
   ],
   "packages": {
     ".": {

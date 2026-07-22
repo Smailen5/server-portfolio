@@ -242,3 +242,4 @@ pnpm start
 ## Licenza
 
 Questo progetto è distribuito con licenza ISC. Vedi il file [LICENSE](LICENSE) per maggiori dettagli.
+

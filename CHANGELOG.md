@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/Smailen5/server-portfolio/compare/v3.0.0...v3.1.0) (2026-07-22)
+
+
+### Features
+
+* aggiunge spazio per testare la nuova ci ([#226](https://github.com/Smailen5/server-portfolio/issues/226)) ([4cb457d](https://github.com/Smailen5/server-portfolio/commit/4cb457d247aca865997224de37add80d327ba94d))
+
+
+### Chores
+
+* abilita release da rami hotfix e nasconde ci/build dal changelog ([#223](https://github.com/Smailen5/server-portfolio/issues/223)) ([f107279](https://github.com/Smailen5/server-portfolio/commit/f10727938e62c2b6708180681b02d5a0b3f2d8af))
+
 ## [3.0.0](https://github.com/Smailen5/server-portfolio/compare/v2.2.3...v3.0.0) (2026-07-21)
 
 

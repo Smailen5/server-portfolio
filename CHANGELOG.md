@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.1](https://github.com/Smailen5/server-portfolio/compare/v3.0.0...v3.0.1) (2026-07-24)
+
+
+### Bug Fixes
+
+* corregge logica CORS e rende variabili opzionali ([#231](https://github.com/Smailen5/server-portfolio/issues/231)) ([ca086a8](https://github.com/Smailen5/server-portfolio/commit/ca086a80f57cbcd1bbc8c5abe7df926310f87cbe))
+
 ## [3.0.0](https://github.com/Smailen5/server-portfolio/compare/v2.2.3...v3.0.0) (2026-07-21)
 
 

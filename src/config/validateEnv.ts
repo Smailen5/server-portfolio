@@ -3,13 +3,6 @@ import { env } from "./env.js";
 
 export const validateEnv = () => {
   const requireVars = [
-    "githubToken",
-    "logFilePath",
-    "errorLogFilePath",
-    "corsOrigins",
-    "devOrigin",
-    "rateLimitWindow",
-    "rateLimitMax",
     "apiKey",
     "jwtSecret",
     "dbConnection",

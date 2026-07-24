@@ -1,0 +1,8 @@
+# Gestione automatica dei fine riga
+* text=auto eol=lf
+
+# Forza i file binari a non essere toccati
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary

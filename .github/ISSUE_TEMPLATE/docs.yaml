@@ -1,7 +1,7 @@
 name: Documentation
 description: Aggiungi o aggiorna la documentazione (README, commenti, wiki)
 title: 'docs: [descrizione breve]'
-labels: ['documentation']
+labels: ['docs']
 body: 
   - type: markdown
     attributes:

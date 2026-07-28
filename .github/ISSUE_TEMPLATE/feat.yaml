@@ -13,7 +13,7 @@ body:
     attributes:
       label: Descrizione
       description: "Spiega cosa vorresti aggiungere e perche'."
-      placeholder: "Aggiungere un endpoint per l\'health check e' necessario per monitorare lo stato del server"
+      placeholder: "Aggiungere un endpoint per l'health check e' necessario per monitorare lo stato del server"
     validations:
       required: true
 

@@ -1,5 +1,5 @@
 ---
-name: Bug Report
+name: Bug Report (CLI)
 about: Segnala e risolvi un malfunzionamento
 title: 'bug: [descrizione breve]'
 labels: bug 

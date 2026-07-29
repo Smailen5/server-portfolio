@@ -1,5 +1,5 @@
 ---
-name: Chore
+name: Chore (CLI)
 about: Manutenzione ordinaria e configurazione
 title: 'chore: [descrizione breve]'
 labels: chore

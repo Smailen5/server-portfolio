@@ -1,5 +1,5 @@
 ---
-name: Documentation
+name: Documentation (CLI)
 about: Aggiungi o aggiorna la documentazione
 title: 'docs: [descrizione breve]'
 labels: docs

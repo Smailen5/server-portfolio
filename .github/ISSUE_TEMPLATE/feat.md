@@ -1,5 +1,5 @@
 ---
-name: Feature Request
+name: Feature Request (CLI)
 about: Aggiungi una nuova funzionalita'
 title: 'feat: [descrizione breve]'
 labels: feat

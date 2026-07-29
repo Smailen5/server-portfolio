@@ -1,5 +1,5 @@
 ---
-name: CI/CD
+name: CI/CD (CLI)
 about: Modifiche a CI/CD e GitHub Actions
 title: 'ci: [descrizione breve]'
 labels: ci

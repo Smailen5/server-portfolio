@@ -10,3 +10,6 @@
 <!-- Elenca i passaggi tecnici necessari per completare la feature. (facoltativo) -->
 - [ ] ...
 - [ ] ...
+
+## Note Aggiuntive
+<!-- Link a documentazione, dipendenze da installare, screenshots -->

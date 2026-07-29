@@ -1,5 +1,5 @@
 ---
-name: Test
+name: Test (CLI)
 about: Crea o migliora la suite di test
 title: 'test: [descrizione breve]'
 labels: test

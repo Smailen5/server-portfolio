@@ -1,5 +1,5 @@
 ---
-name: Refactor
+name: Refactor (CLI)
 about: Migliora la struttura del codice esistente
 title: 'refactor: [descrizione breve]'
 labels: refactor

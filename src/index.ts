@@ -14,6 +14,7 @@ import {
 } from "./middleware/errorHandler.js";
 import { httpLogger } from "./middleware/httpLogger.js";
 import { limiter } from "./middleware/rateLimiter.js";
+import healthCheckRoutes from "./routes/healthcheck/index.js";
 import githubRoutes from "./routes/github/index.js";
 import projectRoutes from "./routes/projects/index.js";
 import usersRoutes from "./routes/users/index.js";
@@ -37,6 +38,7 @@ app.use(httpLogger);
 app.use(limiter);
 
 // Routes
+app.use("/", healthCheckRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/github", githubRoutes);
 app.use("/api/users", usersRoutes);

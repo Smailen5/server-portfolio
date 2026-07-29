@@ -1,3 +1,11 @@
+---
+name: Refactor
+about: Migliora la struttura del codice esistente
+title: 'refactor: [descrizione breve]'
+labels: refactor
+assignees: Smailen5
+---
+
 ## Descrizione
 <!-- Quale parte del codice va riscritta e perche'? (obbligatorio) -->
 

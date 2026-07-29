@@ -1,3 +1,11 @@
+---
+name: CI/CD
+about: Modifiche a CI/CD e GitHub Actions
+title: 'ci: [descrizione breve]'
+labels: ci
+assignees: Smailen5
+---
+
 ## Descrizione
 <!-- Cosa va modificato nella CI/CD. (obbligatorio) -->
 

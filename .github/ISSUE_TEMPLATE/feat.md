@@ -1,3 +1,11 @@
+---
+name: Feature Request
+about: Aggiungi una nuova funzionalita'
+title: 'feat: [descrizione breve]'
+labels: feat
+assignees: Smailen5
+---
+
 ## Descrizione
 <!-- Spiega cosa vorresti aggiungere e perche'. (obbligatorio) -->
 

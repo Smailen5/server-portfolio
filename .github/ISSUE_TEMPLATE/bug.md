@@ -1,3 +1,11 @@
+---
+name: Bug Report
+about: Segnala e risolvi un malfunzionamento
+title: 'bug: [descrizione breve]'
+labels: bug 
+assignees: Smailen5
+---
+
 ## Descrizione e Riproduzione
 <!-- Cosa si e' rotto e quali sono i passaggi per riprodurre l'errore. (obbligatorio) -->
 - 

@@ -1,3 +1,11 @@
+---
+name: Chore
+about: Manutenzione ordinaria e configurazione
+title: 'chore: [descrizione breve]'
+labels: chore
+assignees: Smailen5
+---
+
 ## Descrizione
 <!-- Cosa va aggiornato, rimosso o modificato. (obbligatorio) -->
 

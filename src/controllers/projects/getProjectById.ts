@@ -5,6 +5,7 @@ import {
   validateRequest,
 } from "../../middleware/index.js";
 import { createProjectService } from "../../services/ProjectService.js";
+import { mapProjectToResponse } from "../../utils/projectMapper.js";
 
 const projectService = createProjectService();
 
@@ -15,7 +16,7 @@ export const getProjectById = [
     try {
       const project = await projectService.getById(req.params.id as string);
       if (!project) return next(new AppError("Progetto non trovato", 404));
-      return res.json(project);
+      return res.json(mapProjectToResponse(project));
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Errore sconosciuto";
       return next(new AppError(message, 500));

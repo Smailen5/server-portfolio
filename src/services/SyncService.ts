@@ -20,10 +20,12 @@ export function createSyncService() {
         try {
           let projectData: ProjectData = {
             name: repo.name,
+            repoUrl: repo.html_url,
             description: "",
             images: [],
             technologies: [] as string[],
             readme: "",
+            version: "",
           };
 
           const screenshots = await github.getScreenshots(repo.name);
@@ -61,6 +63,7 @@ export function createSyncService() {
               name: packageData.name || repo.name,
               description: packageData.description || "",
               technologies: packageData.technologies || [],
+              version: packageData.version || "",
             };
 
             if (packageData.createdAt) {

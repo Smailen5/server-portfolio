@@ -4,7 +4,6 @@ about: Aggiungi una nuova funzionalita'
 title: 'feat: [descrizione breve]'
 labels: feat
 assignees: Smailen5
-
 ---
 
 ## Descrizione

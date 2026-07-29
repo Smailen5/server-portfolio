@@ -4,7 +4,6 @@ about: Segnala e risolvi un malfunzionamento
 title: 'bug: [descrizione breve]'
 labels: bug 
 assignees: Smailen5
-
 ---
 
 ## Descrizione e Riproduzione

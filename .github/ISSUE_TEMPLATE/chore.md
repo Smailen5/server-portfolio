@@ -4,7 +4,6 @@ about: Manutenzione ordinaria e configurazione
 title: 'chore: [descrizione breve]'
 labels: chore
 assignees: Smailen5
-
 ---
 
 ## Descrizione

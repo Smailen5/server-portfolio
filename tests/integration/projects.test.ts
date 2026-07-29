@@ -1,6 +1,7 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import request from "supertest";
 import jwt from "jsonwebtoken";
+import { mapProjectToResponse } from "../../src/utils/projectMapper.js";
 
 const { mockProjectService } = vi.hoisted(() => ({
   mockProjectService: {
@@ -50,6 +51,7 @@ vi.mock("../../src/config/appLogger.js", () => ({
 }));
 
 import { createTestApp } from "../helpers/testApp.js";
+import { IProject } from "../../src/models/Projects.js";
 
 const app = createTestApp();
 
@@ -76,6 +78,11 @@ describe("Route /api/projects", () => {
           description: "Desc 1",
           images: [],
           technologies: ["react"],
+          repoUrl: "",
+          version: "",
+          createdAt: String(new Date("2026-01-01")),
+          updatedAt: new Date("2026-01-01"),
+          readme: "",
         },
         {
           _id: "2",
@@ -83,14 +90,23 @@ describe("Route /api/projects", () => {
           description: "Desc 2",
           images: [],
           technologies: ["vue"],
+          repoUrl: "",
+          version: "",
+          createdAt: String(new Date("2026-01-01")),
+          updatedAt: new Date("2026-01-01"),
+          readme: "",
         },
       ];
+
+      const expectedResponse = projects.map((p) =>
+        mapProjectToResponse(p as unknown as IProject)
+      );
       mockProjectService.getAll.mockResolvedValue(projects);
 
       const response = await request(app).get("/api/projects");
 
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(projects);
+      expect(response.body).toEqual(expectedResponse);
       expect(mockProjectService.getAll).toHaveBeenCalled();
     });
 
@@ -112,7 +128,17 @@ describe("Route /api/projects", () => {
         description: "Test description",
         images: [],
         technologies: ["react"],
+        repoUrl: "https://github.com/test/respo",
+        version: "0.0.1",
+        createdAt: new Date("2026-01-01"),
+        updatedAt: new Date("2026-01-01"),
+        readme: "test readme",
       };
+
+      const expectedResponse = mapProjectToResponse(
+        project as unknown as IProject
+      );
+
       mockProjectService.getById.mockResolvedValue(project);
 
       const response = await request(app).get(
@@ -120,7 +146,7 @@ describe("Route /api/projects", () => {
       );
 
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(project);
+      expect(response.body).toEqual(expectedResponse);
     });
 
     it("ritorna 404 quando il progetto non esiste", async () => {

@@ -12,9 +12,9 @@ describe("Projects model", () => {
     await expect(doc.validate()).resolves.not.toThrow();
   });
 
-  it("ha default vuoti per link, images, description e readme", () => {
+  it("ha default vuoti per repoUrl, images, description e readme", () => {
     const doc = new Project({ name: "test-project" });
-    expect(doc.link).toBe("");
+    expect(doc.repoUrl).toBe("");
     expect(doc.images).toEqual([]);
     expect(doc.description).toBe("");
     expect(doc.readme).toBe("");

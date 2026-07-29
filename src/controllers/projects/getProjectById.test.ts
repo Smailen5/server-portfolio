@@ -8,6 +8,25 @@ const mockProject = {
   name: "Project A",
   description: "First",
   technologies: ["React"],
+  images: [],
+  repoUrl: "",
+  version: "",
+  createdAt: String(new Date("2026-01-01")),
+  readme: "",
+};
+
+// ──────────────────────────────────────────────
+// Map dei dati
+// ──────────────────────────────────────────────
+const expectedResponse = {
+  name: mockProject.name,
+  description: mockProject.description,
+  technologies: mockProject.technologies,
+  images: mockProject.images,
+  repoUrl: mockProject.repoUrl,
+  version: mockProject.version,
+  createdAt: mockProject.createdAt,
+  readmeContent: mockProject.readme,
 };
 
 // ──────────────────────────────────────────────
@@ -69,7 +88,7 @@ describe("getProjectById", () => {
 
     // Verifico che abbia cercato con l'id giusto
     expect(mockProjectService.getById).toHaveBeenCalledWith("1");
-    expect(res.json).toHaveBeenCalledWith(mockProject);
+    expect(res.json).toHaveBeenCalledWith(expectedResponse);
   });
 
   it("risponde 404 quando il progetto non esiste", async () => {

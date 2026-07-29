@@ -9,15 +9,44 @@ const mockProjects = [
     name: "Project A",
     description: "First",
     technologies: ["React"],
+    images: [],
+    repoUrl: "",
+    version: "",
+    createdAt: String(new Date("2026-01-01")),
+    readme: "",
   },
-  { _id: "2", name: "Project B", description: "Second", technologies: ["Vue"] },
+  {
+    _id: "2",
+    name: "Project B",
+    description: "Second",
+    technologies: ["Vue"],
+    images: [],
+    repoUrl: "",
+    version: "",
+    createdAt: String(new Date("2026-01-02")),
+    readme: "",
+  },
 ];
+
+// ──────────────────────────────────────────────
+// Map dei dati
+// ──────────────────────────────────────────────
+const expectedResponse = mockProjects.map((project) => ({
+  name: project.name,
+  description: project.description,
+  technologies: project.technologies,
+  images: project.images,
+  repoUrl: project.repoUrl,
+  version: project.version,
+  createdAt: project.createdAt,
+  readmeContent: project.readme,
+}));
 
 // ──────────────────────────────────────────────
 // Mock delle dipendenze
 // ──────────────────────────────────────────────
 // getAllProjects usa solo ProjectService.getAll(), quindi
-// mocko solo quel metodo. Meno mock = test più leggibile.
+// mock solo quel metodo. Meno mock = test più leggibile.
 const mockProjectService = vi.hoisted(() => ({
   create: vi.fn(),
   getAll: vi.fn(),
@@ -65,7 +94,7 @@ describe("getAllProjects", () => {
     await getAllProjects(req, res, next);
 
     expect(mockProjectService.getAll).toHaveBeenCalled();
-    expect(res.json).toHaveBeenCalledWith(mockProjects);
+    expect(res.json).toHaveBeenCalledWith(expectedResponse);
   });
 
   it("risponde 500 in caso di errore", async () => {

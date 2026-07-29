@@ -20,6 +20,7 @@ export function createSyncService() {
         try {
           let projectData: ProjectData = {
             name: repo.name,
+            repoUrl: repo.html_url,
             description: "",
             images: [],
             technologies: [] as string[],

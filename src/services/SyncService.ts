@@ -24,6 +24,7 @@ export function createSyncService() {
             images: [],
             technologies: [] as string[],
             readme: "",
+            version: "",
           };
 
           const screenshots = await github.getScreenshots(repo.name);
@@ -61,6 +62,7 @@ export function createSyncService() {
               name: packageData.name || repo.name,
               description: packageData.description || "",
               technologies: packageData.technologies || [],
+              version: packageData.version || "",
             };
 
             if (packageData.createdAt) {

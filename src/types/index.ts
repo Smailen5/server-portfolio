@@ -9,6 +9,7 @@ export interface PackageJson {
   description: string;
   technologies: string[];
   createdAt?: string;
+  version: string;
 }
 
 export interface ProjectData {
@@ -18,6 +19,7 @@ export interface ProjectData {
   technologies: string[];
   createdAt?: Date;
   readme: string;
+  version: string;
 }
 
 export interface SyncResult {

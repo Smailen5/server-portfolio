@@ -9,6 +9,7 @@ export interface IProject extends Document {
   readme: string;
   createdAt: Date;
   updatedAt: Date;
+  version: string;
 }
 
 const ProjectSchema = new Schema(
@@ -19,6 +20,7 @@ const ProjectSchema = new Schema(
     description: { type: String, default: "" },
     technologies: { type: [{ type: String }] },
     readme: { type: String, default: "" },
+    version: { type: String, default: "" },
   },
   { timestamps: true }
 );

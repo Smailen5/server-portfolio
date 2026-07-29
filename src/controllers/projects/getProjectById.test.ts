@@ -22,7 +22,7 @@ const expectedResponse = {
   name: mockProject.name,
   description: mockProject.description,
   technologies: mockProject.technologies,
-  images: mockProject.images,
+  imagesUrl: mockProject.images,
   repoUrl: mockProject.repoUrl,
   version: mockProject.version,
   createdAt: mockProject.createdAt,
@@ -32,7 +32,7 @@ const expectedResponse = {
 // ──────────────────────────────────────────────
 // Mock delle dipendenze
 // ──────────────────────────────────────────────
-// appLogger va mockato per primo: i controller importano
+// appLogger va mock per primo: i controller importano
 // validateRequest → errorHandler → appLogger, che in CI
 // crasha perché i file path per i log non sono configurati.
 vi.mock("../../config/appLogger", () => ({

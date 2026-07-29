@@ -35,7 +35,7 @@ const expectedResponse = mockProjects.map((project) => ({
   name: project.name,
   description: project.description,
   technologies: project.technologies,
-  images: project.images,
+  imagesUrl: project.images,
   repoUrl: project.repoUrl,
   version: project.version,
   createdAt: project.createdAt,

@@ -34,7 +34,7 @@ export interface ProjectResponse {
   name: string;
   description: string;
   technologies: string[];
-  images: string[];
+  imagesUrl: string[];
   repoUrl: string;
   version: string;
   createdAt: string;

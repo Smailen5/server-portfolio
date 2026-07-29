@@ -1,6 +1,3 @@
-## Descrizione
-<!-- Descrivi quanto piu' possible il bug, in modo chiaro e dettagliato. (obbligatorio)  -->
-
 ## Descrizione e Riproduzione
 <!-- Cosa si e' rotto e quali sono i passaggi per riprodurre l'errore. (obbligatorio) -->
 - 

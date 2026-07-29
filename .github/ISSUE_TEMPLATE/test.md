@@ -1,3 +1,12 @@
+---
+name: Test
+about: Crea o migliora la suite di test
+title: 'test: [descrizione breve]'
+labels: test
+assignees: 
+
+---
+
 ## Descrizione
 <!-- Quali funzioni o componenti necessitano di test? (obbligatorio) -->
 

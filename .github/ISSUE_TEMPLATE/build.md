@@ -1,3 +1,12 @@
+---
+name: Build
+about: Modifiche al sistema di build o script
+title: 'build: [descrizione breve]'
+labels: build
+assignees: Smailen5
+
+---
+
 ## Descrizione
 <!-- Cosa va modificato nel sistema di build? (obbligatorio) -->
 

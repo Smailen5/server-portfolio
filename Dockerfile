@@ -47,6 +47,9 @@ COPY --from=builder /app/dist/ ./dist/
 # Crea cartella per screenshots
 RUN mkdir -p public/screenshots
 
+# Crea cartella per i logs
+RUN mkdir -p logs
+
 # Documenta porta (non fa forwarding)
 EXPOSE 3000
 

@@ -9,6 +9,7 @@ services:
       - mongo
     volumes:
       - screenshots-data:/app/public/screenshots
+      - ./logs:/app/logs
     restart: unless-stopped
 
   mongo:

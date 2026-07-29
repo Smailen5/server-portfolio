@@ -29,3 +29,14 @@ export interface SyncResult {
   errors: string[];
   projects: string[];
 }
+
+export interface ProjectResponse {
+  name: string;
+  description: string;
+  technologies: string[];
+  images: string[];
+  repoUrl: string;
+  version: string;
+  createdAt: string;
+  readmeContent: string;
+}

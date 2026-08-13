@@ -233,11 +233,13 @@ describe("ProjectService", () => {
         _id: "123",
         name: "existing-project",
         description: "Old description",
+        repoUrl: "",
         createdAt: new Date("2024-01-01"),
       };
       const updateData = {
         name: "existing-project",
         description: "Updated description",
+        repoUrl: "https://github.com/test/existing-project",
         images: ["https://example.com/image.webp"],
         technologies: ["react"],
         createdAt: new Date("2024-12-31"),

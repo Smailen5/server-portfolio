@@ -7,11 +7,11 @@ export const createProjectValidator = [
     .withMessage("Il nome è obbligatorio")
     .isString()
     .withMessage("Il nome deve essere una stringa"),
-  body("link")
+  body("repoUrl")
     .notEmpty()
-    .withMessage("Il link è obbligatorio")
+    .withMessage("Il repoUrl è obbligatorio")
     .isURL()
-    .withMessage("Il link deve essere un URL valido"),
+    .withMessage("Il repoUrl deve essere un URL valido"),
   body("images")
     .isArray({ min: 1 })
     .withMessage("Le immagini devono essere un array non vuoto"),
@@ -37,10 +37,10 @@ export const updateProjectValidator = [
     .optional()
     .isString()
     .withMessage("Il nome deve essere una stringa"),
-  body("link")
+  body("repoUrl")
     .optional()
     .isURL()
-    .withMessage("Il link deve essere un URL valido"),
+    .withMessage("Il repoUrl deve essere un URL valido"),
   body("images")
     .optional()
     .isArray()

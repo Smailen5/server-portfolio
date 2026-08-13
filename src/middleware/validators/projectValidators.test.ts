@@ -10,12 +10,12 @@ import { runValidation } from "./testHelpers";
 // Test per createProjectValidator
 // ──────────────────────────────────────────────
 // Verifica la validazione del body per la creazione progetti:
-// name, link, images obbligatori, technologies array non vuoto,
+// name, repoUrl, images obbligatori, technologies array non vuoto,
 // description obbligatoria.
 describe("createProjectValidator", () => {
   const validBody = {
     name: "My Project",
-    link: "https://example.com",
+    repoUrl: "https://example.com",
     images: ["https://example.com/img.png"],
     technologies: ["React"],
     description: "A cool project",
@@ -38,17 +38,17 @@ describe("createProjectValidator", () => {
     );
   });
 
-  it("fallisce quando link mancante", async () => {
-    const { link, ...body } = validBody;
+  it("fallisce quando repoUrl mancante", async () => {
+    const { repoUrl, ...body } = validBody;
     const result = await runValidation({ body }, createProjectValidator);
-    expect(result.array().some((e) => e.msg === "Il link è obbligatorio")).toBe(
-      true
-    );
+    expect(
+      result.array().some((e) => e.msg === "Il repoUrl è obbligatorio")
+    ).toBe(true);
   });
 
-  it("fallisce quando link non è un URL", async () => {
+  it("fallisce quando repoUrl non è un URL", async () => {
     const result = await runValidation(
-      { body: { ...validBody, link: "not-a-url" } },
+      { body: { ...validBody, repoUrl: "not-a-url" } },
       createProjectValidator
     );
     expect(
@@ -135,7 +135,7 @@ describe("createProjectValidator", () => {
 // Test per updateProjectValidator
 // ──────────────────────────────────────────────
 // Verifica che l'id sia un MongoId valido e che i campi
-// opzionali del body (name, link, images, etc.) siano del tipo giusto.
+// opzionali del body (name, repoUrl, images, etc.) siano del tipo giusto.
 describe("updateProjectValidator", () => {
   const validParams = { id: "507f1f77bcf86cd799439011" };
   const validBody = { name: "Updated", technologies: ["Node"] };
@@ -180,9 +180,9 @@ describe("updateProjectValidator", () => {
     expect(result.array().some((e) => e.msg.includes("ID"))).toBe(true);
   });
 
-  it("fallisce quando link non e' un URL", async () => {
+  it("fallisce quando repoUrl non e' un URL", async () => {
     const result = await runValidation(
-      { params: validParams, body: { link: "not-a-url" } },
+      { params: validParams, body: { repoUrl: "not-a-url" } },
       updateProjectValidator
     );
     expect(result.array().some((e) => e.msg.includes("URL"))).toBe(true);

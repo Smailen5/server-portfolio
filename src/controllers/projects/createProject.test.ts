@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 // ──────────────────────────────────────────────
 const validBody = {
   name: "New Project",
-  link: "https://example.com",
+  repoUrl: "https://example.com",
   images: ["https://example.com/img.png"],
   technologies: ["React"],
   description: "New desc",

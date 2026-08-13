@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/Smailen5/server-portfolio/compare/v3.0.1...v3.1.0) (2026-08-13)
+
+
+### Features
+
+* aggiunge endpoint health check con test ([#254](https://github.com/Smailen5/server-portfolio/issues/254)) ([bddd882](https://github.com/Smailen5/server-portfolio/commit/bddd882849ab0f55c8c7ba5017e0a397268bc2c4))
+
+
+### Bug Fixes
+
+* aggiorna label template feat e docs ([#247](https://github.com/Smailen5/server-portfolio/issues/247)) ([4b9853c](https://github.com/Smailen5/server-portfolio/commit/4b9853c7f330e9d500c752ce8ee5d32094344de5))
+* aggiunge policy di cross per le risorse ([#262](https://github.com/Smailen5/server-portfolio/issues/262)) ([5e7cea0](https://github.com/Smailen5/server-portfolio/commit/5e7cea02cf0d56ea05cf94a504729ecb2c2b640d))
+* rimuove escape sbagliato dal template feat ([#249](https://github.com/Smailen5/server-portfolio/issues/249)) ([72941f6](https://github.com/Smailen5/server-portfolio/commit/72941f639a1c32eaaccbea4d85e848df814359b0))
+* rinomina template md per evitare conflitti ([#252](https://github.com/Smailen5/server-portfolio/issues/252)) ([28ab1d7](https://github.com/Smailen5/server-portfolio/commit/28ab1d7ba5c5c0b9a6724a527d68b537ff5a163a))
+* sostituisce link con repoUrl in validazione e controller ([#261](https://github.com/Smailen5/server-portfolio/issues/261)) ([fcb4681](https://github.com/Smailen5/server-portfolio/commit/fcb4681c1b71adca561313cb58c7224716d62532))
+
+
+### Chores
+
+* aggiunge bind mount e cartella logs alla VM ([#253](https://github.com/Smailen5/server-portfolio/issues/253)) ([d9f8822](https://github.com/Smailen5/server-portfolio/commit/d9f88226088dc5785025c6d90cee54a4c550711d))
+* aggiunge frontmatter ai template di issue ([#251](https://github.com/Smailen5/server-portfolio/issues/251)) ([a4408bf](https://github.com/Smailen5/server-portfolio/commit/a4408bf956b8a1d40d49d8b5903c6e006f9d5f3a))
+* aggiunge template md per issue ([#250](https://github.com/Smailen5/server-portfolio/issues/250)) ([b6401bd](https://github.com/Smailen5/server-portfolio/commit/b6401bd47eb1dbcec5ad2a8b16a1026fa7551e6e))
+
+
+### Refactoring
+
+* allinea risposta API progetti al tipo Project del frontend ([#255](https://github.com/Smailen5/server-portfolio/issues/255)) ([52b6527](https://github.com/Smailen5/server-portfolio/commit/52b65279f5c22d0ee252853ecbab2dd46f5623e2))
+
 ## [3.0.1](https://github.com/Smailen5/server-portfolio/compare/v3.0.0...v3.0.1) (2026-07-24)
 
 

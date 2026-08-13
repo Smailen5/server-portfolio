@@ -27,7 +27,11 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 // Protezione dai problemi di sicurezza
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
 
 // Middleware
 app.use(corsMiddleware);

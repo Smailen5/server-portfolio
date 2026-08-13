@@ -172,7 +172,7 @@ describe("Route /api/projects", () => {
         .post("/api/projects")
         .send({
           name: "New Project",
-          link: "https://example.com",
+          repoUrl: "https://example.com",
           images: ["https://example.com/img.png"],
           technologies: ["react"],
           description: "Description",
@@ -185,7 +185,7 @@ describe("Route /api/projects", () => {
     it("crea un progetto con autenticazione valida", async () => {
       const projectData = {
         name: "New Project",
-        link: "https://example.com",
+        repoUrl: "https://example.com",
         images: ["https://example.com/img.png"],
         technologies: ["react"],
         description: "Description",

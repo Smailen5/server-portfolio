@@ -20,6 +20,7 @@ export function createSyncService() {
         try {
           let projectData: ProjectData = {
             name: repo.name,
+            repoName: repo.name,
             repoUrl: repo.html_url,
             description: "",
             images: [],
@@ -73,7 +74,7 @@ export function createSyncService() {
             errors.push(`Nessun package.json trovato per ${repo.name}`);
           }
 
-          await projectService.upsert(repo.name, projectData);
+          await projectService.upsert(projectData.repoName, projectData);
 
           syncedCount++;
         } catch (error: unknown) {

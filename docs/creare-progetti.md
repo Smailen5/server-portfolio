@@ -37,7 +37,7 @@ Ogni repository incluso deve contenere:
 
 ```
 nome-progetto/
-├── package.json     # Metadati lette dal server (vedi sotto)
+├── package.json     # Metadati letti dal server (vedi sotto)
 ├── README.md        # Descrizione lunga del progetto
 └── screenshots/     # Immagini di anteprima (almeno una)
 ```

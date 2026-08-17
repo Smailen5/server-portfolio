@@ -27,6 +27,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+app.set("trust proxy", 2);
+
 // Protezione dai problemi di sicurezza
 app.use(
   helmet({

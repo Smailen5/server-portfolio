@@ -73,7 +73,7 @@ export function createSyncService() {
             errors.push(`Nessun package.json trovato per ${repo.name}`);
           }
 
-          await projectService.upsert(projectData.name, projectData);
+          await projectService.upsert(repo.name, projectData);
 
           syncedCount++;
         } catch (error: unknown) {

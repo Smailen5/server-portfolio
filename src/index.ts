@@ -12,6 +12,7 @@ import {
   errorHandler,
   notFoundHandler,
 } from "./middleware/errorHandler.js";
+import { createSyncService } from "./services/SyncService.js";
 import { httpLogger } from "./middleware/httpLogger.js";
 import { limiter } from "./middleware/rateLimiter.js";
 import healthCheckRoutes from "./routes/healthcheck/index.js";
@@ -68,6 +69,19 @@ const startServer = async () => {
     await initMongo();
     const scheduler = createSchedulerService();
     scheduler.start();
+    try {
+      appLogger.info("Sync iniziale all'avvio del server");
+      const syncService = createSyncService();
+      const result = await syncService.syncAll();
+      appLogger.info(
+        `Sync iniziale completata: ${result.syncedProjects}/${result.totalProjects} progetti`
+      );
+      if (result.errors.length > 0) {
+        appLogger.warn(`Errori sync iniziale: ${result.errors.join(", ")}`);
+      }
+    } catch (error) {
+      appLogger.error("Sync iniziale fallita:", error);
+    }
     const server = app.listen(Number(env.port), "0.0.0.0", () => {
       appLogger.info(`Server in esecuzione sulla porta ${env.port}`);
     });

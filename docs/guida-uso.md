@@ -221,24 +221,6 @@ Autenticazione per ottenere il token JWT.
 }
 ```
 
-### `GET /api/github/repos`
-
-Elenco dei repository GitHub che soddisfano i prefissi configurati, con le informazioni dei rispettivi `package.json`. Pubblica. La risposta è memorizzata in cache per 5 minuti.
-
-**Risposta — 200**
-
-```json
-[
-  {
-    "name": "nome-progetto",
-    "description": "descrizione dal package.json",
-    "url": "https://github.com/Smailen5/nome-progetto",
-    "technologies": ["tech1", "tech2"],
-    "updated_at": "2025-01-20T10:00:00.000Z"
-  }
-]
-```
-
 ### `PUT /api/github/sync`
 
 Avvia la sincronizzazione manuale dei repository con il database. Protetta (richiede API key + JWT).

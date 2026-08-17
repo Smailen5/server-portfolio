@@ -50,10 +50,10 @@ export function createProjectService() {
     },
 
     upsert: async (
-      name: string,
+      repoName: string,
       data: Partial<IProject>
     ): Promise<IProject> => {
-      const existing = await Project.findOne({ name });
+      const existing = await Project.findOne({ repoName });
       if (existing) {
         // Esclude createdAt dai dati di aggiornamento per preservare la data di
         // creazione originale del progetto. La variabile viene destrutturata per
@@ -61,7 +61,7 @@ export function createProjectService() {
         // usata esplicitamente, ma la sua esclusione è intenzionale.
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { createdAt, ...updateData } = data;
-        return (await Project.findOneAndUpdate({ name }, updateData, {
+        return (await Project.findOneAndUpdate({ repoName }, updateData, {
           returnDocument: "after",
         }))!;
       }

@@ -222,7 +222,7 @@ describe("ProjectService", () => {
 
       const result = await projectService.upsert("new-project", projectData);
 
-      expect(Project.findOne).toHaveBeenCalledWith({ name: "new-project" });
+      expect(Project.findOne).toHaveBeenCalledWith({ repoName: "new-project" });
       expect(Project.create).toHaveBeenCalledWith(projectData);
       expect(Project.findOneAndUpdate).not.toHaveBeenCalled();
       expect(result).toEqual(createdProject);
@@ -258,11 +258,11 @@ describe("ProjectService", () => {
       );
 
       expect(Project.findOne).toHaveBeenCalledWith({
-        name: "existing-project",
+        repoName: "existing-project",
       });
       expect(Project.create).not.toHaveBeenCalled();
       expect(Project.findOneAndUpdate).toHaveBeenCalledWith(
-        { name: "existing-project" },
+        { repoName: "existing-project" },
         updateDataWithoutCreatedAt,
         { returnDocument: "after" }
       );
@@ -285,7 +285,7 @@ describe("ProjectService", () => {
       ).rejects.toThrow(duplicateError);
 
       expect(Project.findOne).toHaveBeenCalledWith({
-        name: "race-project",
+        repoName: "race-project",
       });
       expect(Project.create).toHaveBeenCalledWith(projectData);
     });

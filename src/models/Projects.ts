@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface IProject extends Document {
   name: string;
+  repoName: string;
   repoUrl: string;
   images: string[];
   description: string;
@@ -14,7 +15,8 @@ export interface IProject extends Document {
 
 const ProjectSchema = new Schema(
   {
-    name: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    repoName: { type: String, required: true, unique: true },
     repoUrl: { type: String, default: "" },
     images: { type: [{ type: String }], default: [] },
     description: { type: String, default: "" },

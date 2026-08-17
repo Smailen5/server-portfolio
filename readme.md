@@ -2,243 +2,90 @@
 
 ![Release](https://img.shields.io/github/v/release/Smailen5/server-portfolio)
 ![Last commit](https://img.shields.io/github/last-commit/Smailen5/server-portfolio)
+![TypeScript](https://img.shields.io/badge/typescript-strict-3178C6)
+![Test](https://img.shields.io/badge/tests-vitest-6e7687)
 
-Server backend per la gestione dei progetti del portfolio.
+Backend del mio portfolio personale: un'API REST che espone i progetti, li mantiene sincronizzati con GitHub in automatico e li serve al sito con standard di produzione.
 
-## API Endpoints
+## Punti di forza
 
-### Autenticazione
+### Sicurezza
+- Autenticazione a due livelli: **API key** (`x-api-key`) + **JWT** (`Authorization: Bearer`)
+- Header protetti con **Helmet** e politiche CORS configurate
+- **Rate limiting** su tutte le richieste e protezione dedicata sul login
+- Validazione rigida dell'input con `express-validator`, niente dati non verificati
+- Password hashate con `bcrypt`, variabili sensibili solo via `.env`
 
-#### POST /api/users/login
+### Qualità del codice
+- **TypeScript strict** con tipizzazione completa di modelli, servizi e middleware
+- **Test con Vitest** (unit e integrazione) con coverage
+- **ESLint + Prettier** per stile e best practice
+- **Commit convenzionali** con commitlint e hook Husky
+- **CI su GitHub Actions**: lint + build + test su ogni pull request
 
-Autenticazione per l'accesso all'API.
+### Architettura
+- Pattern a livelli: `routes` → `controllers` → `services` → `models`
+- Logging strutturato con **Winston** + **Morgan** su file
+- **Sincronizzazione automatica** con GitHub: i nuovi progetti entrano nel portfolio da soli
 
-**Headers richiesti**
+## Stack
 
-```
-x-api-key: token-autenticazione-api
-```
+| Area | Tecnologie |
+|------|------------|
+| Runtime | Node.js, TypeScript |
+| Framework | Express 5 |
+| Database | MongoDB con Mongoose |
+| Autenticazione | API key + JWT (jsonwebtoken, bcrypt) |
+| Integrazione | Octokit (GitHub API) |
+| Sicurezza | Helmet, express-rate-limit, CORS |
+| Qualità | Vitest, ESLint, Prettier, commitlint, Husky |
+| Operazioni | Docker, pnpm |
 
-**Body**
-
-```json
-{
-  "email": "email-utente",
-  "password": "password-utente"
-}
-```
-
-**Risposta**
-
-```json
-{
-  "token": "token-jwt"
-}
-```
-
-### Progetti
-
-#### GET /api/projects
-
-Recupera tutti i progetti dal database.
-
-**Risposta**
-
-```json
-{
-  "projects": [
-    {
-      "id": 1,
-      "name": "nome-progetto",
-      "description": "descrizione del progetto",
-      "image": "url-immagine",
-      "technologies": ["tech1", "tech2"],
-      "readme": "contenuto markdown del readme",
-      "createdAt": "2024-03-20T...",
-      "updatedAt": "2024-03-20T..."
-    }
-  ]
-}
-```
-
-#### GET /api/projects/:id
-
-Recupera un singolo progetto per ID dal database.
-
-**Risposta**
-
-```json
-{
-  "id": 1,
-  "name": "nome-progetto",
-  "description": "descrizione del progetto",
-  "image": "url-immagine",
-  "technologies": ["tech1", "tech2"],
-  "readme": "contenuto markdown del readme",
-  "createdAt": "2024-03-20T...",
-  "updatedAt": "2024-03-20T..."
-}
-```
-
-#### POST /api/projects
-
-Crea un nuovo progetto.
-
-**Headers richiesti**
+## Struttura del progetto
 
 ```
-x-api-key: token-autenticazione-api
-Authorization: Bearer token-jwt
+src/
+├── config/       # Configurazione, logging, connessione MongoDB
+├── controllers/  # Gestione delle richieste HTTP
+├── middleware/   # Auth, validazione, rate limiting, gestione errori
+├── models/       # Modelli Mongoose
+├── routes/       # Definizione delle rotte
+├── services/     # Logica di business (sync GitHub, immagini, progetti)
+├── types/        # Tipi condivisi
+└── utils/        # Utility (cache, client Octokit)
 ```
 
-**Body**
-
-```json
-{
-  "name": "nome-progetto",
-  "description": "descrizione del progetto",
-  "image": "url-immagine",
-  "technologies": ["tech1", "tech2"]
-}
-```
-
-**Risposta**
-
-```json
-{
-  "message": "Progetto creato con successo",
-  "project": {
-    "id": 1,
-    "name": "nome-progetto",
-    "description": "descrizione del progetto",
-    "image": "url-immagine",
-    "technologies": ["tech1", "tech2"],
-    "readme": "contenuto markdown del readme",
-    "createdAt": "2024-03-20T...",
-    "updatedAt": "2024-03-20T..."
-  }
-}
-```
-
-#### PUT /api/projects/:id
-
-Aggiorna un progetto esistente.
-
-**Headers richiesti**
-
-```
-x-api-key: token-autenticazione-api
-Authorization: Bearer token-jwt
-```
-
-**Body**
-
-Solo i campi che vengono modificati devono essere presenti nel body.
-
-```json
-{
-  "name": "nome-progetto",
-  "description": "descrizione del progetto",
-  "image": "url-immagine",
-  "technologies": ["tech1", "tech2"]
-}
-```
-
-**Risposta**
-
-```json
-{
-  "message": "Progetto aggiornato con successo",
-  "project": {
-    "id": 1,
-    "name": "nome-progetto",
-    "description": "descrizione del progetto",
-    "image": "url-immagine",
-    "technologies": ["tech1", "tech2"],
-    "readme": "contenuto markdown del readme",
-    "createdAt": "2024-03-20T...",
-    "updatedAt": "2024-03-20T..."
-  }
-}
-```
-
-#### DELETE /api/projects/:id
-
-Elimina un progetto esistente.
-
-**Headers richiesti**
-
-```
-x-api-key: token-autenticazione-api
-Authorization: Bearer token-jwt
-```
-
-**Risposta**
-
-```json
-{
-  "message": "Progetto eliminato con successo"
-}
-```
-
-### Sincronizzazione GitHub
-
-#### PUT /api/github/sync
-
-Sincronizza i progetti dal repository GitHub con il database.
-
-**Headers richiesti**
-
-```
-x-api-key: token-autenticazione-api
-Authorization: Bearer token-jwt
-```
-
-**Risposta**
-
-```json
-{
-  "message": "Sincronizzati X progetti con successo",
-  "totalProjects": 33,
-  "syncedProjects": 33,
-  "errors": [],
-  "projects": ["nome-progetto-1", "nome-progetto-2"]
-}
-```
-
-## Gestione degli Errori
-
-Le API restituiscono i seguenti codici di stato:
-
-- 200: Successo
-- 400: Richiesta non valida
-- 401: Non autorizzato
-- 404: Risorsa non trovata
-- 500: Errore del server
-
-In caso di errore, la risposta avrà questo formato:
-
-```json
-{
-  "message": "Messaggio di errore",
-  "errors": ["Dettaglio errore 1", "Dettaglio errore 2"]
-}
-```
-
-## Sviluppo
-
-Per avviare il server in modalità sviluppo:
+## Avvio rapido
 
 ```bash
+# 1. Installa le dipendenze
+pnpm install
+
+# 2. Configura le variabili d'ambiente
+cp .env.example .env
+
+# 3. Avvia in sviluppo
 pnpm dev
 ```
 
-Per la produzione:
+Il server è in ascolto su `http://localhost:3000` (o sulla porta configurata).
+
+## Comandi utili
 
 ```bash
-pnpm start
+pnpm dev            # Avvio in sviluppo (hot reload)
+pnpm lint           # Controllo stile e best practice
+pnpm build          # Compilazione TypeScript
+pnpm start          # Avvio in produzione (richiede la build)
+pnpm test           # Esecuzione dei test
+pnpm test:coverage  # Esecuzione dei test con report di coverage
 ```
+
+## Documentazione
+
+- [Documentazione tecnica](docs/README.md) — setup completo, endpoint e autenticazione
+- [Creare nuovi progetti](docs/creare-progetti.md) — come aggiungere progetti al portfolio
 
 ## Licenza
 
-Questo progetto è distribuito con licenza ISC. Vedi il file [LICENSE](LICENSE) per maggiori dettagli.
+Questo progetto è distribuito con licenza [MIT](LICENSE).

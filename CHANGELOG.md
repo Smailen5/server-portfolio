@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/Smailen5/server-portfolio/compare/v3.1.0...v3.2.0) (2026-08-18)
+
+
+### Features
+
+* aggiunge sync iniziale all'avvio del server ([#266](https://github.com/Smailen5/server-portfolio/issues/266)) ([bb21aec](https://github.com/Smailen5/server-portfolio/commit/bb21aec52a212bec8191b535192b3f9eb475870a))
+
+
+### Bug Fixes
+
+* configura trust proxy per il rate limiter dietro proxy ([#267](https://github.com/Smailen5/server-portfolio/issues/267)) ([2feedab](https://github.com/Smailen5/server-portfolio/commit/2feedab5156df47680fcde47af1ce95ce46c5774))
+* usa nome repo come chiave upsert per evitare duplicati ([#264](https://github.com/Smailen5/server-portfolio/issues/264)) ([bb43f45](https://github.com/Smailen5/server-portfolio/commit/bb43f455dba7e0b6007d0e0d975d70f0fc3cb399))
+
+
+### Documentation
+
+* aggiunge documentazione tecnica e readme di presentazione ([#268](https://github.com/Smailen5/server-portfolio/issues/268)) ([2a00309](https://github.com/Smailen5/server-portfolio/commit/2a00309f2dba376903417552d4338fcab3ecaf0c))
+
 ## [3.1.0](https://github.com/Smailen5/server-portfolio/compare/v3.0.1...v3.1.0) (2026-08-13)
 
 

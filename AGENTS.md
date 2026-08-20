@@ -42,8 +42,57 @@ Vedi `CONVENTION.md` per le regole complete su commit, PR, issue, lingua e templ
 - **CI**: su ogni PR a `main` → job `lint-build-test` (lint + build + test) + job `validate-pr-title`
 - **Release-please**: su push a `main` → crea/aggiorna release PR, genera tag e changelog
 - Config release-please: `release-type: node`, `include-component-in-tag: false` (usa tag `vX.Y.Z`), `changelog-sections` completo
+- `.github/ISSUE_TEMPLATE/` — template obbligatori per issue (usare `<tipo>.yaml`)
 
 ## Husky (v9)
 - **commit-msg**: commitlint
 - **pre-push**: `pnpm lint` + `pnpm build`
 - Nessun boilerplate v4 nei file hook
+
+## Struttura del Progetto
+- **src/**: Codice sorgente principale
+  - `models/`: Modelli Mongoose per MongoDB (User, Projects)
+  - `services/`: Servizi di business logic (SyncService, SchedulerService, ProjectService, ImageService, GitHubService)
+  - `controllers/`: Logica delle richieste HTTP (healthcheck, github, projects, users)
+  - `routes/`: Definizione delle rotte API
+  - `middleware/`: Middleware per auth, cors, error handling e rate limiting
+  - `utils/`: Funzioni di utilità (octokit, cache)
+  - `config/`: Configurazione dell'applicazione (env, logger, initMongo)
+- **public/**: Directory per le immagini dei progetti
+- **logs/**: File di log generati dall'applicazione
+
+## Comandi e Workflow
+1. **Lint**: `pnpm lint` - Esegue ESLint sul codice sorgente
+2. **Build**: `pnpm build` - Compila TypeScript in JavaScript nella directory dist/
+3. **Test**: `pnpm test` - Esegue i test unitari con Vitest
+4. **Dev**: `pnpm dev` - Avvia il server in modalità sviluppo con nodemon
+
+## Strumenti e Tecnologie
+- Express.js 5.x per l'API REST
+- TypeScript 6.x per type checking
+- Mongoose 9.x per MongoDB
+- Octokit per interazione GitHub API
+- Winston + Morgan per logging
+- Husky + commitlint per controllo dei commit
+- Vitest per testing unitario
+- ESLint + Prettier per linting e formattazione
+
+## Configurazione Ambiente
+Le variabili d'ambiente richieste:
+- `SERVER_API_KEY` - Chiave API per autenticazione
+- `JWT_SECRET` - Segreto per JWT
+- `DB_CONNECTION` - Connessione MongoDB
+- `ADMIN_EMAIL` e `ADMIN_PASSWORD` - Credenziali amministrative
+- `GITHUB_TOKEN` - Token per accesso a GitHub API
+
+## Sicurezza
+- Protezione CORS con middleware personalizzato
+- Rate limiting per limitare le richieste
+- Helmet per configurazione di sicurezza HTTP
+- Middleware di autenticazione JWT e API key
+- Validazione dei dati in ingresso con express-validator
+
+## Sincronizzazione Automatica
+- Il server sincronizza automaticamente i progetti GitHub all'avvio
+- La sincronizzazione avviene ogni ora (configurabile tramite `SYNC_CRON`)
+- I screenshot vengono scaricati e convertiti automaticamente per il portfolio

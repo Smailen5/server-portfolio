@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.1](https://github.com/Smailen5/server-portfolio/compare/v3.2.0...v3.2.1) (2026-08-27)
+
+
+### Documentation
+
+* aggiorna AGENTS.md con informazioni sul progetto ([#269](https://github.com/Smailen5/server-portfolio/issues/269)) ([74a1db3](https://github.com/Smailen5/server-portfolio/commit/74a1db3f4d22391a6cd446f0d3a710f0ea955ff8))
+
 ## [3.2.0](https://github.com/Smailen5/server-portfolio/compare/v3.1.0...v3.2.0) (2026-08-18)
 
 

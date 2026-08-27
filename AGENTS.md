@@ -6,6 +6,8 @@
 | Avvio sviluppo | `pnpm dev` |
 | Lint | `pnpm lint` |
 | Build | `pnpm build` |
+| Test | `pnpm test` |
+| Typecheck | `pnpm typecheck` |
 | Avvio produzione | `pnpm start` |
 
 ## File di contesto
@@ -51,21 +53,17 @@ Vedi `CONVENTION.md` per le regole complete su commit, PR, issue, lingua e templ
 
 ## Struttura del Progetto
 - **src/**: Codice sorgente principale
-  - `models/`: Modelli Mongoose per MongoDB (User, Projects)
-  - `services/`: Servizi di business logic (SyncService, SchedulerService, ProjectService, ImageService, GitHubService)
-  - `controllers/`: Logica delle richieste HTTP (healthcheck, github, projects, users)
-  - `routes/`: Definizione delle rotte API
-  - `middleware/`: Middleware per auth, cors, error handling e rate limiting
-  - `utils/`: Funzioni di utilità (octokit, cache)
-  - `config/`: Configurazione dell'applicazione (env, logger, initMongo)
-- **public/**: Directory per le immagini dei progetti
+  - `config/`: Configurazione applicazione (`appLogger`, `env`, `initMongo`, `mongodb`, `validateEnv`)
+  - `controllers/`: Logica delle richieste HTTP (`github`, `healthcheck`, `projects`, `users`)
+  - `middleware/`: Middleware per auth, cors, error handling, rate limiting, logging e validazione (`auth/`, `cors`, `errorHandler`, `httpLogger`, `rateLimiter`, `validators/`)
+  - `models/`: Modelli Mongoose per MongoDB (`Projects`, `User`)
+  - `routes/`: Definizione delle rotte API (`github`, `healthcheck`, `projects`, `users`)
+  - `seeders/`: Script di popolamento iniziale database (`createAdminUser`)
+  - `services/`: Servizi di business logic (`GitHubService`, `ImageService`, `ProjectService`, `SchedulerService`, `SyncService`)
+  - `types/`: Definizioni di tipi TypeScript condivisi
+  - `utils/`: Funzioni di utilità (`cache`, `octokit`, `projectMapper`)
+- **public/**: Directory per assets statici e screenshot dei progetti
 - **logs/**: File di log generati dall'applicazione
-
-## Comandi e Workflow
-1. **Lint**: `pnpm lint` - Esegue ESLint sul codice sorgente
-2. **Build**: `pnpm build` - Compila TypeScript in JavaScript nella directory dist/
-3. **Test**: `pnpm test` - Esegue i test unitari con Vitest
-4. **Dev**: `pnpm dev` - Avvia il server in modalità sviluppo con nodemon
 
 ## Strumenti e Tecnologie
 - Express.js 5.x per l'API REST
@@ -78,12 +76,8 @@ Vedi `CONVENTION.md` per le regole complete su commit, PR, issue, lingua e templ
 - ESLint + Prettier per linting e formattazione
 
 ## Configurazione Ambiente
-Le variabili d'ambiente richieste:
-- `SERVER_API_KEY` - Chiave API per autenticazione
-- `JWT_SECRET` - Segreto per JWT
-- `DB_CONNECTION` - Connessione MongoDB
-- `ADMIN_EMAIL` e `ADMIN_PASSWORD` - Credenziali amministrative
-- `GITHUB_TOKEN` - Token per accesso a GitHub API
+- La configurazione e l'elenco completo delle variabili d'ambiente (obbligatorie e opzionali) sono definiti in `.env.example`.
+- La validazione all'avvio è gestita da `src/config/validateEnv.ts`.
 
 ## Sicurezza
 - Protezione CORS con middleware personalizzato
@@ -95,4 +89,4 @@ Le variabili d'ambiente richieste:
 ## Sincronizzazione Automatica
 - Il server sincronizza automaticamente i progetti GitHub all'avvio
 - La sincronizzazione avviene ogni ora (configurabile tramite `SYNC_CRON`)
-- I screenshot vengono scaricati e convertiti automaticamente per il portfolio
+- Gli screenshot vengono scaricati e convertiti automaticamente per il portfolio

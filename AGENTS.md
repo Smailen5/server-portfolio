@@ -44,7 +44,7 @@ Vedi `CONVENTION.md` per le regole complete su commit, PR, issue, lingua e templ
 - **Entrypoint**: `src/index.ts` → Express app con route: `/api/projects`, `/api/github`, `/api/users`, `/healthcheck`
 - **Auth**: doppio layer — API key (`x-api-key`) + JWT (`Authorization: Bearer`)
 - **GitHub sync**: Octokit per sincronizzare repo da `Smailen5/Frontend-mentor-challenge`; sync iniziale all'avvio + cron ogni ora (`SYNC_CRON`)
-- **Deploy**: Docker (`Dockerfile` multi-stage) + docker-compose (app + MongoDB 7). Presenza di `.netlify/` indica anche deploy Netlify.
+- **Deploy**: Docker (`Dockerfile` multi-stage) + docker-compose (app + MongoDB 7).
 
 ## Gotchas
 
